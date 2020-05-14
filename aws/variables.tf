@@ -24,3 +24,7 @@ variable "instance_type" {
 variable "cluster_name" {
   default = "edge-cluster"
 }
+
+variable "map_roles" {
+  default = []
+}
