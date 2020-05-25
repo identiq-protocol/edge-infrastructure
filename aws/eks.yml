@@ -31,6 +31,11 @@ Mappings:
   EksAmiIds:
     us-east-1:
       Standard: ami-0e5bb2367e692b807
+    eu-west-1:
+      Standard: ami-0f9e9442edcd2faa2
+    eu-west-2:
+      Standard: ami-0ad8600a59c501b34
+
 Resources:
 
   #============================================================================#
