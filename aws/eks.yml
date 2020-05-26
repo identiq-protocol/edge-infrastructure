@@ -24,10 +24,10 @@ Mappings:
       VPC: 10.0.0.0/16
       PublicSubnetA: 10.0.64.0/20
       PublicSubnetB: 10.0.80.0/20
-      PublicSubnetC: 10.0.80.0/20
+      PublicSubnetC: 10.0.96.0/20
       PrivateSubnetA: 10.0.16.0/20
       PrivateSubnetB: 10.0.32.0/20
-      PrivateSubnetC: 10.0.32.0/20
+      PrivateSubnetC: 10.0.48.0/20
   # IDs of the "EKS-optimised AMIs" for the worker nodes:
   # https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html
   EksAmiIds:
