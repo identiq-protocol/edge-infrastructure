@@ -24,8 +24,10 @@ Mappings:
       VPC: 10.0.0.0/16
       PublicSubnetA: 10.0.64.0/20
       PublicSubnetB: 10.0.80.0/20
+      PublicSubnetC: 10.0.80.0/20
       PrivateSubnetA: 10.0.16.0/20
       PrivateSubnetB: 10.0.32.0/20
+      PrivateSubnetC: 10.0.32.0/20
   # IDs of the "EKS-optimised AMIs" for the worker nodes:
   # https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html
   EksAmiIds:
@@ -75,6 +77,17 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-PublicSubnetB"
+  PublicSubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !FindInMap [ VpcIpRanges, Option1, PublicSubnetC ]
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs ""
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-PublicSubnetC"
   PrivateSubnetA:
     Type: AWS::EC2::Subnet
     Properties:
@@ -98,6 +111,17 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-PrivateSubnetB"
+  PrivateSubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !FindInMap [ VpcIpRanges, Option1, PrivateSubnetC ]
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs ""
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-PrivateSubnetC"
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
@@ -141,6 +165,12 @@ Resources:
       SubnetId: !Ref PublicSubnetB
       RouteTableId: !Ref RouteTable
 
+  PublicSubnetCRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetC
+      RouteTableId: !Ref RouteTable
+
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -177,6 +207,11 @@ Resources:
     Properties:
       SubnetId: !Ref PrivateSubnetB
       RouteTableId: !Ref PrivateRouteTable
+  PrivateSubnetCRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnetC
+      RouteTableId: !Ref PrivateRouteTable
   #============================================================================#
   # Control plane
   #============================================================================#
@@ -193,8 +228,10 @@ Resources:
         SubnetIds:
           - !Ref PublicSubnetA
           - !Ref PublicSubnetB
+          - !Ref PublicSubnetC
           - !Ref PrivateSubnetA
           - !Ref PrivateSubnetB
+          - !Ref PrivateSubnetC
 
   ControlPlaneRole:
     Type: AWS::IAM::Role
@@ -202,12 +239,12 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-            Effect: Allow
-            Principal:
-              Service:
-                - eks.amazonaws.com
-            Action: sts:AssumeRole
-      ManagedPolicyArns: 
+          Effect: Allow
+          Principal:
+            Service:
+              - eks.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
         - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
 
@@ -223,7 +260,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-ControlPlaneSecurityGroup"
-      
+
 
   ControlPlaneIngressFromWorkerNodesHttps:
     Type: AWS::EC2::SecurityGroupIngress
@@ -282,7 +319,7 @@ Resources:
   WorkerNodesIngressFromControlPlaneKubelet:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      Description: Allow incoming kubelet traffic (TCP/10250) from control plane 
+      Description: Allow incoming kubelet traffic (TCP/10250) from control plane
       GroupId: !Ref WorkerNodesSecurityGroup
       SourceSecurityGroupId: !Ref ControlPlaneSecurityGroup
       IpProtocol: tcp
@@ -342,14 +379,14 @@ Resources:
         - !Ref WorkerNodesSecurityGroup
       UserData:
         Fn::Base64: !Sub |
-            #!/bin/bash
-            set -o xtrace
-            /etc/eks/bootstrap.sh ${ControlPlane}
-            /opt/aws/bin/cfn-signal \
-                            --exit-code $? \
-                            --stack  ${AWS::StackName} \
-                            --resource NodeGroup  \
-                            --region ${AWS::Region}
+          #!/bin/bash
+          set -o xtrace
+          /etc/eks/bootstrap.sh ${ControlPlane}
+          /opt/aws/bin/cfn-signal \
+                          --exit-code $? \
+                          --stack  ${AWS::StackName} \
+                          --resource NodeGroup  \
+                          --region ${AWS::Region}
 
   WorkerNodesInstanceProfile:
     Type: AWS::IAM::InstanceProfile
