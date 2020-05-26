@@ -311,7 +311,8 @@ Resources:
         MaxBatchSize: 1
     Properties:
       LaunchConfigurationName: !Ref WorkerNodesLaunchConfiguration
-      MinSize: !Ref NumWorkerNodes
+      MinSize: 0
+      DesiredCapacity: !Ref NumWorkerNodes
       MaxSize: !Ref NumWorkerNodes
       VPCZoneIdentifier:
         - !Ref PrivateSubnetA
