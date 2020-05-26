@@ -1,6 +1,6 @@
 instance_count = 3
 instance_type  = "c5n.2xlarge"
-cluster_name   = "edge1-cluster"
+cluster_name   = "edge-cluster"
 region         = "us-east-1"
 # For configuring additional IAM roles to administer the cluster
 # uncomment the variable below and set the correct IAM roles ARN.
