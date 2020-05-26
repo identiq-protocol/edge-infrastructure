@@ -28,3 +28,7 @@ variable "cluster_name" {
 variable "map_roles" {
   default = []
 }
+
+variable "additional_policies" {
+  default = ""
+}

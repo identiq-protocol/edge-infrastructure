@@ -29,6 +29,7 @@ module "my-cluster" {
       asg_desired_capacity = var.instance_count
     }
   ]
+  workers_additional_policies = var.additional_policies
 }
 
 output connect {
