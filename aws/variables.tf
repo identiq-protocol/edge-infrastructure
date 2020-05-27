@@ -30,5 +30,5 @@ variable "map_roles" {
 }
 
 variable "additional_policies" {
-  default = ""
+  default = [""]
 }
