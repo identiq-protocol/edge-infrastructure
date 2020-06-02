@@ -32,3 +32,10 @@ variable "map_roles" {
 variable "additional_policies" {
   default = [""]
 }
+
+variable "internal_domain_name" {
+  default = "NOT_SET"
+}
+variable "external_domain_name" {
+  default = "NOT_SET"
+}
