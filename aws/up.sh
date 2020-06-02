@@ -32,9 +32,7 @@ aws cloudformation deploy \
   --parameter-overrides \
       KeyPairName="edge-key-pair" \
       NumWorkerNodes="$NUM_WORKER_NODES" \
-      WorkerNodesInstanceType="$WORKER_NODES_INSTANCE_TYPE" \
-      InternalDomain="$INTERNAL_DOMAIN_NAME" \
-      ExternalDomain="$EXTERNAL_DOMAIN_NAME"
+      WorkerNodesInstanceType="$WORKER_NODES_INSTANCE_TYPE"
 
 DEPLOY_RESULT=$?
 set -e
@@ -72,22 +70,25 @@ data:
         - system:nodes
 EOF
 
-if [ $INTERNAL_DOMAIN_NAME != "NOT_SET" ] || [ $EXTERNAL_DOMAIN_NAME != "NOT_SET" ]; then
-  echo -e "\n$COL> certs = "
-  cert=$(aws cloudformation describe-stacks \
-    --region "$REGION" \
-    --stack-name "$STACK_NAME" \
-    --query "Stacks[0].Outputs[?OutputKey=='InternalCert'].OutputValue" \
-    --output text)
+CERT_EXISTS=$(aws acm list-certificates | grep $INTERNAL_DOMAIN_NAME | wc -l)
+if [ $INTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CERT_EXISTS -eq 0 ]; then
+  echo -e "\n$COL> Requesting certificate for ${INTERNAL_DOMAIN_NAME}"$NOC
+  cert=$(aws acm request-certificate --domain-name $INTERNAL_DOMAIN_NAME --validation-method DNS --output text)
+  sleep 10
+  echo -e "\n$COL> internal_certs = "
   echo -n $cert" "
   aws acm describe-certificate --certificate-arn $cert --query 'Certificate.DomainValidationOptions[*].ResourceRecord.[Name,Value]' --output text
-  cert=$(aws cloudformation describe-stacks \
-    --region "$REGION" \
-    --stack-name "$STACK_NAME" \
-    --query "Stacks[0].Outputs[?OutputKey=='ExternalCert'].OutputValue" \
-    --output text)
+  echo -e $NOC
+fi
+
+CERT_EXISTS=$(aws acm list-certificates | grep $EXTERNAL_DOMAIN_NAME | wc -l)
+if [ $EXTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CERT_EXISTS -eq 0 ]; then
+  echo -e "\n$COL> Requesting certificate for ${EXTERNAL_DOMAIN_NAME}"$NOC
+  cert=$(aws acm request-certificate --domain-name $EXTERNAL_DOMAIN_NAME --validation-method DNS --output text)
+  sleep 10
+  echo -e "\n$COL> external_certs = "
   echo -n $cert" "
   aws acm describe-certificate --certificate-arn $cert --query 'Certificate.DomainValidationOptions[*].ResourceRecord.[Name,Value]' --output text
-  echo -e "$NOC"
+  echo -e $NOC
 fi
 echo -e "\n$COL> connect = aws eks update-kubeconfig --region "$REGION" --name $STACK_NAME $NOC"
