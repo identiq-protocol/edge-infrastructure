@@ -14,18 +14,18 @@ module "vpc" {
 
 
   tags = {
-    Terraform                            = "true"
-    "kubernetes.io/cluster/edge-cluster" = "shared"
+    Terraform                                   = "true"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
 
   }
 
   public_subnet_tags = {
-    Terraform                            = "true"
-    "kubernetes.io/cluster/edge-cluster" = "shared"
+    Terraform                                   = "true"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
   private_subnet_tags = {
-    Terraform                            = "true"
-    "kubernetes.io/cluster/edge-cluster" = "shared"
-    "kubernetes.io/role/internal-elb"    = "1"
+    Terraform                                   = "true"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+    "kubernetes.io/role/internal-elb"           = "1"
   }
 }
