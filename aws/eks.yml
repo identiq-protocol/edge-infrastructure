@@ -13,10 +13,23 @@ Parameters:
     Description: EC2 instance type for the worker nodes
     Default: c5n.2xlarge
 
+  InternalDomain:
+    Type: String
+    Description: Internal domain name for ACM certificate
+    Default: "NOT_SET"
+
+  ExternalDomain:
+    Type: String
+    Description: External domain name for ACM certificate
+    Default: "NOT_SET"
+
   KeyPairName:
     Type: String
     Description: Name of an existing EC2 key pair (for SSH-access to the worker node instances)
 
+Conditions:
+  CreateInternalCert: !Not [!Equals [ !Ref InternalDomain, "NOT_SET" ]]
+  CreateExternalCert: !Not [!Equals [ !Ref ExternalDomain, "NOT_SET" ]]
 Mappings:
 
   VpcIpRanges:
@@ -409,11 +422,30 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
 
+  InternalCert:
+    Type: AWS::CertificateManager::Certificate
+    Condition: CreateInternalCert
+    Properties:
+      DomainName: !Ref InternalDomain
+      ValidationMethod: DNS
+
+  ExternalCert:
+    Type: AWS::CertificateManager::Certificate
+    Condition: CreateExternalCert
+    Properties:
+      DomainName: !Ref ExternalDomain
+      ValidationMethod: DNS
 Outputs:
-
+  InternalCert:
+    Description: Internal certificate ARN
+    Value: !Ref InternalCert
+    Condition: CreateInternalCert
+  ExternalCert:
+    Description: External certificate ARN
+    Value: !Ref ExternalCert
+    Condition: CreateExternalCert
   WorkerNodesRoleArn:
-    # Needed for the last step "enable worker nodes to join the cluster":
-    # https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html#eks-create-cluster
     Description: ARN of the worker nodes role
     Value: !GetAtt WorkerNodesRole.Arn
