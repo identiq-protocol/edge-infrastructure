@@ -70,8 +70,9 @@ data:
         - system:nodes
 EOF
 
-CHECK_CERT=$(aws acm list-certificates | grep $INTERNAL_DOMAIN_NAME | wc -l)
-if [ $INTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CHECK_CERT -eq 0 ]; then
+CERT_EXISTS=$(aws acm list-certificates | grep $INTERNAL_DOMAIN_NAME | wc -l)
+if [ $INTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CERT_EXISTS -eq 0 ]; then
+  echo -e "\n$COL> Requesting certificate for ${INTERNAL_DOMAIN_NAME}"$NOC
   cert=$(aws acm request-certificate --domain-name $INTERNAL_DOMAIN_NAME --validation-method DNS --output text)
   sleep 10
   echo -e "\n$COL> internal_certs = "
@@ -80,8 +81,9 @@ if [ $INTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CHECK_CERT -eq 0 ]; then
   echo -e $NOC
 fi
 
-CHECK_CERT=$(aws acm list-certificates | grep $EXTERNAL_DOMAIN_NAME | wc -l)
-if [ $EXTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CHECK_CERT -eq 0 ]; then
+CERT_EXISTS=$(aws acm list-certificates | grep $EXTERNAL_DOMAIN_NAME | wc -l)
+if [ $EXTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CERT_EXISTS -eq 0 ]; then
+  echo -e "\n$COL> Requesting certificate for ${EXTERNAL_DOMAIN_NAME}"$NOC
   cert=$(aws acm request-certificate --domain-name $EXTERNAL_DOMAIN_NAME --validation-method DNS --output text)
   sleep 10
   echo -e "\n$COL> external_certs = "
