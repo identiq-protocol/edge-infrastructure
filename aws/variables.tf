@@ -39,3 +39,10 @@ variable "internal_domain_name" {
 variable "external_domain_name" {
   default = "NOT_SET"
 }
+variable "edge_eks_subnets" {
+  default = concat(module.vpc.private_subnets, module.vpc.public_subnets)
+}
+
+variable "edge_asg_subnet" {
+  default = [module.vpc.private_subnets[0]]
+}
