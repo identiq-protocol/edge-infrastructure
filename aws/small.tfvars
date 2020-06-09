@@ -1,5 +1,5 @@
-instance_count = 3
-instance_type  = "c5n.2xlarge"
+instance_count = 4
+instance_type  = "c5.2xlarge"
 cluster_name   = "edge-cluster"
 region         = "us-east-1"
 # For configuring additional IAM roles to administer the cluster
