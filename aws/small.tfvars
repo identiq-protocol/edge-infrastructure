@@ -7,6 +7,3 @@ region         = "us-east-1"
 # map_roles = [{ rolearn = "arn:aws:iam::012345678901:role/edge-admin", username = "admin", groups = ["system:masters"] }]
 # For cloudwatch logs in edge uncomment the following line
 # additional_policies = ["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]
-# To configure ACM creation, uncomment the following variables and set with correct values
-# internal_domain_name = "NOT_SET"
-# external_domain_name = "NOT_SET"
