@@ -13,8 +13,6 @@ NUM_WORKER_NODES=$(cat ${1}.tfvars | grep instance_count | awk '{print $NF}')
 STACK_NAME=$(cat ${1}.tfvars | grep cluster_name | awk '{print $NF}' | sed 's/"//g')
 WORKER_NODES_INSTANCE_TYPE=$(cat ${1}.tfvars | grep instance_type | awk '{print $NF}' | sed 's/"//g')
 REGION=$(cat ${1}.tfvars | grep region | awk '{print $NF}' | sed 's/"//g')
-INTERNAL_DOMAIN_NAME=$(cat ${1}.tfvars | grep internal_domain_name | awk '{print $NF}' | sed 's/"//g')
-EXTERNAL_DOMAIN_NAME=$(cat ${1}.tfvars | grep external_domain_name | awk '{print $NF}' | sed 's/"//g')
 #------------------------------------------------------------------------------#
 
 echo -e  "$COL> Ensuring SSH key pair for worker node connectivity$NOC"
@@ -70,25 +68,4 @@ data:
         - system:nodes
 EOF
 
-CERT_EXISTS=$(aws acm list-certificates | grep $INTERNAL_DOMAIN_NAME | wc -l)
-if [ $INTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CERT_EXISTS -eq 0 ]; then
-  echo -e "\n$COL> Requesting certificate for ${INTERNAL_DOMAIN_NAME}"$NOC
-  cert=$(aws acm request-certificate --domain-name $INTERNAL_DOMAIN_NAME --validation-method DNS --output text)
-  sleep 10
-  echo -e "\n$COL> internal_certs = "
-  echo -n $cert" "
-  aws acm describe-certificate --certificate-arn $cert --query 'Certificate.DomainValidationOptions[*].ResourceRecord.[Name,Value]' --output text
-  echo -e $NOC
-fi
-
-CERT_EXISTS=$(aws acm list-certificates | grep $EXTERNAL_DOMAIN_NAME | wc -l)
-if [ $EXTERNAL_DOMAIN_NAME != "NOT_SET" ] && [ $CERT_EXISTS -eq 0 ]; then
-  echo -e "\n$COL> Requesting certificate for ${EXTERNAL_DOMAIN_NAME}"$NOC
-  cert=$(aws acm request-certificate --domain-name $EXTERNAL_DOMAIN_NAME --validation-method DNS --output text)
-  sleep 10
-  echo -e "\n$COL> external_certs = "
-  echo -n $cert" "
-  aws acm describe-certificate --certificate-arn $cert --query 'Certificate.DomainValidationOptions[*].ResourceRecord.[Name,Value]' --output text
-  echo -e $NOC
-fi
 echo -e "\n$COL> connect = aws eks update-kubeconfig --region "$REGION" --name $STACK_NAME $NOC"
