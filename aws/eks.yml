@@ -32,11 +32,11 @@ Mappings:
   # https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html
   EksAmiIds:
     us-east-1:
-      Standard: ami-0e5bb2367e692b807
+      Standard: ami-0d960646974cf9e5b
     eu-west-1:
-      Standard: ami-0f9e9442edcd2faa2
+      Standard: ami-0e6058a35a7645609
     eu-west-2:
-      Standard: ami-0ad8600a59c501b34
+      Standard: ami-0b494b0512ce3c32b
 
 Resources:
 
@@ -220,7 +220,7 @@ Resources:
     Type: AWS::EKS::Cluster
     Properties:
       Name: !Ref AWS::StackName
-      Version: "1.15"
+      Version: "1.16"
       RoleArn: !GetAtt ControlPlaneRole.Arn
       ResourcesVpcConfig:
         SecurityGroupIds:

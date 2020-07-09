@@ -13,10 +13,11 @@ provider "kubernetes" {
 }
 
 module "my-cluster" {
-  source               = "terraform-aws-modules/eks/aws"
-  version              = "11.0.0"
-  cluster_name         = var.cluster_name
-  cluster_version      = "1.15"
+  source       = "terraform-aws-modules/eks/aws"
+  version      = "11.0.0"
+  cluster_name = var.cluster_name
+
+  cluster_version      = "1.16"
   subnets              = concat(module.vpc.private_subnets, module.vpc.public_subnets)
   vpc_id               = module.vpc.vpc_id
   map_roles            = var.map_roles
@@ -25,6 +26,7 @@ module "my-cluster" {
     {
       subnets              = [module.vpc.private_subnets[0]]
       instance_type        = var.instance_type
+      asg_min_size         = 0
       asg_max_size         = var.instance_count
       asg_desired_capacity = var.instance_count
     }
