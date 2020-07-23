@@ -3,9 +3,8 @@ COL='\033[1;34m'
 NOC='\033[0m'
 
 # General variables
-INSTANCE_TYPE=m5.large
+INSTANCE_TYPE=m5.4xlarge
 AMI_ID=ami-08f3d892de259504d
-VOLUME_SIZE=20
 
 echo -e  "$COL> Checking for existing SSH key$NOC"
 KEY_PAIR_EXISTS=$(aws ec2  describe-key-pairs --query "KeyPairs[*].KeyName" --output text | grep edge-key-pair | wc -l)
@@ -23,7 +22,7 @@ echo -e "$COL> Creating verification server$NOC"
 echo $(aws ec2 run-instances  --instance-type $INSTANCE_TYPE \
    --key-name edge-key-pair \
    --image-id $AMI_ID \
-   --block-device-mappings '[{"DeviceName":"/dev/sdg","Ebs":{"VolumeSize":20,"DeleteOnTermination":true}}]' \
+   --block-device-mappings '[{"DeviceName":"/dev/sdg","Ebs":{"VolumeSize":1024,"DeleteOnTermination":true}}]' \
    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=verification-tool}]' 'ResourceType=volume,Tags=[{Key=Name,Value=verification-tool}]' \
    --user-data file://init-verification-tool.sh --query "Instances[*].InstanceId" --output text) > instance_id
 echo -e "$COL> Verification server created. to connect it please use the following command:\n${NOC}"
