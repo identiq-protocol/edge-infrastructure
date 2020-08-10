@@ -26,5 +26,5 @@ echo $(aws ec2 run-instances  --instance-type $INSTANCE_TYPE \
    --block-device-mappings '[{"DeviceName":"/dev/sdg","Ebs":{"VolumeSize":20,"DeleteOnTermination":true}}]' \
    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=verification-tool}]' 'ResourceType=volume,Tags=[{Key=Name,Value=verification-tool}]' \
    --user-data file://init-verification-tool.sh --query "Instances[*].InstanceId" --output text) > instance_id
-echo -e "$COL> Verification server created. to connect it please use the following command:\n${NOC}"
+echo -e "$COL> Verification server created. to connect it please use the following command:${NOC}"
 echo "ssh -i \"edge-key-pair.pem\" ec2-user@"$(aws ec2 describe-instances --instance-ids $(cat instance_id) --query "Reservations[*].Instances[*].PublicDnsName" --output text)
