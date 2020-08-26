@@ -29,6 +29,10 @@ variable "map_roles" {
   default = []
 }
 
+variable "map_users" {
+  default = []
+}
+
 variable "additional_policies" {
   default = []
 }
