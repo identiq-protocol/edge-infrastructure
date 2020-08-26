@@ -7,4 +7,4 @@ region         = "us-east-1"
 # map_roles = [{ rolearn = "arn:aws:iam::012345678901:role/edge-admin", username = "admin", groups = ["system:masters"] }]
 # map_users = [{ userarn = "arn:aws:iam::012345678901:user/username", username = "admin", groups = ["system:masters"] }]
 # For cloudwatch logs in edge uncomment the following line
-# additional_policies = ["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]"
+# additional_policies = ["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]
