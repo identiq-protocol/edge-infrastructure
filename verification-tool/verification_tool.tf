@@ -43,6 +43,8 @@ resource "aws_security_group" "server-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+resource "aws_eip" "ip" {
+}
 resource "aws_instance" "verification-tool" {
   ami = data.aws_ami.amazon-linux-2.id
   instance_type = var.instance_type
@@ -60,10 +62,15 @@ resource "aws_instance" "verification-tool" {
   tags = {
     Name = "Identiq Data Verification Tool"
   }
-
   depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, aws_security_group.server-sg]
   security_groups = [aws_security_group.server-sg.name]
   user_data = file("${path.cwd}/init-verification-tool.sh")
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.verification-tool.id
+  allocation_id = aws_eip.ip.id
+  depends_on = [aws_instance.verification-tool,aws_eip.ip]
 }
 
 output verification_tool {
