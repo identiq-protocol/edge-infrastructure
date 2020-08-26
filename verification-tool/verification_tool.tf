@@ -43,7 +43,6 @@ resource "aws_security_group" "server-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 resource "aws_eip" "ip" {
 }
 resource "aws_instance" "verification-tool" {
@@ -73,6 +72,7 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.ip.id
   depends_on = [aws_instance.verification-tool,aws_eip.ip]
 }
+
 output verification_tool {
   value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_instance.verification-tool.public_dns}"
 }
