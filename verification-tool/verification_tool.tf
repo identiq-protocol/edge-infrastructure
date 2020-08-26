@@ -52,7 +52,7 @@ resource "aws_instance" "verification-tool" {
     volume_size = var.verification_tool_disk_size
     volume_type = "gp2"
     encrypted = true
-    delete_on_termination = false
+    delete_on_termination = true
   }
   volume_tags = {
     Name = "Identiq Data Verification Tool"
