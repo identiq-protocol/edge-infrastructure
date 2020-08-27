@@ -13,3 +13,8 @@ variable "region" {
 variable "instance_type" {
   default = "m5.4xlarge"
 }
+
+data "http" "myip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
