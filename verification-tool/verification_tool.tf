@@ -73,6 +73,7 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.ip.id
   depends_on = [aws_instance.verification-tool,aws_eip.ip]
 }
+
 output verification_tool {
   value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_instance.verification-tool.public_dns}"
 }
