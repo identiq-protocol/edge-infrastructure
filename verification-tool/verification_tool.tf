@@ -34,7 +34,7 @@ resource "aws_security_group" "server-sg" {
     from_port = 22
     to_port   = 22
     protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
   }
   egress {
     from_port   = 0
@@ -43,6 +43,7 @@ resource "aws_security_group" "server-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
 resource "aws_eip" "ip" {
 }
 resource "aws_instance" "verification-tool" {
@@ -74,5 +75,5 @@ resource "aws_eip_association" "eip_assoc" {
 }
 
 output verification_tool {
-  value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_instance.verification-tool.public_dns}"
+  value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_eip.ip.public_dns}"
 }
