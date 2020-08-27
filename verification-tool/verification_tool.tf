@@ -75,5 +75,5 @@ resource "aws_eip_association" "eip_assoc" {
 }
 
 output verification_tool {
-  value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_instance.verification-tool.public_dns}"
+  value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_eip.ip.public_dns}"
 }
