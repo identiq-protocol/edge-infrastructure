@@ -1,5 +1,5 @@
-
-
+# https://github.com/vfrank66/awsbatchlaunchtemplate/blob/master/aws-batch-launch-ami.yaml
+# consider using this flow in the future.
 ---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'AWS CloudFormation Sample Template Managed Single Batch Job Queue: This
