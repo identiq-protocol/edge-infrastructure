@@ -34,6 +34,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       CidrBlock: !FindInMap [ VpcIpRanges, Option1, PublicSubnetA ]
+      MapPublicIpOnLaunch: 'True'
       AvailabilityZone: !Select
         - 0
         - !GetAZs ""
@@ -44,6 +45,7 @@ Resources:
   PublicSubnetB:
     Type: AWS::EC2::Subnet
     Properties:
+      MapPublicIpOnLaunch: 'True'
       VpcId: !Ref VPC
       CidrBlock: !FindInMap [ VpcIpRanges, Option1, PublicSubnetB ]
       AvailabilityZone: !Select
@@ -55,6 +57,7 @@ Resources:
   PublicSubnetC:
     Type: AWS::EC2::Subnet
     Properties:
+      MapPublicIpOnLaunch: 'True'
       VpcId: !Ref VPC
       CidrBlock: !FindInMap [ VpcIpRanges, Option1, PublicSubnetC ]
       AvailabilityZone: !Select
