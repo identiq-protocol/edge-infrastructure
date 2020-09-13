@@ -34,6 +34,10 @@ Parameters:
   DockerEmail:
     Type: String
     Description: Email of the docker user registered in the docker registry
+  LoggingEnabled:
+    Type: String
+    Default: false
+    Description: Value for IDQ_LOGGING_ENABLED environment variable
 Mappings:
 
   VpcIpRanges:
@@ -204,7 +208,8 @@ Resources:
           - Name: IDQ_PRE_CLEAN_OUTPUT
             Value: false
           - Name: IDQ_LOGGING_ENABLED
-            Value: false
+            Value:
+              Ref: LoggingEnabled
           - Name: IDQ_EVENTS_PATH
             Value:
               Ref: EventsPath
