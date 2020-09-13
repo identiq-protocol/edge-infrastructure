@@ -5,7 +5,7 @@
 2. Fill in the variable according to their description in the template.
 3. Wait 15 minutes for the template to deploy and the compute environment to finish starting.
 4. Submit a job from AWS Batch -> Jobs -> Submit a job. 
-    1. Name it: IdentiqFreud1
-    2. job definition: IdentiqFreudJobDef:1 
-    3. job queue field choose: IdentiqFreudJobQueue
-    4. compute environment field choose: IdentiqFreudComputeEnv
+    * Name it: IdentiqFreud1
+    * Job definition: IdentiqFreudJobDef:1 
+    * Job queue field choose: IdentiqFreudJobQueue
+    * Compute environment field choose: IdentiqFreudComputeEnv
