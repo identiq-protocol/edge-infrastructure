@@ -1,4 +1,4 @@
-# run freud in AWS batch:
+# Freud in AWS batch
 
 ### Deploy Template
 1. Sign in to AWS Console and navigate to cloud formation deploy cloudformation from edge-infrastructure/verification-tool/cloudformation/batch.yaml
@@ -6,4 +6,6 @@
 3. Wait 15 minutes for the template to deploy and the compute environment to finish starting.
 4. Submit a job from AWS Batch -> Jobs -> Submit a job. 
     1. Name it: IdentiqFreud1
-    2. 
+    2. job definition: IdentiqFreudJobDef:1 
+    3. job queue field choose: IdentiqFreudJobQueue
+    4. compute environment field choose: IdentiqFreudComputeEnv
