@@ -2,14 +2,38 @@
 # consider using this flow in the future.
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'AWS CloudFormation Sample Template Managed Single Batch Job Queue: This
-  template demonstrates the usage of simple Job Queue and EC2 style Compute Environment.  **WARNING**
-  You will be billed for the AWS resources used if you create a stack from this template.'
+Description: 'AWS Cloudformation for deploying AWS Batch.'
 Parameters:
   AwsAccessKey:
     Type: String
+    Description: AWS access key for accessing S3 objects
   AwsSecretKey:
     Type: String
+    Description: AWS secret key for accessing S3 objects
+  SpringProfile:
+    Type: String
+    Default: sample
+    Description: Spring profile to indicate freud's action
+  IdentiqMember:
+    Type: String
+    Description: Identiq member's name for docker image name
+  TxnPath:
+    Type: String
+    Default: s3a://identiq-freud/sample
+    Description: Value for IDQ_TRANSACTIONS_PATH environment variable
+  EventsPath:
+    Type: String
+    Description: Value for IDQ_EVENTS_PATH environment variable
+  OutputPath:
+    Type: String
+    Default: s3a://identiq-freud/events
+    Description: Value for IDQ_S3_OUT_PATH environment variable
+  DockerCreds:
+    Type: String
+    Description: Base64 of docker creds in the format of username:password
+  DockerEmail:
+    Type: String
+    Description: Email of the docker user registered in the docker registry
 Mappings:
 
   VpcIpRanges:
@@ -156,16 +180,18 @@ Resources:
     Properties:
       Type: container
       ContainerProperties:
-        Image: identiq-internal-docker-freud.jfrog.io/freud-greenmangaming:master
+        Image: !Sub 'identiq-internal-docker-freud.jfrog.io/freud-${IdentiqMember}:master'
         Vcpus:  14
         Memory: 50000
         Environment:
           - Name: IDQ_SPRING_PROFILE
-            Value: sample
+            Value:
+              Ref: SpringProfile
           - Name: IDQ_MEMORY_TMP_PATH
             Value: /var/app/output/tmp
           - Name: IDQ_TRANSACTIONS_PATH
-            Value: s3a://identiq-freud/sample
+            Value:
+              Ref: TxnPath
           - Name: IDQ_S3_ACCESS_KEY
             Value:
               Ref: AwsAccessKey
@@ -173,15 +199,48 @@ Resources:
             Value:
               Ref: AwsSecretKey
           - Name: IDQ_S3_OUT_PATH
-            Value: s3a://identiq-freud/events
+            Value:
+              Ref: OutputPath
           - Name: IDQ_PRE_CLEAN_OUTPUT
             Value: false
           - Name: IDQ_LOGGING_ENABLED
             Value: false
           - Name: IDQ_EVENTS_PATH
-            Value: s3a://identiq-gmg-sample/*/*/*.gz
+            Value:
+              Ref: EventsPath
       RetryStrategy:
         Attempts: 1
+  SpecialComputeLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        BlockDeviceMappings:
+          - DeviceName: /dev/xvda
+            Ebs:
+              VolumeType: gp2
+              VolumeSize: '1024'
+              DeleteOnTermination: 'true'
+        UserData:
+          "Fn::Base64": !Sub |
+            Content-Type: multipart/mixed; boundary="==BOUNDARY=="
+            MIME-Version: 1.0
+
+            --==BOUNDARY==
+            MIME-Version: 1.0
+            Content-Type: text/x-shellscript; charset="us-ascii"
+
+            #!/bin/bash
+            echo ECS_CLUSTER=ComputeEnvironment-3ed0faebc41c7a1_Batch_aa4a5ab7-604c-3a50-809c-565cd02a2508>>/etc/ecs/ecs.config
+            echo ECS_DISABLE_IMAGE_CLEANUP=false>>/etc/ecs/ecs.config
+            echo ECS_ENGINE_TASK_CLEANUP_WAIT_DURATION=2m>>/etc/ecs/ecs.config
+            echo ECS_IMAGE_CLEANUP_INTERVAL=10m>>/etc/ecs/ecs.config
+            echo ECS_IMAGE_MINIMUM_CLEANUP_AGE=10m>>/etc/ecs/ecs.config
+            echo ECS_NUM_IMAGES_DELETE_PER_CYCLE=5>>/etc/ecs/ecs.config
+            echo ECS_RESERVED_MEMORY=32>>/etc/ecs/ecs.config
+            echo ECS_ENGINE_AUTH_TYPE=dockercfg >> /etc/ecs/ecs.config
+            echo 'ECS_ENGINE_AUTH_DATA={"identiq-internal-docker-freud.jfrog.io":{"auth":"${DockerCreds}","email":"${DockerEmail}"}}' >> /etc/ecs/ecs.config
+
+            --==BOUNDARY==--
 
   JobQueue:
     Type: AWS::Batch::JobQueue
@@ -201,6 +260,9 @@ Resources:
         MaxvCpus: 64
         InstanceTypes:
           - m5.4xlarge
+        LaunchTemplate:
+          LaunchTemplateId: !Ref SpecialComputeLaunchTemplate
+          Version: !GetAtt SpecialComputeLaunchTemplate.LatestVersionNumber
         Subnets:
           - Ref: PublicSubnetA
           - Ref: PublicSubnetB
