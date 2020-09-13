@@ -46,6 +46,7 @@ Mappings:
       PublicSubnetA: 10.0.64.0/20
       PublicSubnetB: 10.0.80.0/20
       PublicSubnetC: 10.0.96.0/20
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -182,6 +183,7 @@ Resources:
   JobDefinition:
     Type: AWS::Batch::JobDefinition
     Properties:
+      JobDefinitionName: IdentiqFreudJobDef
       Type: container
       ContainerProperties:
         Image: !Sub 'identiq-internal-docker-freud.jfrog.io/freud-${IdentiqMember}:master'
@@ -250,6 +252,7 @@ Resources:
   JobQueue:
     Type: AWS::Batch::JobQueue
     Properties:
+      JobQueueName: IdentiqFreudJobQueue
       Priority: 1
       ComputeEnvironmentOrder:
         - Order: 1
@@ -258,6 +261,7 @@ Resources:
   ComputeEnvironment:
     Type: AWS::Batch::ComputeEnvironment
     Properties:
+      ComputeEnvironmentName: IdentiqFreudComputeEnv
       Type: MANAGED
       ComputeResources:
         Type: EC2
@@ -276,6 +280,7 @@ Resources:
           - Ref: SecurityGroup
         InstanceRole:
           Ref: IamInstanceProfile
+        Tags: {"Name" : "IdentiqFreudComputeEnv"}
       ServiceRole:
         Ref: BatchServiceRole
 Outputs:
