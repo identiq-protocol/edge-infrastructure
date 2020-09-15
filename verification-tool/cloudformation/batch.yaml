@@ -247,7 +247,7 @@ Resources:
             echo ECS_ENGINE_AUTH_TYPE=dockercfg >> /etc/ecs/ecs.config
             echo 'ECS_ENGINE_AUTH_DATA={"identiq-internal-docker-freud.jfrog.io":{"auth":"${DockerCreds}","email":"${DockerEmail}"}}' >> /etc/ecs/ecs.config
 
-            --==BOUNDARY==--
+            --==BOUNDARY==
 
   JobQueue:
     Type: AWS::Batch::JobQueue
