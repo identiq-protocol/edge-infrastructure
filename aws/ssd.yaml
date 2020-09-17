@@ -7,3 +7,4 @@ parameters:
   type: gp2
   fsType: ext4
   encrypted: "true"
+allowVolumeExpansion: true
