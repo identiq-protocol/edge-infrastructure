@@ -189,6 +189,14 @@ Resources:
         Image: !Sub 'identiq-internal-docker-freud.jfrog.io/freud-${IdentiqMember}:master'
         Vcpus:  14
         Memory: 50000
+        MountPoints:
+          - ReadOnly: false
+            SourceVolume: volume
+            ContainerPath: /var/app/output/tmp
+        Volumes:
+          - Host:
+              SourcePath: /tmp/identiq
+            Name: volume
         Environment:
           - Name: IDQ_SPRING_PROFILE
             Value:
@@ -237,6 +245,7 @@ Resources:
             Content-Type: text/x-shellscript; charset="us-ascii"
 
             #!/bin/bash
+            mkdir -p /tmp/identiq
             echo ECS_CLUSTER=ComputeEnvironment-3ed0faebc41c7a1_Batch_aa4a5ab7-604c-3a50-809c-565cd02a2508>>/etc/ecs/ecs.config
             echo ECS_DISABLE_IMAGE_CLEANUP=false>>/etc/ecs/ecs.config
             echo ECS_ENGINE_TASK_CLEANUP_WAIT_DURATION=2m>>/etc/ecs/ecs.config
