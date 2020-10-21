@@ -8,3 +8,4 @@ parameters:
   fsType: ext4
   encrypted: "true"
 allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
