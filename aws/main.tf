@@ -14,9 +14,8 @@ provider "kubernetes" {
 
 module "my-cluster" {
   source       = "terraform-aws-modules/eks/aws"
-  version      = "11.0.0"
   cluster_name = var.cluster_name
-
+  version = "13.2.1"
   cluster_version      = "1.16"
   subnets              = concat(module.vpc.private_subnets, module.vpc.public_subnets)
   vpc_id               = module.vpc.vpc_id
