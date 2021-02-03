@@ -16,7 +16,7 @@ module "my-cluster" {
   source       = "terraform-aws-modules/eks/aws"
   cluster_name = var.cluster_name
   version = "13.2.1"
-  cluster_version      = "1.16"
+  cluster_version      = "1.18"
   subnets              = concat(module.vpc.private_subnets, module.vpc.public_subnets)
   vpc_id               = module.vpc.vpc_id
   map_roles            = var.map_roles
@@ -31,5 +31,6 @@ module "my-cluster" {
       asg_desired_capacity = var.instance_count
     }
   ]
-  workers_additional_policies = var.additional_policies
+  workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn],var.additional_policies)
+  depends_on = [aws_iam_policy.lb_controller_policy]
 }
