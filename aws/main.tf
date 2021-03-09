@@ -22,13 +22,42 @@ module "my-cluster" {
   map_roles            = var.map_roles
   map_users            = var.map_users
   wait_for_cluster_cmd = "sleep 300"
-  worker_groups = [
+  worker_groups_launch_template = [
     {
-      subnets              = [module.vpc.private_subnets[0]]
-      instance_type        = var.instance_type
-      asg_min_size         = 0
-      asg_max_size         = var.instance_count
-      asg_desired_capacity = var.instance_count
+      name                    = "db"
+      override_instance_types = [var.db_instance_type]
+      spot_instance_pools     = var.db_instance_count
+      on_demand_base_capacity = var.db_instance_count
+      asg_min_size            = 0
+      asg_max_size            = var.db_instance_count
+      asg_desired_capacity    = var.db_instance_count
+      subnets                 = [module.vpc.private_subnets[0]]
+      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
+      public_ip               = false
+    },
+    {
+      name                    = "cache"
+      override_instance_types = [var.cache_instance_type]
+      spot_instance_pools     = var.cache_instance_count
+      on_demand_base_capacity = var.cache_instance_count
+      asg_min_size            = 0
+      asg_max_size            = var.cache_instance_count
+      asg_desired_capacity    = var.cache_instance_count
+      subnets                 = [module.vpc.private_subnets[0]]
+      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
+      public_ip               = false
+    },
+    {
+      name                    = "components"
+      override_instance_types = [var.components_instance_type]
+      spot_instance_pools     = var.components_instance_count
+      on_demand_base_capacity = var.components_instance_count
+      asg_min_size            = 0
+      asg_max_size            = var.components_instance_count
+      asg_desired_capacity    = var.components_instance_count
+      subnets                 = [module.vpc.private_subnets[0]]
+      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=components"
+      public_ip               = false
     }
   ]
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn],var.additional_policies)

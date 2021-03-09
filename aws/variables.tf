@@ -36,3 +36,12 @@ variable "map_users" {
 variable "additional_policies" {
   default = []
 }
+
+variable "db_instance_count" {default = 1}
+
+variable "cache_instance_type" {default = "r5.2xlarge"}
+variable "cache_instance_count" {default = 1}
+
+variable "components_instance_type" {default = "c5.4xlarge"}
+variable "components_instance_count" {default = 4}
+variable "db_instance_type" {default = "m5.large"}
