@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "lb_controller_policy" {
-  name = "AWSLoadBalancerControllerIAMPolicy"
+  name = "IdentiqAWSLoadBalancerControllerIAMPolicy"
   policy = data.http.iam_policy.body
   depends_on = [data.http.iam_policy]
 }
