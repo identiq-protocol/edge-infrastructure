@@ -3,6 +3,7 @@ region         = "us-east-1"
 components_instance_count = 3
 components_instance_type = "c5.4xlarge"
 cache_instance_type = "r5.4xlarge"
+db_instance_type = "r5.xlarge"
 # For configuring additional IAM roles to administer the cluster
 # uncomment the variable below and set the correct IAM roles ARN.
 # map_roles = [{ rolearn = "arn:aws:iam::012345678901:role/edge-admin", username = "admin", groups = ["system:masters"] }]
