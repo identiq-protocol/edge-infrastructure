@@ -1,0 +1,144 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-edge-mariadb-0
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: edge.identiq.com/role
+            operator: In
+            values:
+              - db
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1000Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: data-edge-mariadb-0
+    namespace: default
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: default
+  volumeMode: Filesystem
+  hostPath:
+    path: "/data/pv0001/"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: edge-elasticsearch-master-edge-elasticsearch-master-0
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: edge.identiq.com/role
+            operator: In
+            values:
+              - db
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 30Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: edge-elasticsearch-master-edge-elasticsearch-master-0
+    namespace: default
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: default
+  volumeMode: Filesystem
+  hostPath:
+    path: "/data/pv0002/"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: edge-tweety
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: edge.identiq.com/role
+            operator: In
+            values:
+              - components
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: edge-tweety
+    namespace: default
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: default
+  volumeMode: Filesystem
+  hostPath:
+    path: "/data/pv0003/"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-data-edge-redis-master-0
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: edge.identiq.com/role
+            operator: In
+            values:
+              - components
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 8Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: redis-data-edge-redis-master-0
+    namespace: default
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: default
+  volumeMode: Filesystem
+  hostPath:
+    path: "/data/pv0004/"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-data-edge-identities-redis-master-0
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: edge.identiq.com/role
+              operator: In
+              values:
+                - cache
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 500Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: redis-data-edge-identities-redis-master-0
+    namespace: default
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: default
+  volumeMode: Filesystem
+  hostPath:
+    path: "/data/pv0005/"
+    type: DirectoryOrCreate
