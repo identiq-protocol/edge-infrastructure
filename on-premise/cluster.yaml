@@ -1,0 +1,54 @@
+nodes:
+  - address: idqkub1
+    user: centos
+    role:
+      - etcd
+  - address: idqkub2
+    user: centos
+    role:
+      - controlplane
+  - address: idqkub3
+    user: centos
+    role:
+      - controlplane
+  - address: idqapp1
+    user: centos
+    role:
+      - worker
+    labels:
+      edge.identiq.com/role: components
+  - address: idqapp2
+    user: centos
+    role:
+      - worker
+    labels:
+      edge.identiq.com/role: components
+  - address: idqapp3
+    user: centos
+    role:
+      - worker
+    labels:
+      edge.identiq.com/role: components
+  - address: idqdb1
+    user: centos
+    role:
+      - worker
+    labels:
+      edge.identiq.com/role: db
+  - address: idqcache1
+    user: centos
+    role:
+      - worker
+    labels:
+      edge.identiq.com/role: cache
+
+ssh_key_path: /path/to/file.pem
+
+cluster_name: edge-cluster
+
+kubernetes_version: v1.18.16-rancher1-1
+
+network:
+  plugin: calico
+dns:
+  provider: coredns
