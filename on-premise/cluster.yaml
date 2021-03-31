@@ -51,6 +51,7 @@ kubernetes_version: v1.18.16-rancher1-1
 network:
   plugin: calico
 dns:
+<<<<<<< HEAD
   provider: coredns
 
 private_registries:
@@ -58,3 +59,6 @@ private_registries:
     user: user_name_for_artifactory
     password: password_for_artifactory
     is_default: true
+=======
+  provider: coredns
+>>>>>>> 3b9cee33fddac560354256b0a2dbabd73276fc28
