@@ -52,3 +52,8 @@ network:
   plugin: calico
 dns:
   provider: coredns
+
+private_registries:
+  - url: identiq-docker.jfrog.io
+    user: user_name_for_artifactory
+    password: password_for_artifactory
