@@ -4,12 +4,15 @@ variable "region" {
 provider "aws" {
   region = var.region
 }
+
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
-  version                = "~> 1.9"
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    command     = "aws"
+    args        = ["--region", var.region, "eks", "get-token", "--cluster-name", var.cluster_name]
+  }
 }
 
 module "my-cluster" {
@@ -30,7 +33,7 @@ module "my-cluster" {
       on_demand_base_capacity = var.db_instance_count
       asg_min_size            = 0
       asg_max_size            = var.db_instance_count
-      asg_desired_capacity    = var.db_instance_count
+      asg_desired_capacity    = var.external_store ? 0 : var.db_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
       public_ip               = false
@@ -42,7 +45,7 @@ module "my-cluster" {
       on_demand_base_capacity = var.cache_instance_count
       asg_min_size            = 0
       asg_max_size            = var.cache_instance_count
-      asg_desired_capacity    = var.cache_instance_count
+      asg_desired_capacity    = var.external_store ? 0 : var.cache_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
       public_ip               = false

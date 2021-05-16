@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.66.0"
+  version = "3.0.0"
   name    = "identiq-vpc"
   cidr    = var.cidrsubnet
 
