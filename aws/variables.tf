@@ -45,3 +45,13 @@ variable "cache_instance_count" {default = 1}
 variable "components_instance_type" {default = "c5.4xlarge"}
 variable "components_instance_count" {default = 4}
 variable "db_instance_type" {default = "m5.large"}
+
+variable "external_store" { default = false }
+variable "store_name" { default = "edge" }
+
+variable "tags" {
+  default = {
+    Owner = "Identiq" 
+    Application = "IdentiqEdge"
+  }
+}
