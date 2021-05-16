@@ -85,6 +85,6 @@ resource "kubernetes_service" "edge_mariadb_service" {
 
   depends_on = [
     module.my-cluster,
-    module.rds
+    module.rds[0]
   ]
 }
