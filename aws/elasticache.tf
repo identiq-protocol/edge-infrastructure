@@ -11,20 +11,14 @@ module "redis" {
   security_group_description = "Managed by Terraform"
   cluster_mode_replicas_per_node_group = 0
   cluster_size = 1
-  auth_token = random_password.elasticache_password[0].result
   instance_type                        = "cache.${var.cache_instance_type}"
   apply_immediately                    = true
   automatic_failover_enabled           = false
   engine_version                       = "6.x"
   family                               = "redis6.x"
   at_rest_encryption_enabled           = "true"
-  transit_encryption_enabled           = "true"
+  transit_encryption_enabled           = "false"
   tags = var.tags
-}
-resource "random_password" "elasticache_password" {
-  length = 16
-  count = var.external_store ?  1 : 0
-  special = false
 }
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_store ?  1 : 0
@@ -37,7 +31,7 @@ resource "kubernetes_secret" "edge_redis_secret" {
     }
   }
   data = {
-    redis-password = random_password.elasticache_password[0].result
+    redis-password = ""
   }
   depends_on = [
     module.my-cluster,
