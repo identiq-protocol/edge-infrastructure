@@ -1,0 +1,181 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: helm-operator
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: helm-operator-git-deploy
+type: Opaque
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: helm-operator-kube-config
+data:
+  config: |
+    apiVersion: v1
+    clusters: []
+    contexts:
+    - context:
+        cluster: ""
+        namespace: default
+        user: ""
+      name: default
+    current-context: default
+    kind: Config
+    preferences: {}
+    users: []
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: helm-operator
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: helm-operator
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: helm-operator
+subjects:
+  - name: helm-operator
+    namespace: "default"
+    kind: ServiceAccount
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helm-operator
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3030
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: helm-operator
+    release: helm-operator
+---
+kind: Deployment
+metadata:
+  name: helm-operator
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: helm-operator
+      release: helm-operator
+  strategy:
+    type:  Recreate
+  template:
+    metadata:
+      annotations:
+        checksum/repositories: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      labels:
+        app: helm-operator
+        release: helm-operator
+    spec:
+      serviceAccountName: helm-operator
+      imagePullSecrets:
+        - name: identiq-docker-key
+      volumes:
+      - name: git-key
+        secret:
+          secretName: helm-operator-git-deploy
+          defaultMode: 0400
+      - name: "repositories-yaml"
+        secret:
+          secretName: "flux-helm-repositories"
+      - name: "repositories-cache"
+        emptyDir: {}
+      containers:
+      - name: flux-helm-operator
+        image: "identiq-docker.jfrog.io/helm-operator:1.0.1"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 3030
+        livenessProbe:
+          httpGet:
+            port: 3030
+            path: /healthz
+          initialDelaySeconds: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            port: 3030
+            path: /healthz
+          initialDelaySeconds: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: git-key
+          mountPath: /etc/fluxd/ssh
+          readOnly: true
+        - name: "repositories-yaml"
+          mountPath: /root/.helm/repository/repositories.yaml
+          subPath: repositories.yaml
+          readOnly: true
+        - name: "repositories-cache"
+          mountPath: /root/.cache/helm/repository
+          subPath: v3
+        args:
+        - --enabled-helm-versions=v3
+        - --helm-repository-import=v3:/root/.helm/repository/repositories.yaml
+        - --log-format=fmt
+        - --git-timeout=20s
+        - --git-poll-interval=5m
+        - --charts-sync-interval=3m
+        - --status-update-interval=30s
+        - --update-chart-deps=true
+        - --log-release-diffs=false
+        - --workers=4
+        - --tiller-namespace=kube-system
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
