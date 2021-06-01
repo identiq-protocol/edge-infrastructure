@@ -8,13 +8,13 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "network" {
-  source              = "Azure/network/azurerm"
-  resource_group_name = azurerm_resource_group.rg.name
-  address_space       = "10.0.0.0/16"
-  subnet_prefixes     = ["10.0.4.0/22"]
-  subnet_names        = ["subnet1"]
-  subnet_enforce_private_link_endpoint_network_policies = {"subnet1": true}
-  depends_on          = [azurerm_resource_group.rg]
+  source                                                = "Azure/network/azurerm"
+  resource_group_name                                   = azurerm_resource_group.rg.name
+  address_space                                         = "10.0.0.0/16"
+  subnet_prefixes                                       = ["10.0.4.0/22"]
+  subnet_names                                          = ["subnet1"]
+  subnet_enforce_private_link_endpoint_network_policies = { "subnet1" : true }
+  depends_on                                            = [azurerm_resource_group.rg]
 }
 
 terraform {
@@ -41,9 +41,9 @@ module "aks" {
   sku_tier                         = "Paid"
   enable_role_based_access_control = true
   rbac_aad_managed                 = true
-  private_cluster_enabled          = true # default value
-  enable_log_analytics_workspace = false
-  agents_size = var.agents_size
+  private_cluster_enabled          = false # default value
+  enable_log_analytics_workspace   = false
+  agents_size                      = var.agents_size
   agents_min_count                 = 1
   agents_max_count                 = var.agents_count
   agents_count                     = var.agents_count
@@ -59,4 +59,11 @@ module "aks" {
   net_profile_service_cidr       = "10.30.0.0/24"
 
   depends_on = [module.network]
+}
+provider "kubernetes" {
+  host                   = module.aks.admin_host
+  cluster_ca_certificate = base64decode(module.aks.admin_cluster_ca_certificate)
+  client_certificate     = base64decode(module.aks.admin_client_certificate)
+  client_key             = base64decode(module.aks.admin_client_key)
+
 }

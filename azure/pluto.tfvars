@@ -1,4 +1,5 @@
-cluster_name   = "edge"
-region         = "eastus"
+cluster_name = "edge"
+region       = "eastus"
 agents_count = 4
-agents_size = "Standard_E8ds_v4"
+agents_size  = "Standard_E8ds_v4"
+external_store = true
