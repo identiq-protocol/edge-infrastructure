@@ -3,13 +3,13 @@ apiVersion: v1
 kind: Config
 preferences:
   colors: true
-current-context: tf-k8s-gcp-test
+current-context: ${cluster_name}
 contexts:
 - context:
     cluster: ${cluster_name}
     namespace: default
     user: ${user_name}
-  name: tf-k8s-gcp-test
+  name: ${cluster_name}
 clusters:
 - cluster:
     server: ${endpoint}

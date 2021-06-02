@@ -93,6 +93,7 @@ spec:
     app: helm-operator
     release: helm-operator
 ---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: helm-operator
