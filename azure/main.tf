@@ -39,14 +39,6 @@ resource "azurerm_subnet_nat_gateway_association" "nat_gw_a" {
   nat_gateway_id = azurerm_nat_gateway.nat_gw.id
   subnet_id      = module.network.vnet_subnets[0]
 }
-terraform {
-  backend "s3" {
-    region  = "us-east-1"
-    bucket  = "identiq-production-terraform"
-    key     = "dev/azure/edge-infrastructure"
-    encrypt = "true"
-  }
-}
 
 module "aks" {
   source                           = "Azure/aks/azurerm"
