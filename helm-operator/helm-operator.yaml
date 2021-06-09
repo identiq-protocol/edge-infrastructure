@@ -73,6 +73,14 @@ subjects:
     namespace: "default"
     kind: ServiceAccount
 ---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: helm-operator
+value: 1000002
+globalDefault: false
+description: "This priority class should be used for helm-operator service pods only."
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -131,6 +139,7 @@ spec:
           secretName: "flux-helm-repositories"
       - name: "repositories-cache"
         emptyDir: {}
+      priorityClassName: helm-operator
       containers:
       - name: flux-helm-operator
         image: "identiq-docker.jfrog.io/helm-operator:1.0.1"
