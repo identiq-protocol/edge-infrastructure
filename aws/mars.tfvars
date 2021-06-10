@@ -1,7 +1,7 @@
 cluster_name   = "edge-cluster"
 region         = "us-east-1"
-components_instance_count = 9
-components_instance_type = "c5.4xlarge"
+dynamic_instance_count = 8
+dynamic_instance_type = "c5.4xlarge"
 cache_instance_type = "r5.8xlarge"
 db_instance_type = "r5.2xlarge"
 # For configuring additional IAM roles to administer the cluster

@@ -1,6 +1,6 @@
 cluster_name   = "edge-cluster"
 region         = "us-east-1"
-# components_instance_count = 4
+dynamic_instance_count = 3
 # components_instance_type = "c5.4xlarge"
 # For configuring additional IAM roles to administer the cluster
 # uncomment the variable below and set the correct IAM roles ARN.
