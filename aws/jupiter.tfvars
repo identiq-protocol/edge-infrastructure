@@ -1,6 +1,6 @@
 cluster_name   = "edge-cluster"
 region         = "us-east-1"
-components_instance_count = 5
+components_instance_count = 4
 components_instance_type = "c5.4xlarge"
 cache_instance_type = "r5.4xlarge"
 db_instance_type = "r5.xlarge"
