@@ -16,14 +16,6 @@ module "network" {
   subnet_enforce_private_link_endpoint_network_policies = { "subnet1" : true }
   depends_on                                            = [azurerm_resource_group.rg]
 }
-terraform {
-  backend "s3" {
-    region  = "us-east-1"
-    bucket  = "identiq-production-terraform"
-    key     = "dev/azure/edge-infrastructure"
-    encrypt = "true"
-  }
-}
 
 resource "azurerm_public_ip_prefix" "nat_ip" {
   name                = "${var.cluster_name}-nat-gateway-publicIPPrefix"
