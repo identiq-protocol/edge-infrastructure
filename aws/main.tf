@@ -52,24 +52,24 @@ module "my-cluster" {
     },
     {
       name                    = "dynamic"
-      override_instance_types = [var.components_instance_type]
-      spot_instance_pools     = var.components_instance_count
-      on_demand_base_capacity = var.components_instance_count
+      override_instance_types = [var.dynamic_instance_type]
+      spot_instance_pools     = var.dynamic_instance_count
+      on_demand_base_capacity = var.dynamic_instance_count
       asg_min_size            = 0
-      asg_max_size            = var.components_instance_count
-      asg_desired_capacity    = var.components_instance_count
+      asg_max_size            = var.dynamic_instance_count
+      asg_desired_capacity    = var.dynamic_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic"
       public_ip               = false
     },
     {
       name                    = "base"
-      override_instance_types = [var.components_instance_type]
-      spot_instance_pools     = 1
-      on_demand_base_capacity = 1
+      override_instance_types = [var.base_instance_type]
+      spot_instance_pools     = var.base_instance_count
+      on_demand_base_capacity = var.base_instance_count
       asg_min_size            = 0
-      asg_max_size            = 1
-      asg_desired_capacity    = 1
+      asg_max_size            = var.base_instance_count
+      asg_desired_capacity    = var.base_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=base"
       public_ip               = false
