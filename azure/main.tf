@@ -1,3 +1,12 @@
+terraform {
+  backend "s3" {
+    region  = "us-east-1"
+    bucket  = "identiq-production-terraform"
+    key     = "dev/azure/edge-infrastructure"
+    encrypt = "true"
+  }
+}
+
 provider "azurerm" {
   features {}
 }
@@ -11,9 +20,12 @@ module "network" {
   source                                                = "Azure/network/azurerm"
   resource_group_name                                   = azurerm_resource_group.rg.name
   address_space                                         = "10.0.0.0/16"
-  subnet_prefixes                                       = ["10.0.4.0/22"]
-  subnet_names                                          = ["subnet1"]
-  subnet_enforce_private_link_endpoint_network_policies = { "subnet1" : true }
+  subnet_prefixes                                       = ["10.0.4.0/24","10.0.5.0/24","10.0.6.0/24"]
+  subnet_names                                          = ["subnet1","subnet2","subnet3"]
+  subnet_enforce_private_link_endpoint_network_policies = {
+    "subnet2" = true,
+    "subnet3" = true
+  }
   depends_on                                            = [azurerm_resource_group.rg]
 }
 
@@ -22,7 +34,7 @@ resource "azurerm_public_ip_prefix" "nat_ip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   prefix_length       = 31
-  zones               = ["1"]
+  availability_zone   = 1
 }
 
 resource "azurerm_nat_gateway" "nat_gw" {
@@ -71,8 +83,7 @@ module "aks" {
   net_profile_dns_service_ip     = var.net_profile_dns_service_ip
   net_profile_docker_bridge_cidr = var.net_profile_docker_bridge_cidr
   net_profile_service_cidr       = var.net_profile_service_cidr
-
-  depends_on = [module.network]
+  depends_on                     = [module.network, azuread_application.app]
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "db" {
