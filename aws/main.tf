@@ -32,7 +32,7 @@ module "my-cluster" {
       spot_instance_pools     = var.db_instance_count
       on_demand_base_capacity = var.db_instance_count
       asg_min_size            = 0
-      asg_max_size            = var.db_instance_count
+      asg_max_size            = var.external_store ? 0 : var.db_instance_count
       asg_desired_capacity    = var.external_store ? 0 : var.db_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
@@ -44,7 +44,7 @@ module "my-cluster" {
       spot_instance_pools     = var.cache_instance_count
       on_demand_base_capacity = var.cache_instance_count
       asg_min_size            = 0
-      asg_max_size            = var.cache_instance_count
+      asg_max_size            = var.external_store ? 0 : var.cache_instance_count
       asg_desired_capacity    = var.external_store ? 0 : var.cache_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
