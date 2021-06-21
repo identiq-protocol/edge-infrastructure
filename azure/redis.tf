@@ -11,32 +11,12 @@ module "redis" {
   subnet_id                 = module.network.vnet_subnets[1]
   #private_static_ip_address = cidrhost(module.network.vnet_address_space[0],4)
   #private_static_ip_address = module.network.vnet_address_space[0]
-  private_static_ip_address = "10.0.5.6"
+  private_static_ip_address = cidrhost(local.subnet_prefixes[1], 4)
   authorized_cidrs = {
     ip1 = "10.0.0.0/16"
   }
   depends_on = [module.network, azuread_application.app]
 }
-
-#resource "azurerm_private_endpoint" "redis_private_endpoint" {
-#  count               = var.external_store ? 1 : 0
-#  name                = "redis-private-endpoint"
-#  location            = var.region
-#  resource_group_name = azurerm_resource_group.rg.name
-#  subnet_id           = module.network.vnet_subnets[1]
-#
-#  private_service_connection {
-#    name = "redis-private-privateserviceconnection"
-#    private_connection_resource_id = module.redis[0].redis_id
-#    subresource_names              = ["redisServer"]
-#    is_manual_connection           = false
-#  }
-#  depends_on = [
-#    module.aks,
-#    module.redis[0]
-#  ]
-#
-#}
 
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_store ? 1 : 0
@@ -57,6 +37,28 @@ resource "kubernetes_secret" "edge_redis_secret" {
   ]
 }
 
+resource "kubernetes_endpoints" "external-redis-endpoint" {
+  count = var.external_store ? 1 : 0
+  metadata {
+    name = "edge-identities-redis-master"
+  }
+
+  subset {
+    address {
+      ip = module.redis[0].redis_private_static_ip_address
+    }
+
+    port {
+      name = "redis"
+      port = 6379
+    }
+  }
+  depends_on = [
+    module.aks,
+    module.redis[0]
+  ]
+}
+
 resource "kubernetes_service" "edge_redis_service" {
   count = var.external_store ? 1 : 0
   metadata {
@@ -68,14 +70,15 @@ resource "kubernetes_service" "edge_redis_service" {
     }
   }
   spec {
-    type = "ExternalName"
-    #external_name = module.redis[0].redis_hostname
-    #external_name = azurerm_private_endpoint.redis_private_endpoint[0].private_service_connection[0].private_ip_address
-    external_name = module.redis[0].redis_private_static_ip_address
+    port {
+      name        = "redis"
+      protocol    = "TCP"
+      port        = 6379
+      target_port = 6379
+    }
   }
   depends_on = [
     module.aks,
     module.redis[0]
-    #azurerm_private_endpoint.redis_private_endpoint
   ]
 }

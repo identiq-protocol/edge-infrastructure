@@ -6,7 +6,7 @@ resource "random_password" "mysql_password" {
 
 module "mysql" {
   count               = var.external_store ? 1 : 0
-  source              = "./modules/terraform-azurerm-db-mysql/"
+  source              = "../modules/terraform-azurerm-db-mysql/"
   tier                = "GeneralPurpose"
   force_ssl           = false
   client_name         = var.cluster_name
@@ -48,7 +48,7 @@ resource "azurerm_private_endpoint" "mysql_private_endpoint" {
   subnet_id           = module.network.vnet_subnets[2]
 
   private_service_connection {
-    name = "mysql-private-privateserviceconnection"
+    name                           = "mysql-private-privateserviceconnection"
     private_connection_resource_id = module.mysql[0].mysql_server_id
     subresource_names              = ["mysqlServer"]
     is_manual_connection           = false
@@ -81,6 +81,28 @@ resource "kubernetes_secret" "edge_mariadb_secret" {
   ]
 }
 
+resource "kubernetes_endpoints" "external-mysql-endpoint" {
+  count = var.external_store ? 1 : 0
+  metadata {
+    name = "edge-mariadb"
+  }
+
+  subset {
+    address {
+      ip = azurerm_private_endpoint.mysql_private_endpoint[0].private_service_connection[0].private_ip_address
+    }
+
+    port {
+      name = "mysql"
+      port = 3306
+    }
+  }
+  depends_on = [
+    module.aks,
+    azurerm_private_endpoint.mysql_private_endpoint
+  ]
+}
+
 resource "kubernetes_service" "edge_mariadb_service" {
   count = var.external_store ? 1 : 0
   metadata {
@@ -93,9 +115,12 @@ resource "kubernetes_service" "edge_mariadb_service" {
   }
 
   spec {
-    type = "ExternalName"
-    #external_name = module.mysql[0].mysql_fqdn
-    external_name = azurerm_private_endpoint.mysql_private_endpoint[0].private_service_connection[0].private_ip_address
+    port {
+      name        = "mysql"
+      protocol    = "TCP"
+      port        = 3306
+      target_port = 3306
+    }
   }
 
   depends_on = [
