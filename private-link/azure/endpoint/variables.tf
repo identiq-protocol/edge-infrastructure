@@ -2,6 +2,8 @@ variable "resource_group" { default = "identiq-edge" }
 variable "private_connection_resource_alias" {}
 variable "subnet_name" { default = "subnet1" }
 variable "virtual_network_name" { default = "acctvnet" }
+variable "private_endpoint_name" { default = "identiq-endpoint"}
+variable "private_endpoint_request_message" { default = "Approve Request" }
 data "azurerm_resource_group" "rg" {
   name = var.resource_group
 }

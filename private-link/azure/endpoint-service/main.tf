@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_private_link_service" "service" {
-  name                = "identiq-privatelink-service"
+  name                = var.private_link_service_name
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
 
@@ -17,7 +17,6 @@ resource "azurerm_private_link_service" "service" {
     data.azurerm_lb.lb.frontend_ip_configuration.0.id,
   ]
 }
-
 output "service_name" {
   value = azurerm_private_link_service.service.alias
 }
