@@ -2,7 +2,7 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_private_link_service" "example" {
+resource "azurerm_private_link_service" "service" {
   name                = "identiq-privatelink-service"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -19,6 +19,6 @@ resource "azurerm_private_link_service" "example" {
 }
 
 output "service_name" {
-  value = azurerm_private_link_service.example.alias
+  value = azurerm_private_link_service.service.alias
 }
 

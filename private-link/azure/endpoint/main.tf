@@ -8,12 +8,10 @@ resource "azurerm_private_endpoint" "example" {
   resource_group_name = data.azurerm_resource_group.rg.name
   subnet_id           = data.azurerm_subnet.subnet.id
   private_service_connection {
-    name = "aaa"
-    request_message = "approve me"
-    is_manual_connection = true
-    private_connection_resource_alias = "identiq-privatelink-service.b2233e05-12e2-43c1-82dc-8709338a7d55.eastus.azure.privatelinkservice"
+    name                              = "PrivateEndpoint"
+    request_message                   = "Approve Request"
+    is_manual_connection              = true
+    private_connection_resource_alias = var.private_connection_resource_alias
   }
-
 }
-
 
