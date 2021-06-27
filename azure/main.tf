@@ -1,12 +1,3 @@
-terraform {
-  backend "s3" {
-    region  = "us-east-1"
-    bucket  = "identiq-production-terraform"
-    key     = "dev/azure/edge-infrastructure"
-    encrypt = "true"
-  }
-}
-
 provider "azurerm" {
   features {}
 }
