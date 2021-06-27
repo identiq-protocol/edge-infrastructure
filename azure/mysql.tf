@@ -71,6 +71,7 @@ resource "kubernetes_secret" "edge_mariadb_secret" {
     }
   }
   data = {
+    mariadb-user = "${var.mysql_administrator_login}@${module.mysql[0].mysql_server_name}"
     mariadb-password      = random_password.mysql_password[0].result
     mariadb-root-password = random_password.mysql_password[0].result
   }
