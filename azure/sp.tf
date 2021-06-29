@@ -24,3 +24,9 @@ resource "azurerm_role_assignment" "assignment" {
   role_definition_name = "Owner"
   principal_id = azuread_service_principal.app.id
 }
+
+resource "azurerm_role_assignment" "assignment" {
+  scope = azurerm_resource_group.rg.id
+  role_definition_name = "Owner"
+  principal_id = azuread_service_principal.app.id
+}
