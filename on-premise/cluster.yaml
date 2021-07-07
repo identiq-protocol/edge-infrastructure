@@ -16,19 +16,19 @@ nodes:
     role:
       - worker
     labels:
-      edge.identiq.com/role: components
+      edge.identiq.com/role: base
   - address: idqapp2
     user: centos
     role:
       - worker
     labels:
-      edge.identiq.com/role: components
+      edge.identiq.com/role: dynamic
   - address: idqapp3
     user: centos
     role:
       - worker
     labels:
-      edge.identiq.com/role: components
+      edge.identiq.com/role: dynamic
   - address: idqdb1
     user: centos
     role:
@@ -46,7 +46,7 @@ ssh_key_path: /path/to/file.pem
 
 cluster_name: edge-cluster
 
-kubernetes_version: v1.18.16-rancher1-1
+kubernetes_version: v1.19.8-rancher1-1
 
 network:
   plugin: calico
@@ -57,3 +57,4 @@ private_registries:
   - url: identiq-docker.jfrog.io
     user: user_name_for_artifactory
     password: password_for_artifactory
+    is_default: true
