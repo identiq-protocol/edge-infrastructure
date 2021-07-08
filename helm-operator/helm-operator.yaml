@@ -140,6 +140,8 @@ spec:
       - name: "repositories-cache"
         emptyDir: {}
       priorityClassName: helm-operator
+      nodeSelector:
+        edge.identiq.com/role: base
       containers:
       - name: flux-helm-operator
         image: "identiq-docker.jfrog.io/helm-operator:1.0.1"
