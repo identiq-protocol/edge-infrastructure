@@ -1,5 +1,5 @@
 resource "azuread_application" "app" {
-  name = "identiq-sa"
+  display_name = "identiq-sa"
 }
 
 # Create Service Principal
@@ -15,6 +15,18 @@ resource "random_string" "password" {
 # Create Service Principal password
 resource "azuread_service_principal_password" "app" {
   end_date             = "2299-12-30T23:00:00Z" # Forever
-  service_principal_id = azuread_service_principal.app.id
   value                = random_string.password.result
+  service_principal_id = azuread_service_principal.app.id
+}
+
+resource "azurerm_role_assignment" "assignment" {
+  scope = azurerm_resource_group.rg.id
+  role_definition_name = "Owner"
+  principal_id = azuread_service_principal.app.id
+}
+
+resource "azurerm_role_assignment" "assignment" {
+  scope = azurerm_resource_group.rg.id
+  role_definition_name = "Owner"
+  principal_id = azuread_service_principal.app.id
 }
