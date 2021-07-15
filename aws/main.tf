@@ -4,6 +4,15 @@ variable "region" {
 provider "aws" {
   region = var.region
 }
+terraform {
+  backend "s3" {
+    region  = "us-east-1"
+    role_arn = "arn:aws:iam::189347618452:role/allow-rw-s3"
+    bucket  = "identiq-production-terraform"
+    key     = "dev/aws/edges/test-pg"
+    encrypt = "true"
+  }
+}
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
@@ -18,19 +27,20 @@ provider "kubernetes" {
 module "my-cluster" {
   source       = "terraform-aws-modules/eks/aws"
   cluster_name = var.cluster_name
-  version = "13.2.1"
+  version = "17.1.0"
   cluster_version      = "1.18"
   subnets              = concat(module.vpc.private_subnets, module.vpc.public_subnets)
   vpc_id               = module.vpc.vpc_id
   map_roles            = var.map_roles
   map_users            = var.map_users
-  wait_for_cluster_cmd = "sleep 300"
+
+  # wait_for_cluster_cmd = "sleep 300"
   worker_groups_launch_template = [
     {
       name                    = "db"
       override_instance_types = [var.db_instance_type]
-      spot_instance_pools     = var.db_instance_count
-      on_demand_base_capacity = var.db_instance_count
+      spot_instance_pools     = var.external_store ? 0 : var.db_instance_count
+      on_demand_base_capacity = var.external_store ? 0 : var.db_instance_count
       asg_min_size            = 0
       asg_max_size            = var.external_store ? 0 : var.db_instance_count
       asg_desired_capacity    = var.external_store ? 0 : var.db_instance_count
@@ -41,8 +51,8 @@ module "my-cluster" {
     {
       name                    = "cache"
       override_instance_types = [var.cache_instance_type]
-      spot_instance_pools     = var.cache_instance_count
-      on_demand_base_capacity = var.cache_instance_count
+      spot_instance_pools     = var.external_store ? 0 : var.cache_instance_count
+      on_demand_base_capacity = var.external_store ? 0 : var.cache_instance_count
       asg_min_size            = 0
       asg_max_size            = var.external_store ? 0 : var.cache_instance_count
       asg_desired_capacity    = var.external_store ? 0 : var.cache_instance_count

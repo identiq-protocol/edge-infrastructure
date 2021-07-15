@@ -58,3 +58,22 @@ variable "tags" {
     Application = "IdentiqEdge"
   }
 }
+
+variable "rds_engine" { default = "mariadb" }
+variable "rds_engine_version" { default = "10.3"}
+variable "rds_parameter_group" { default = "mariadb10.3"}
+variable "rds_db_name" { default = "edge" }
+variable "rds_create_monitoring_role" { default = "true" }
+variable "rds_username" { default = "edge" }
+variable "rds_multi_az" { default = true }
+variable "rds_maintenance_window" { default = "Sun:00:00-Sun:03:00"}
+variable "rds_backup_window" { default = "03:00-06:00" }
+variable "rds_skip_final_snapshot" { default = true }
+variable "rds_deletion_protection" { default = false }
+variable "rds_performance_insights_enabled" { default = true }
+variable "rds_performance_insights_retention_period" { default = 7 }
+variable "rds_allocated_storage" { default = 1000 }
+variable "rds_storage_encrypted" { default = true }
+variable "rds_instance_class" { default = "db.m5.large" }
+variable "rds_backup_retention_period" { default = 14 }
+variable "rds_monitoring_interval" { default = 60 }

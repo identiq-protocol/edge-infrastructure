@@ -5,7 +5,7 @@ module "redis" {
   name                                 = var.store_name
   zone_id                              = ""
   vpc_id                               = module.vpc.vpc_id
-  allowed_security_groups              = [module.my-cluster.worker_security_group_id]
+  security_groups              = [module.my-cluster.worker_security_group_id]
   subnets                              = module.vpc.private_subnets
   cluster_mode_enabled                 = false
   security_group_description = "Managed by Terraform"

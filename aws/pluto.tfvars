@@ -4,7 +4,12 @@ dynamic_instance_count = 1
 dynamic_instance_type = "c5.2xlarge"
 db_instance_count = 1
 cache_instance_type = "r5.large"
-# external_store = false
+external_store = true
+rds_engine = "postgres"
+rds_engine_version = "12.5"
+rds_parameter_group = "postgres12"
+store_name = "test"
+rds_storage_encrypted = false
 # For configuring additional IAM roles to administer the cluster
 # uncomment the variable below and set the correct IAM roles ARN.
 # map_roles = [{ rolearn = "arn:aws:iam::012345678901:role/edge-admin", username = "admin", groups = ["system:masters"] }]
