@@ -29,8 +29,8 @@ module "my-cluster" {
     {
       name                    = "db"
       override_instance_types = [var.db_instance_type]
-      spot_instance_pools     = var.db_instance_count
-      on_demand_base_capacity = var.db_instance_count
+      spot_instance_pools     = var.external_store ? 0 : var.db_instance_count
+      on_demand_base_capacity = var.external_store ? 0 : var.db_instance_count
       asg_min_size            = 0
       asg_max_size            = var.external_store ? 0 : var.db_instance_count
       asg_desired_capacity    = var.external_store ? 0 : var.db_instance_count
@@ -41,8 +41,8 @@ module "my-cluster" {
     {
       name                    = "cache"
       override_instance_types = [var.cache_instance_type]
-      spot_instance_pools     = var.cache_instance_count
-      on_demand_base_capacity = var.cache_instance_count
+      spot_instance_pools     = var.external_store ? 0 : var.cache_instance_count
+      on_demand_base_capacity = var.external_store ? 0 : var.cache_instance_count
       asg_min_size            = 0
       asg_max_size            = var.external_store ? 0 : var.cache_instance_count
       asg_desired_capacity    = var.external_store ? 0 : var.cache_instance_count
