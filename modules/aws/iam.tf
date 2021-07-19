@@ -1,6 +1,6 @@
 resource "aws_iam_policy" "lb_controller_policy" {
-  name = "IdentiqAWSLoadBalancerControllerIAMPolicy"
-  policy = data.http.iam_policy.body
+  name       = "${var.eks_cluster_name}IdentiqAWSLBCIAMPolicy"
+  policy     = data.http.iam_policy.body
   depends_on = [data.http.iam_policy]
 }
 

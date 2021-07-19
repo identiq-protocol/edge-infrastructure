@@ -3,7 +3,7 @@ output "connect" {
 }
 
 data "template_file" "kubeconfig" {
-  template = file("${path.cwd}/kubeconfig.tpl")
+  template = file("${path.module}/kubeconfig.tpl")
 
   vars = {
     cluster_name    = var.cluster_name
