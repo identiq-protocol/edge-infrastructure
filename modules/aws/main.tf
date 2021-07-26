@@ -13,10 +13,10 @@ module "my-cluster" {
       name                    = "db"
       override_instance_types = [var.eks_db_instance_type]
       spot_instance_pools     = var.eks_db_instance_count
-      on_demand_base_capacity = var.external_store ? 0 : var.eks_db_instance_count
-      asg_min_size            = var.external_store ? 0 : var.eks_db_asg_min_size
-      asg_max_size            = var.external_store ? 0 : var.eks_db_instance_count
-      asg_desired_capacity    = var.external_store ? 0 : var.eks_db_instance_count
+      on_demand_base_capacity = var.external_db ? 0 : var.eks_db_instance_count
+      asg_min_size            = var.external_db ? 0 : var.eks_db_asg_min_size
+      asg_max_size            = var.external_db ? 0 : var.eks_db_instance_count
+      asg_desired_capacity    = var.external_db ? 0 : var.eks_db_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
       public_ip               = false
@@ -25,10 +25,11 @@ module "my-cluster" {
       name                    = "cache"
       override_instance_types = [var.eks_cache_instance_type]
       spot_instance_pools     = var.eks_cache_instance_count
-      on_demand_base_capacity = var.external_store ? 0 : var.eks_cache_instance_count
-      asg_min_size            = var.external_store ? 0 : var.eks_cache_asg_min_size
-      asg_max_size            = var.external_store ? 0 : var.eks_cache_instance_count
-      asg_desired_capacity    = var.external_store ? 0 : var.eks_cache_instance_count
+      on_demand_base_capacity = var.external_redis ? 0 : var.eks_cache_instance_count
+      on_demand_base_capacity = var.external_redis ? 0 : var.eks_cache_instance_count
+      asg_min_size            = var.external_redis ? 0 : var.eks_cache_asg_min_size
+      asg_max_size            = var.external_redis ? 0 : var.eks_cache_instance_count
+      asg_desired_capacity    = var.external_redis ? 0 : var.eks_cache_instance_count
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
       public_ip               = false
@@ -81,31 +82,31 @@ provider "kubernetes" {
   }
 }
 
-resource "null_resource" "storge_patch" {
-  provisioner "local-exec" {
-    command = "kubectl patch storageclass gp2 -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}'"
-  }
-  depends_on = [
-    module.my-cluster,
-  ]
-}
-
-resource "kubernetes_storage_class" "ssd" {
-  metadata {
-    name = "ssd"
-    annotations = {
-      "storageclass.kubernetes.io/is-default-class" = "true"
-    }
-  }
-  storage_provisioner    = "kubernetes.io/aws-ebs"
-  allow_volume_expansion = "true"
-  volume_binding_mode    = "WaitForFirstConsumer"
-  parameters = {
-    fsType      = "ext4"
-    "type"      = "gp2"
-    "encrypted" = "true"
-  }
-  depends_on = [
-    module.my-cluster,
-  ]
-}
+#resource "null_resource" "storge_patch" {
+#  provisioner "local-exec" {
+#    command = "kubectl patch storageclass gp2 -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"false\"}}}'"
+#  }
+#  depends_on = [
+#    module.my-cluster,
+#  ]
+#}
+#
+#resource "kubernetes_storage_class" "ssd" {
+#  metadata {
+#    name = "ssd"
+#    annotations = {
+#      "storageclass.kubernetes.io/is-default-class" = "true"
+#    }
+#  }
+#  storage_provisioner    = "kubernetes.io/aws-ebs"
+#  allow_volume_expansion = "true"
+#  volume_binding_mode    = "WaitForFirstConsumer"
+#  parameters = {
+#    fsType      = "ext4"
+#    "type"      = "gp2"
+#    "encrypted" = "true"
+#  }
+#  depends_on = [
+#    module.my-cluster,
+#  ]
+#}

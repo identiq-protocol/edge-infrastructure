@@ -38,7 +38,7 @@ variable "eks_cluster_name" {
 
 variable "eks_cluster_version" {
   description = "Kubernetes version to use for the EKS cluster"
-  default     = "1.18"
+  default     = "1.19"
 }
 
 variable "eks_map_roles" {
@@ -77,13 +77,16 @@ variable "eks_base_instance_type" { default = "c5.2xlarge" }
 variable "eks_base_instance_count" { default = 1 }
 variable "eks_base_asg_min_size" { default = 0 }
 
-variable "external_store" {
-  description = "MySQL and Redis data stores will be installed outside of EKS cluster (RDS and Elasticache)"
+variable "external_redis" {
+  description = "Redis will be installed outside of EKS cluster (Elasticache)"
+  type        = bool
   default     = false
 }
 
-variable "store_name" { default = "edge" }
-
+variable "external_redis_name" {
+  description = "External redis name (if enabled)"
+  default     = "edge"
+}
 variable "ec_instance_type" { default = "cache.r5.2xlarge" }
 variable "ec_cluster_mode_enabled" { default = false }
 variable "ec_cluster_mode_replicas_per_node_group" { default = 0 }
@@ -95,9 +98,19 @@ variable "ec_family" { default = "redis6.x" }
 variable "ec_at_rest_encryption_enabled" { default = true }
 variable "ec_transit_encryption_enabled" { default = false }
 
-variable "rds_engine" { default = "mariadb" }
-variable "rds_engine_version" { default = "10.3" }
-variable "rds_parameter_group" { default = "mariadb10.3" }
+variable "external_db" {
+  description = "Database will be installed outside of EKS cluster (RDS)"
+  type        = bool
+  default     = false
+}
+
+variable "external_db_name" {
+  description = "External db name (if enabled)"
+  default     = "edge"
+}
+variable "rds_engine" { default = "postgres" }
+variable "rds_engine_version" { default = "13.3" }
+variable "rds_parameter_group_family" { default = "postgres13" }
 variable "rds_db_name" { default = "edge" }
 variable "rds_create_monitoring_role" { default = "true" }
 variable "rds_username" { default = "edge" }
@@ -113,6 +126,10 @@ variable "rds_storage_encrypted" { default = true }
 variable "rds_instance_class" { default = "db.m5.large" }
 variable "rds_backup_retention_period" { default = 14 }
 variable "rds_monitoring_interval" { default = 60 }
+variable "rds_iops" { default = 3000 }
+variable "rds_apply_immediately" { default = false }
+variable "rds_parameters" { default = [] }
+variable "rds_allow_major_version_upgrade" { default = false }
 
 variable "tags" {
   default = {

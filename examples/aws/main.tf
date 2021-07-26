@@ -2,18 +2,18 @@ provider "aws" {
   region = var.region
 }
 
-terraform {
-  backend "s3" {
-    region   = "us-east-1"
-    role_arn = "arn:aws:iam::189347618452:role/allow-rw-s3"
-    bucket   = "identiq-production-terraform"
-    key      = "perf/azure/edges/twenty"
-    encrypt  = "true"
-  }
-}
+#terraform {
+#  backend "s3" {
+#    region   = "us-east-1"
+#    role_arn = "arn:aws:iam::123456789:role/allow-rw-s3"
+#    bucket   = "terraform-state"
+#    key      = "production/aws/edge"
+#    encrypt  = "true"
+#  }
+#}
 
 module "edge-aws" {
-  source = "../../modules/aws"
+  source = "../../../modules/aws"
   # vpc
   vpc_name                 = var.vpc_name
   vpc_cidrsubnet           = var.vpc_cidrsubnet
@@ -22,6 +22,7 @@ module "edge-aws" {
   vpc_enable_dns_hostnames = var.vpc_enable_dns_hostnames
   vpc_enable_dns_support   = var.vpc_enable_dns_support
   region                   = var.region
+
   # eks
   eks_cluster_name             = var.eks_cluster_name
   eks_cluster_version          = var.eks_cluster_version
@@ -41,13 +42,13 @@ module "edge-aws" {
   eks_base_instance_type       = var.eks_base_instance_type
   eks_base_instance_count      = var.eks_base_instance_count
   eks_base_asg_min_size        = var.eks_base_asg_min_size
-  # external store
-  external_store = var.external_store
-  store_name     = var.store_name
+
   # rds
+  external_db                               = var.external_db
+  external_db_name                          = var.external_db_name
   rds_engine                                = var.rds_engine
   rds_engine_version                        = var.rds_engine_version
-  rds_parameter_group                       = var.rds_parameter_group
+  rds_parameter_group_family                = var.rds_parameter_group_family
   rds_db_name                               = var.rds_db_name
   rds_create_monitoring_role                = var.rds_create_monitoring_role
   rds_username                              = var.rds_username
@@ -63,8 +64,14 @@ module "edge-aws" {
   rds_instance_class                        = var.rds_instance_class
   rds_backup_retention_period               = var.rds_backup_retention_period
   rds_monitoring_interval                   = var.rds_monitoring_interval
+  rds_iops                                  = var.rds_iops
+  rds_apply_immediately                     = var.rds_apply_immediately
+  rds_parameters                            = var.rds_parameters
+  rds_allow_major_version_upgrade           = var.rds_allow_major_version_upgrade
 
   # Elastic cache
+  external_redis                          = var.external_redis
+  external_redis_name                     = var.external_redis_name
   ec_instance_type                        = var.ec_instance_type
   ec_cluster_mode_enabled                 = var.ec_cluster_mode_enabled
   ec_cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group

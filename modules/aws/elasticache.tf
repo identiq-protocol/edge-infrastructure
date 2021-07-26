@@ -1,8 +1,8 @@
 module "redis" {
-  count              = var.external_store ? 1 : 0
+  count              = var.external_redis ? 1 : 0
   source             = "git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git?ref=0.40.0"
   availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  name               = var.store_name
+  name               = var.external_redis_name
   zone_id            = ""
   vpc_id             = module.vpc.vpc_id
   security_group_rules = [
@@ -40,7 +40,7 @@ module "redis" {
   tags                                 = var.tags
 }
 resource "kubernetes_secret" "edge_redis_secret" {
-  count = var.external_store ? 1 : 0
+  count = var.external_redis ? 1 : 0
   metadata {
     name = "edge-identities-redis"
     annotations = {
@@ -58,7 +58,7 @@ resource "kubernetes_secret" "edge_redis_secret" {
   ]
 }
 resource "kubernetes_service" "edge_redis_service" {
-  count = var.external_store ? 1 : 0
+  count = var.external_redis ? 1 : 0
   metadata {
     name = "edge-identities-redis-master"
     annotations = {

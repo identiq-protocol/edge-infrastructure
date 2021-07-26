@@ -1,21 +1,20 @@
 resource "random_password" "rds_password" {
-  count   = var.external_store ? 1 : 0
+  count   = var.external_db ? 1 : 0
   length  = 16
-  special = true
+  special = false
 }
 
 module "rds" {
-  count                                 = var.external_store ? 1 : 0
+  count                                 = var.external_db ? 1 : 0
   source                                = "terraform-aws-modules/rds/aws"
   version                               = "2.35.0"
-  identifier                            = var.store_name
+  identifier                            = var.external_db_name
   name                                  = var.rds_db_name
   monitoring_role_name                  = "${var.eks_cluster_name}-monitoring"
   create_monitoring_role                = var.rds_create_monitoring_role
   engine                                = var.rds_engine
   engine_version                        = var.rds_engine_version
-  family                                = var.rds_parameter_group # DB parameter group
-  major_engine_version                  = var.rds_parameter_group # DB option group
+  family                                = var.rds_parameter_group_family
   instance_class                        = var.rds_instance_class
   allocated_storage                     = var.rds_allocated_storage
   storage_encrypted                     = var.rds_storage_encrypted
@@ -34,6 +33,10 @@ module "rds" {
   performance_insights_enabled          = var.rds_performance_insights_enabled
   performance_insights_retention_period = var.rds_performance_insights_retention_period
   monitoring_interval                   = var.rds_monitoring_interval
+  iops                                  = var.rds_iops
+  apply_immediately                     = var.rds_apply_immediately
+  parameters                            = var.rds_parameters
+  allow_major_version_upgrade           = var.rds_allow_major_version_upgrade
 
   tags = {
     Terraform = "true"
@@ -41,7 +44,7 @@ module "rds" {
 }
 
 resource "kubernetes_secret" "edge_db_secret" {
-  count = var.external_store ? 1 : 0
+  count = var.external_db ? 1 : 0
   metadata {
     name = "edge-${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}"
   }
@@ -57,7 +60,7 @@ resource "kubernetes_secret" "edge_db_secret" {
 }
 
 resource "kubernetes_service" "edge_db_service" {
-  count = var.external_store ? 1 : 0
+  count = var.external_db ? 1 : 0
   metadata {
     name = "edge-${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}"
     annotations = {
