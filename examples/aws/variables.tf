@@ -1,3 +1,7 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
   default     = "identiq-vpc"
@@ -42,40 +46,97 @@ variable "eks_cluster_version" {
 }
 
 variable "eks_map_roles" {
-  description = "Additional IAM roles to add to the aws-auth configmap"
+  description = "EKS additional IAM roles to add to the aws-auth configmap"
   default     = []
 }
 
 variable "eks_map_users" {
-  description = "Additional IAM users to add to the aws-auth configmap"
+  description = "EKS additional IAM users to add to the aws-auth configmap"
   default     = []
 }
 
 variable "eks_additional_policies" {
-  description = "Additional policies to be added to workers"
+  description = "EKS additional policies to be added to workers"
   default     = []
 }
 
 variable "eks_wait_for_cluster_timeout" {
-  description = "A timeout (in seconds) to wait for cluster to be available"
+  description = "A timeout (in seconds) to wait for EKS cluster to be available"
+  type        = number
   default     = 300
 }
 
-variable "eks_db_instance_type" { default = "m5.large" }
-variable "eks_db_instance_count" { default = 1 }
-variable "eks_db_asg_min_size" { default = 0 }
+variable "eks_db_instance_type" {
+  description = "EKS database worker group instance type"
+  type        = string
+  default     = "m5.large"
+}
 
-variable "eks_cache_instance_type" { default = "r5.2xlarge" }
-variable "eks_cache_instance_count" { default = 1 }
-variable "eks_cache_asg_min_size" { default = 0 }
+variable "eks_db_instance_count" {
+  description = "EKS database worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+  type        = number
+  default     = 1
+}
 
-variable "eks_dynamic_instance_type" { default = "c5.4xlarge" }
-variable "eks_dynamic_instance_count" { default = 4 }
-variable "eks_dynamic_asg_min_size" { default = 0 }
+variable "eks_db_asg_min_size" {
+  description = "EKS database worker group minimimum number of instances (asg_min_size)"
+  type        = number
+  default     = 0
+}
 
-variable "eks_base_instance_type" { default = "c5.2xlarge" }
-variable "eks_base_instance_count" { default = 1 }
-variable "eks_base_asg_min_size" { default = 0 }
+variable "eks_cache_instance_type" {
+  description = "EKS cache worker group instance type"
+  type        = string
+  default     = "r5.2xlarge"
+}
+
+variable "eks_cache_instance_count" {
+  description = "EKS cache worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+  type        = number
+  default     = 1
+}
+
+variable "eks_cache_asg_min_size" {
+  description = "EKS cache worker group minimimum number of instances (asg_min_size)"
+  type        = number
+  default     = 0
+}
+
+variable "eks_dynamic_instance_type" {
+  description = "EKS dynamic worker group instance type"
+  type        = string
+  default     = "c5.4xlarge"
+}
+
+variable "eks_dynamic_instance_count" {
+  description = "EKS dynamic worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+  type        = number
+  default     = 4
+}
+
+variable "eks_dynamic_asg_min_size" {
+  description = "EKS dynamic worker group minimimum number of instances (asg_min_size)"
+  type        = number
+  default     = 0
+}
+
+variable "eks_base_instance_type" {
+  description = "EKS base worker group instance type"
+  type        = string
+  default     = "c5.2xlarge"
+}
+
+variable "eks_base_instance_count" {
+  description = "EKS base worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+  type        = number
+  default     = 1
+}
+
+variable "eks_base_asg_min_size" {
+  description = "EKS base worker group minimimum number of instances (asg_min_size)"
+  type        = number
+  default     = 0
+}
 
 variable "external_redis" {
   description = "Redis will be installed outside of EKS cluster (Elasticache)"
@@ -87,16 +148,81 @@ variable "external_redis_name" {
   description = "External redis name (if enabled)"
   default     = "edge"
 }
-variable "ec_instance_type" { default = "cache.r5.2xlarge" }
-variable "ec_cluster_mode_enabled" { default = false }
-variable "ec_cluster_mode_replicas_per_node_group" { default = 0 }
-variable "ec_cluster_size" { default = 1 }
-variable "ec_apply_immediately" { default = true }
-variable "ec_automatic_failover_enabled" { default = false }
-variable "ec_engine_version" { default = "6.x" }
-variable "ec_family" { default = "redis6.x" }
-variable "ec_at_rest_encryption_enabled" { default = true }
-variable "ec_transit_encryption_enabled" { default = false }
+
+variable "ec_instance_type" {
+  description = "Elastic cache instance type"
+  type        = string
+  default     = "cache.r5.2xlarge"
+}
+
+variable "ec_cluster_mode_enabled" {
+  description = "Elastic cache flag to enable/disable creation of a native redis cluster. `automatic_failover_enabled` must be set to `true`. Only 1 `cluster_mode` block is allowed"
+  type        = bool
+  default     = false
+}
+
+variable "ec_cluster_mode_replicas_per_node_group" {
+  description = "Elastic cache number of replica nodes in each node group. Valid values are 0 to 5. Changing this number will force a new resource"
+  type        = number
+  default     = 0
+}
+
+variable "ec_cluster_size" {
+  description = "Elastic cache number of nodes in cluster. *Ignored when `cluster_mode_enabled` == `true`*"
+  type        = number
+  default     = 1
+}
+
+variable "ec_apply_immediately" {
+  description = "Elastic cache apply changes immediately"
+  type        = bool
+  default     = true
+}
+
+variable "ec_automatic_failover_enabled" {
+  description = "Elastic cache automatic failover (Not available for T1/T2 instances)"
+  type        = bool
+  default     = false
+}
+
+variable "ec_engine_version" {
+  description = "Elastic cache Redis engine version"
+  type        = string
+  default     = "6.x"
+}
+
+variable "ec_family" {
+  description = "Elastic cache Redis family"
+  type        = string
+  default     = "redis6.x"
+}
+
+variable "ec_at_rest_encryption_enabled" {
+  description = "Elastic cache enable encryption at rest"
+  type        = bool
+  default     = true
+}
+
+variable "ec_parameter" {
+  description = "A list of Redis parameters to apply. Note that parameters may differ from one Redis family to another"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = [
+    {
+      name  = "reserved-memory-percent"
+      value = "10"
+    }
+
+  ]
+}
+
+variable "ec_transit_encryption_enabled" {
+  description = "Whether to enable Elastic cache encryption in transit. If this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis"
+  type        = bool
+  default     = false
+}
 
 variable "external_db" {
   description = "Database will be installed outside of EKS cluster (RDS)"
@@ -127,8 +253,46 @@ variable "rds_instance_class" { default = "db.m5.large" }
 variable "rds_backup_retention_period" { default = 14 }
 variable "rds_monitoring_interval" { default = 60 }
 variable "rds_iops" { default = 3000 }
-variable "rds_apply_immediately" { default = false }
-variable "rds_parameters" { default = [] }
+variable "rds_apply_immediately" { default = "true" }
+variable "rds_parameters" {
+  description = "A list of DB parameters (map) to apply"
+  type        = list(map(string))
+  default = [{
+    apply_method = "pending-reboot",
+    name         = "maintenance_work_mem"
+    value        = "4194304"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "checkpoint_timeout"
+      value        = "1800"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "max_wal_size"
+      value        = "4096"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "synchronous_commit"
+      value        = "off"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "wal_buffers"
+      value        = "8192"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "enable_hashagg"
+      value        = "1"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "hash_mem_multiplier"
+      value        = "2.0"
+  }]
+}
 variable "rds_allow_major_version_upgrade" { default = false }
 
 variable "tags" {
