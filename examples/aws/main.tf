@@ -82,6 +82,7 @@ module "edge-aws" {
   ec_family                               = var.ec_family
   ec_at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
   ec_transit_encryption_enabled           = var.ec_transit_encryption_enabled
+  ec_parameter                            = var.ec_parameter
   # General
   tags = var.tags
 }
