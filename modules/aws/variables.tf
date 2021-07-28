@@ -203,6 +203,21 @@ variable "ec_at_rest_encryption_enabled" {
   default     = true
 }
 
+variable "ec_parameter" {
+  description = "A list of Redis parameters to apply. Note that parameters may differ from one Redis family to another"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = [
+    {
+      name  = "reserved-memory-percent"
+      value = "10"
+    }
+
+  ]
+}
+
 variable "ec_transit_encryption_enabled" {
   description = "Whether to enable Elastic cache encryption in transit. If this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis"
   type        = bool
@@ -239,7 +254,45 @@ variable "rds_backup_retention_period" { default = 14 }
 variable "rds_monitoring_interval" { default = 60 }
 variable "rds_iops" { default = 3000 }
 variable "rds_apply_immediately" { default = "true" }
-variable "rds_parameters" { default = [] }
+variable "rds_parameters" {
+  description = "A list of DB parameters (map) to apply"
+  type        = list(map(string))
+  default = [{
+    apply_method = "pending-reboot",
+    name         = "maintenance_work_mem"
+    value        = "4194304"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "checkpoint_timeout"
+      value        = "1800"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "max_wal_size"
+      value        = "4096"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "synchronous_commit"
+      value        = "off"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "wal_buffers"
+      value        = "8192"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "enable_hashagg"
+      value        = "1"
+    },
+    {
+      apply_method = "pending-reboot",
+      name         = "hash_mem_multiplier"
+      value        = "2.0"
+  }]
+}
 variable "rds_allow_major_version_upgrade" { default = false }
 
 variable "tags" {

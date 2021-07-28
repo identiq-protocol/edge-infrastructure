@@ -37,6 +37,7 @@ module "redis" {
   family                               = var.ec_family
   at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
   transit_encryption_enabled           = var.ec_transit_encryption_enabled
+  parameter                            = var.ec_parameter
   tags                                 = var.tags
 }
 resource "kubernetes_secret" "edge_redis_secret" {
