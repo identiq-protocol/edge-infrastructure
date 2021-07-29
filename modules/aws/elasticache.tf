@@ -1,7 +1,7 @@
 module "redis" {
   count              = var.external_redis ? 1 : 0
   source             = "git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git?ref=0.40.0"
-  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  availability_zones = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
   name               = var.external_redis_name
   zone_id            = ""
   vpc_id             = module.vpc.vpc_id
