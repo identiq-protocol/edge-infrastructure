@@ -37,10 +37,7 @@ module "rds" {
   apply_immediately                     = var.rds_apply_immediately
   parameters                            = var.rds_parameters
   allow_major_version_upgrade           = var.rds_allow_major_version_upgrade
-
-  tags = {
-    Terraform = "true"
-  }
+  tags                                  = merge(var.tags, var.default_tags)
 }
 
 resource "kubernetes_secret" "edge_db_secret" {

@@ -161,6 +161,12 @@ variable "ec_cluster_mode_enabled" {
   default     = false
 }
 
+variable "ec_cluster_mode_num_node_groups" {
+  description = "Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications"
+  type        = number
+  default     = 0
+}
+
 variable "ec_cluster_mode_replicas_per_node_group" {
   description = "Elastic cache number of replica nodes in each node group. Valid values are 0 to 5. Changing this number will force a new resource"
   type        = number

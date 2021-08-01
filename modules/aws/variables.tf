@@ -161,6 +161,12 @@ variable "ec_cluster_mode_enabled" {
   default     = false
 }
 
+variable "ec_cluster_mode_num_node_groups" {
+  description = "Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications"
+  type        = number
+  default     = 0
+}
+
 variable "ec_cluster_mode_replicas_per_node_group" {
   description = "Elastic cache number of replica nodes in each node group. Valid values are 0 to 5. Changing this number will force a new resource"
   type        = number
@@ -232,26 +238,118 @@ variable "external_db" {
 
 variable "external_db_name" {
   description = "External db name (if enabled)"
+  type        = string
   default     = "edge"
 }
-variable "rds_engine" { default = "postgres" }
-variable "rds_engine_version" { default = "13.3" }
-variable "rds_parameter_group_family" { default = "postgres13" }
-variable "rds_db_name" { default = "edge" }
-variable "rds_create_monitoring_role" { default = "true" }
-variable "rds_username" { default = "edge" }
-variable "rds_multi_az" { default = true }
-variable "rds_maintenance_window" { default = "Sun:00:00-Sun:03:00" }
-variable "rds_backup_window" { default = "03:00-06:00" }
-variable "rds_skip_final_snapshot" { default = true }
-variable "rds_deletion_protection" { default = false }
-variable "rds_performance_insights_enabled" { default = true }
-variable "rds_performance_insights_retention_period" { default = 7 }
-variable "rds_allocated_storage" { default = 1000 }
-variable "rds_storage_encrypted" { default = true }
-variable "rds_instance_class" { default = "db.m5.large" }
-variable "rds_backup_retention_period" { default = 14 }
-variable "rds_monitoring_interval" { default = 60 }
+
+variable "rds_engine" {
+  description = "The database engine to use"
+  type        = string
+  default     = "postgres"
+}
+
+variable "rds_engine_version" {
+  description = "The engine version to use"
+  type        = string
+  default     = "13.3"
+}
+
+variable "rds_parameter_group_family" {
+  description = "The engine version to use"
+  type        = string
+  default     = "postgres13"
+}
+
+variable "rds_db_name" {
+  description = "The DB name to create"
+  type        = string
+  default     = "edge"
+}
+
+variable "rds_create_monitoring_role" {
+  description = "Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs"
+  type        = bool
+  default     = "true"
+}
+
+variable "rds_username" {
+  description = "Username for the master DB user"
+  type        = string
+  default     = "edge"
+}
+
+variable "rds_multi_az" {
+  description = "Specifies if the RDS instance is multi-AZ"
+  type        = bool
+  default     = true
+}
+
+variable "rds_maintenance_window" {
+  description = "The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00'"
+  type        = string
+  default     = "Sun:00:00-Sun:03:00"
+}
+
+variable "rds_backup_window" {
+  description = "The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance_window"
+  type        = string
+  default     = "03:00-06:00"
+}
+
+variable "rds_skip_final_snapshot" {
+  description = "Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final_snapshot_identifier"
+  type        = bool
+  default     = true
+}
+
+variable "rds_deletion_protection" {
+  description = "The database can't be deleted when this value is set to true"
+  type        = bool
+  default     = false
+}
+
+variable "rds_performance_insights_enabled" {
+  description = "Specifies whether Performance Insights are enabled"
+  type        = bool
+  default     = true
+}
+
+variable "rds_performance_insights_retention_period" {
+  description = "The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years)."
+  type        = number
+  default     = 7
+}
+
+variable "rds_allocated_storage" {
+  description = "The allocated storage in gigabytes"
+  type        = string
+  default     = 1000
+}
+
+variable "rds_storage_encrypted" {
+  description = "Specifies whether the DB instance is encrypted"
+  type        = bool
+  default     = true
+}
+
+variable "rds_instance_class" {
+  description = "The instance type of the RDS instance"
+  type        = string
+  default     = "db.m5.large"
+}
+
+variable "rds_backup_retention_period" {
+  description = "The days to retain backups for"
+  type        = number
+  default     = 14
+}
+
+variable "rds_monitoring_interval" {
+  description = "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60"
+  type        = number
+  default     = 60
+}
+
 variable "rds_iops" { default = 3000 }
 variable "rds_apply_immediately" { default = "true" }
 variable "rds_parameters" {
@@ -295,9 +393,12 @@ variable "rds_parameters" {
 }
 variable "rds_allow_major_version_upgrade" { default = false }
 
-variable "tags" {
+variable "default_tags" {
   default = {
-    Owner       = "Identiq"
-    Application = "IdentiqEdge"
+    Terraform = "true"
   }
+}
+
+variable "tags" {
+  type = map(string)
 }

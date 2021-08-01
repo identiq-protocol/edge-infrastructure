@@ -74,6 +74,7 @@ module "edge-aws" {
   external_redis_name                     = var.external_redis_name
   ec_instance_type                        = var.ec_instance_type
   ec_cluster_mode_enabled                 = var.ec_cluster_mode_enabled
+  ec_cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
   ec_cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group
   ec_cluster_size                         = var.ec_cluster_size
   ec_apply_immediately                    = var.ec_apply_immediately

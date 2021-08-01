@@ -61,6 +61,7 @@ module "my-cluster" {
   ]
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy]
+  tags                        = merge(var.tags, var.default_tags)
 }
 
 data "aws_eks_cluster" "cluster" {

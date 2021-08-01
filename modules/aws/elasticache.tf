@@ -1,7 +1,7 @@
 module "redis" {
   count              = var.external_redis ? 1 : 0
   source             = "git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git?ref=0.40.0"
-  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  availability_zones = data.aws_availability_zones.available.names
   name               = var.external_redis_name
   zone_id            = ""
   vpc_id             = module.vpc.vpc_id
@@ -27,9 +27,10 @@ module "redis" {
   ]
   subnets                              = module.vpc.private_subnets
   cluster_mode_enabled                 = var.ec_cluster_mode_enabled
-  security_group_description           = "Managed by Terraform"
+  cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
   cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group
   cluster_size                         = var.ec_cluster_size
+  security_group_description           = "Managed by Terraform"
   instance_type                        = var.ec_instance_type
   apply_immediately                    = var.ec_apply_immediately
   automatic_failover_enabled           = var.ec_automatic_failover_enabled
@@ -38,8 +39,9 @@ module "redis" {
   at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
   transit_encryption_enabled           = var.ec_transit_encryption_enabled
   parameter                            = var.ec_parameter
-  tags                                 = var.tags
+  tags                                 = merge(var.tags, var.default_tags)
 }
+
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_redis ? 1 : 0
   metadata {
