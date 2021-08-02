@@ -301,9 +301,12 @@ variable "rds_parameters" {
 }
 variable "rds_allow_major_version_upgrade" { default = false }
 
-variable "tags" {
+variable "default_tags" {
   default = {
-    Owner       = "Identiq"
-    Application = "IdentiqEdge"
+    Terraform = "true"
   }
+}
+
+variable "tags" {
+  type = map(string)
 }
