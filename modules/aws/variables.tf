@@ -350,8 +350,18 @@ variable "rds_monitoring_interval" {
   default     = 60
 }
 
-variable "rds_iops" { default = 3000 }
-variable "rds_apply_immediately" { default = "true" }
+variable "rds_iops" {
+  description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'"
+  type        = number
+  default     = 3000
+}
+
+variable "rds_apply_immediately" {
+  description = "Specifies whether any database modifications are applied immediately, or during the next maintenance window"
+  type        = bool
+  default     = "true"
+}
+
 variable "rds_parameters" {
   description = "A list of DB parameters (map) to apply"
   type        = list(map(string))
@@ -391,14 +401,21 @@ variable "rds_parameters" {
       value        = "2.0"
   }]
 }
-variable "rds_allow_major_version_upgrade" { default = false }
+
+variable "rds_allow_major_version_upgrade" {
+  description = "Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible"
+  type        = bool
+  default     = false
+}
 
 variable "default_tags" {
+  description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
   default = {
     Terraform = "true"
   }
 }
 
 variable "tags" {
+  description = "Any tags the user wishes to add to all resources of the edge"
   type = map(string)
 }

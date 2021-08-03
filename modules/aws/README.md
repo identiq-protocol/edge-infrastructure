@@ -3,13 +3,8 @@
 This Terraform module creates Identiq's edge infrastructure on which the edge application will deployed on.
 The infstructarue consists of the following components:
  * [EKS](https://aws.amazon.com/eks) cluster
- * MySQL (Containerized or RDS)
+ * PostgreSQL (Containerized or RDS)
  * Redis (Containerized or Elasticache)
-
-## Requirements
-
-* [AWS Terraform provider](https://www.terraform.io/docs/providers/aws/)
-* [kubernetes terraform provider](https://www.terraform.io/docs/providers/kubernetes)
 
 ## Requirements
 
@@ -52,10 +47,12 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable | `map` | <pre>{<br>  "Terraform": "true"<br>}</pre> | no |
 | <a name="input_ec_apply_immediately"></a> [ec\_apply\_immediately](#input\_ec\_apply\_immediately) | Elastic cache apply changes immediately | `bool` | `true` | no |
 | <a name="input_ec_at_rest_encryption_enabled"></a> [ec\_at\_rest\_encryption\_enabled](#input\_ec\_at\_rest\_encryption\_enabled) | Elastic cache enable encryption at rest | `bool` | `true` | no |
 | <a name="input_ec_automatic_failover_enabled"></a> [ec\_automatic\_failover\_enabled](#input\_ec\_automatic\_failover\_enabled) | Elastic cache automatic failover (Not available for T1/T2 instances) | `bool` | `false` | no |
 | <a name="input_ec_cluster_mode_enabled"></a> [ec\_cluster\_mode\_enabled](#input\_ec\_cluster\_mode\_enabled) | Elastic cache flag to enable/disable creation of a native redis cluster. `automatic_failover_enabled` must be set to `true`. Only 1 `cluster_mode` block is allowed | `bool` | `false` | no |
+| <a name="input_ec_cluster_mode_num_node_groups"></a> [ec\_cluster\_mode\_num\_node\_groups](#input\_ec\_cluster\_mode\_num\_node\_groups) | Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications | `number` | `0` | no |
 | <a name="input_ec_cluster_mode_replicas_per_node_group"></a> [ec\_cluster\_mode\_replicas\_per\_node\_group](#input\_ec\_cluster\_mode\_replicas\_per\_node\_group) | Elastic cache number of replica nodes in each node group. Valid values are 0 to 5. Changing this number will force a new resource | `number` | `0` | no |
 | <a name="input_ec_cluster_size"></a> [ec\_cluster\_size](#input\_ec\_cluster\_size) | Elastic cache number of nodes in cluster. *Ignored when `cluster_mode_enabled` == `true`* | `number` | `1` | no |
 | <a name="input_ec_engine_version"></a> [ec\_engine\_version](#input\_ec\_engine\_version) | Elastic cache Redis engine version | `string` | `"6.x"` | no |
@@ -85,30 +82,30 @@ No requirements.
 | <a name="input_external_db_name"></a> [external\_db\_name](#input\_external\_db\_name) | External db name (if enabled) | `string` | `"edge"` | no |
 | <a name="input_external_redis"></a> [external\_redis](#input\_external\_redis) | Redis will be installed outside of EKS cluster (Elasticache) | `bool` | `false` | no |
 | <a name="input_external_redis_name"></a> [external\_redis\_name](#input\_external\_redis\_name) | External redis name (if enabled) | `string` | `"edge"` | no |
-| <a name="input_rds_allocated_storage"></a> [rds\_allocated\_storage](#input\_rds\_allocated\_storage) | n/a | `number` | `1000` | no |
-| <a name="input_rds_allow_major_version_upgrade"></a> [rds\_allow\_major\_version\_upgrade](#input\_rds\_allow\_major\_version\_upgrade) | n/a | `bool` | `false` | no |
-| <a name="input_rds_apply_immediately"></a> [rds\_apply\_immediately](#input\_rds\_apply\_immediately) | n/a | `string` | `"true"` | no |
-| <a name="input_rds_backup_retention_period"></a> [rds\_backup\_retention\_period](#input\_rds\_backup\_retention\_period) | n/a | `number` | `14` | no |
-| <a name="input_rds_backup_window"></a> [rds\_backup\_window](#input\_rds\_backup\_window) | n/a | `string` | `"03:00-06:00"` | no |
-| <a name="input_rds_create_monitoring_role"></a> [rds\_create\_monitoring\_role](#input\_rds\_create\_monitoring\_role) | n/a | `string` | `"true"` | no |
-| <a name="input_rds_db_name"></a> [rds\_db\_name](#input\_rds\_db\_name) | n/a | `string` | `"edge"` | no |
-| <a name="input_rds_deletion_protection"></a> [rds\_deletion\_protection](#input\_rds\_deletion\_protection) | n/a | `bool` | `false` | no |
-| <a name="input_rds_engine"></a> [rds\_engine](#input\_rds\_engine) | n/a | `string` | `"postgres"` | no |
-| <a name="input_rds_engine_version"></a> [rds\_engine\_version](#input\_rds\_engine\_version) | n/a | `string` | `"13.3"` | no |
-| <a name="input_rds_instance_class"></a> [rds\_instance\_class](#input\_rds\_instance\_class) | n/a | `string` | `"db.m5.large"` | no |
-| <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | n/a | `number` | `3000` | no |
-| <a name="input_rds_maintenance_window"></a> [rds\_maintenance\_window](#input\_rds\_maintenance\_window) | n/a | `string` | `"Sun:00:00-Sun:03:00"` | no |
-| <a name="input_rds_monitoring_interval"></a> [rds\_monitoring\_interval](#input\_rds\_monitoring\_interval) | n/a | `number` | `60` | no |
-| <a name="input_rds_multi_az"></a> [rds\_multi\_az](#input\_rds\_multi\_az) | n/a | `bool` | `true` | no |
-| <a name="input_rds_parameter_group_family"></a> [rds\_parameter\_group\_family](#input\_rds\_parameter\_group\_family) | n/a | `string` | `"postgres13"` | no |
+| <a name="input_rds_allocated_storage"></a> [rds\_allocated\_storage](#input\_rds\_allocated\_storage) | The allocated storage in gigabytes | `string` | `1000` | no |
+| <a name="input_rds_allow_major_version_upgrade"></a> [rds\_allow\_major\_version\_upgrade](#input\_rds\_allow\_major\_version\_upgrade) | Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible | `bool` | `false` | no |
+| <a name="input_rds_apply_immediately"></a> [rds\_apply\_immediately](#input\_rds\_apply\_immediately) | Specifies whether any database modifications are applied immediately, or during the next maintenance window | `bool` | `"true"` | no |
+| <a name="input_rds_backup_retention_period"></a> [rds\_backup\_retention\_period](#input\_rds\_backup\_retention\_period) | The days to retain backups for | `number` | `14` | no |
+| <a name="input_rds_backup_window"></a> [rds\_backup\_window](#input\_rds\_backup\_window) | The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance\_window | `string` | `"03:00-06:00"` | no |
+| <a name="input_rds_create_monitoring_role"></a> [rds\_create\_monitoring\_role](#input\_rds\_create\_monitoring\_role) | Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs | `bool` | `"true"` | no |
+| <a name="input_rds_db_name"></a> [rds\_db\_name](#input\_rds\_db\_name) | The DB name to create | `string` | `"edge"` | no |
+| <a name="input_rds_deletion_protection"></a> [rds\_deletion\_protection](#input\_rds\_deletion\_protection) | The database can't be deleted when this value is set to true | `bool` | `false` | no |
+| <a name="input_rds_engine"></a> [rds\_engine](#input\_rds\_engine) | The database engine to use | `string` | `"postgres"` | no |
+| <a name="input_rds_engine_version"></a> [rds\_engine\_version](#input\_rds\_engine\_version) | The engine version to use | `string` | `"13.3"` | no |
+| <a name="input_rds_instance_class"></a> [rds\_instance\_class](#input\_rds\_instance\_class) | The instance type of the RDS instance | `string` | `"db.m5.large"` | no |
+| <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `3000` | no |
+| <a name="input_rds_maintenance_window"></a> [rds\_maintenance\_window](#input\_rds\_maintenance\_window) | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | `"Sun:00:00-Sun:03:00"` | no |
+| <a name="input_rds_monitoring_interval"></a> [rds\_monitoring\_interval](#input\_rds\_monitoring\_interval) | The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60 | `number` | `60` | no |
+| <a name="input_rds_multi_az"></a> [rds\_multi\_az](#input\_rds\_multi\_az) | Specifies if the RDS instance is multi-AZ | `bool` | `true` | no |
+| <a name="input_rds_parameter_group_family"></a> [rds\_parameter\_group\_family](#input\_rds\_parameter\_group\_family) | The engine version to use | `string` | `"postgres13"` | no |
 | <a name="input_rds_parameters"></a> [rds\_parameters](#input\_rds\_parameters) | A list of DB parameters (map) to apply | `list(map(string))` | <pre>[<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "maintenance_work_mem",<br>    "value": "4194304"<br>  },<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "checkpoint_timeout",<br>    "value": "1800"<br>  },<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "max_wal_size",<br>    "value": "4096"<br>  },<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "synchronous_commit",<br>    "value": "off"<br>  },<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "wal_buffers",<br>    "value": "8192"<br>  },<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "enable_hashagg",<br>    "value": "1"<br>  },<br>  {<br>    "apply_method": "pending-reboot",<br>    "name": "hash_mem_multiplier",<br>    "value": "2.0"<br>  }<br>]</pre> | no |
-| <a name="input_rds_performance_insights_enabled"></a> [rds\_performance\_insights\_enabled](#input\_rds\_performance\_insights\_enabled) | n/a | `bool` | `true` | no |
-| <a name="input_rds_performance_insights_retention_period"></a> [rds\_performance\_insights\_retention\_period](#input\_rds\_performance\_insights\_retention\_period) | n/a | `number` | `7` | no |
-| <a name="input_rds_skip_final_snapshot"></a> [rds\_skip\_final\_snapshot](#input\_rds\_skip\_final\_snapshot) | n/a | `bool` | `true` | no |
-| <a name="input_rds_storage_encrypted"></a> [rds\_storage\_encrypted](#input\_rds\_storage\_encrypted) | n/a | `bool` | `true` | no |
-| <a name="input_rds_username"></a> [rds\_username](#input\_rds\_username) | n/a | `string` | `"edge"` | no |
+| <a name="input_rds_performance_insights_enabled"></a> [rds\_performance\_insights\_enabled](#input\_rds\_performance\_insights\_enabled) | Specifies whether Performance Insights are enabled | `bool` | `true` | no |
+| <a name="input_rds_performance_insights_retention_period"></a> [rds\_performance\_insights\_retention\_period](#input\_rds\_performance\_insights\_retention\_period) | The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years). | `number` | `7` | no |
+| <a name="input_rds_skip_final_snapshot"></a> [rds\_skip\_final\_snapshot](#input\_rds\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final\_snapshot\_identifier | `bool` | `true` | no |
+| <a name="input_rds_storage_encrypted"></a> [rds\_storage\_encrypted](#input\_rds\_storage\_encrypted) | Specifies whether the DB instance is encrypted | `bool` | `true` | no |
+| <a name="input_rds_username"></a> [rds\_username](#input\_rds\_username) | Username for the master DB user | `string` | `"edge"` | no |
 | <a name="input_region"></a> [region](#input\_region) | region | `any` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map` | <pre>{<br>  "Application": "IdentiqEdge",<br>  "Owner": "Identiq"<br>}</pre> | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources of the edge | `map(string)` | n/a | yes |
 | <a name="input_vpc_cidrsubnet"></a> [vpc\_cidrsubnet](#input\_vpc\_cidrsubnet) | The CIDR block for the VPC | `string` | `"10.0.0.0/16"` | no |
 | <a name="input_vpc_enable_dns_hostnames"></a> [vpc\_enable\_dns\_hostnames](#input\_vpc\_enable\_dns\_hostnames) | Should be true to enable DNS hostnames in the Default VPC | `bool` | `true` | no |
 | <a name="input_vpc_enable_dns_support"></a> [vpc\_enable\_dns\_support](#input\_vpc\_enable\_dns\_support) | Should be true to enable DNS support in the Default VPC | `bool` | `true` | no |

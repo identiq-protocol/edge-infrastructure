@@ -12,20 +12,7 @@ module "vpc" {
   enable_dns_hostnames = var.vpc_enable_dns_hostnames
   enable_dns_support   = var.vpc_enable_dns_support
 
-  tags = {
-    Terraform                                   = "true"
-    "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
-
-  }
-
-  public_subnet_tags = {
-    Terraform                                   = "true"
-    "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
-    "kubernetes.io/role/elb"           = "1"
-  }
-  private_subnet_tags = {
-    Terraform                                   = "true"
-    "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"           = "1"
-  }
+  tags                = merge(var.tags, var.default_tags, { "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared" })
+  public_subnet_tags  = merge(var.tags, var.default_tags, { "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared", "kubernetes.io/role/elb" = "1" })
+  private_subnet_tags = merge(var.tags, var.default_tags, { "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared", "kubernetes.io/role/internal-elb" = "1" })
 }
