@@ -56,6 +56,7 @@ module "aks" {
   rbac_aad_managed                 = var.rbac_aad_managed
   private_cluster_enabled          = var.private_cluster_enabled # default value
   enable_log_analytics_workspace   = var.enable_log_analytics_workspace
+  agents_size			   = var.aks_default_agent_size
   agents_size                      = "Standard_A2_v2"
   agents_min_count                 = 1
   agents_max_count                 = 1
@@ -94,10 +95,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "cache" {
   name                  = substr("${var.cluster_name}cache", 0, 10)
   count                 = var.external_store ? 0 : 1
   kubernetes_cluster_id = module.aks.aks_id
-  vm_size               = var.cache_agent_size
-  node_count            = 1
-  os_disk_size_gb       = var.os_disk_size_gb
-  orchestrator_version  = var.kubernetes_version
+  vm_size               = var.aks_cache_vm_size
+  node_count            = var.aks_cache_node_count
+  os_disk_size_gb       = var.aks_os_disk_size_gb
+  orchestrator_version  = var.aks_kubernetes_version
   vnet_subnet_id        = module.network.vnet_subnets[0]
   node_labels = {
     "edge.identiq.com/role" = "cache"

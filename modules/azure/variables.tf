@@ -22,7 +22,16 @@ variable "net_profile_dns_service_ip" { default = "10.30.0.10" }
 variable "net_profile_docker_bridge_cidr" { default = "170.10.0.1/16" }
 variable "net_profile_service_cidr" { default = "10.30.0.0/24" }
 variable "agents_max_pods" { default = 100 }
-variable "cache_agent_size" { default = "Standard_B8ms" }
+variable "aks_cache_vm_size" {
+  description = "AKS cache node pool vm size"
+  type        = string
+  default     = "Standard_B8ms"
+}
+variable "aks_cache_node_count" {
+  description = "AKS cache node pool initial number of nodes"
+  type        = number
+  default     = 1
+}
 variable "mysql_administrator_login" { default = "edge" }
 
 locals {
