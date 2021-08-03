@@ -42,35 +42,34 @@ resource "azurerm_subnet_nat_gateway_association" "nat_gw_a" {
 module "aks" {
   source                           = "Azure/aks/azurerm"
   resource_group_name              = azurerm_resource_group.rg.name
-  kubernetes_version               = var.kubernetes_version
-  orchestrator_version             = var.kubernetes_version
+  kubernetes_version               = var.aks_kubernetes_version
+  orchestrator_version             = var.aks_kubernetes_version
   client_id                        = azuread_application.app.application_id
   client_secret                    = azuread_service_principal_password.app.value
-  prefix                           = var.cluster_prefix
-  cluster_name                     = var.cluster_name
-  network_plugin                   = var.network_plugin
+  prefix                           = var.aks_prefix
+  cluster_name                     = var.aks_cluster_name
+  network_plugin                   = var.aks_network_plugin
   vnet_subnet_id                   = module.network.vnet_subnets[0]
-  os_disk_size_gb                  = var.os_disk_size_gb
-  sku_tier                         = var.sku_tier
-  enable_role_based_access_control = var.enable_role_based_access_control
-  rbac_aad_managed                 = var.rbac_aad_managed
-  private_cluster_enabled          = var.private_cluster_enabled # default value
-  enable_log_analytics_workspace   = var.enable_log_analytics_workspace
-  agents_size			   = var.aks_default_agent_size
-  agents_size                      = "Standard_A2_v2"
-  agents_min_count                 = 1
-  agents_max_count                 = 1
-  agents_count                     = 1
-  agents_max_pods                  = var.agents_max_pods
+  os_disk_size_gb                  = var.aks_os_disk_size_gb
+  sku_tier                         = var.aks_sku_tier
+  enable_role_based_access_control = var.aks_enable_role_based_access_control
+  rbac_aad_managed                 = var.aks_rbac_aad_managed
+  private_cluster_enabled          = var.aks_private_cluster_enabled
+  enable_log_analytics_workspace   = var.aks_enable_log_analytics_workspace
+  agents_size                      = var.aks_default_agent_size
+  agents_min_count                 = var.aks_default_agents_min_count
+  agents_max_count                 = var.aks_default_agents_max_count
+  agents_count                     = var.aks_default_agents_count
+  agents_max_pods                  = var.aks_default_agents_max_pods
   agents_pool_name                 = "default"
   agents_availability_zones        = ["1"]
   agents_labels = {
     "nodepool" = "defaultnodepool"
   }
-  network_policy                 = var.network_policy
-  net_profile_dns_service_ip     = var.net_profile_dns_service_ip
-  net_profile_docker_bridge_cidr = var.net_profile_docker_bridge_cidr
-  net_profile_service_cidr       = var.net_profile_service_cidr
+  network_policy                 = var.aks_network_policy
+  net_profile_dns_service_ip     = var.aks_net_profile_dns_service_ip
+  net_profile_docker_bridge_cidr = var.aks_net_profile_docker_bridge_cidr
+  net_profile_service_cidr       = var.aks_net_profile_service_cidr
   depends_on                     = [module.network, azuread_application.app]
 }
 
@@ -114,7 +113,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "base" {
   vm_size               = var.base_agents_size
   node_count            = var.base_agents_count != 0 ? var.base_agents_count : 1
   os_disk_size_gb       = var.os_disk_size_gb
-  orchestrator_version  = var.kubernetes_version
+  orchestrator_version  = var.aks_kubernetes_version
   vnet_subnet_id        = module.network.vnet_subnets[0]
   node_labels = {
     "edge.identiq.com/role" = "base"
@@ -130,7 +129,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "dynamic" {
   vm_size               = var.dynamic_agents_size
   node_count            = var.dynamic_agents_count != 0 ? var.dynamic_agents_count : 1
   os_disk_size_gb       = var.os_disk_size_gb
-  orchestrator_version  = var.kubernetes_version
+  orchestrator_version  = var.aks_kubernetes_version
   vnet_subnet_id        = module.network.vnet_subnets[0]
   node_labels = {
     "edge.identiq.com/role" = "dynamic"
