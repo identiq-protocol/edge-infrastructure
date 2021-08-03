@@ -6,7 +6,7 @@ resource "random_password" "mysql_password" {
 
 module "mysql" {
   count               = var.external_store ? 1 : 0
-  source              = "../modules/terraform-azurerm-db-mysql/"
+  source              = "../terraform-azurerm-db-mysql/"
   tier                = "GeneralPurpose"
   force_ssl           = false
   client_name         = var.cluster_name

@@ -7,7 +7,7 @@ variable "address_space" { default = "10.0.0.0/16" }
 variable "resource_group" { default = "identiq-edge" }
 variable "cluster_prefix" { default = "identiq" }
 variable "cluster_name" { default = "edge" }
-variable "kubernetes_version" { default = "1.18.19" }
+variable "cluster_version" { default = {} }
 variable "external_store" { default = false }
 variable "enable_role_based_access_control" { default = true }
 variable "rbac_aad_managed" { default = true }
@@ -24,7 +24,3 @@ variable "net_profile_service_cidr" { default = "10.30.0.0/24" }
 variable "agents_max_pods" { default = 100 }
 variable "cache_agent_size" { default = "Standard_B8ms" }
 variable "mysql_administrator_login" { default = "edge" }
-
-locals {
-  subnet_prefixes = [cidrsubnet(var.address_space, 4, 1), cidrsubnet(var.address_space, 4, 2), cidrsubnet(var.address_space, 4, 3)]
-}
