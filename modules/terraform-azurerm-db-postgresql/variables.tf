@@ -41,24 +41,18 @@ variable "custom_server_name" {
 }
 
 variable "administrator_login" {
-  description = "MySQL administrator login"
+  description = "PostgreSQL administrator login"
   type        = string
 }
 
 variable "administrator_password" {
-  description = "MySQL administrator password. Strong Password: https://docs.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-2017"
+  description = "PostgreSQL administrator password. Strong Password : https://docs.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-2017"
   type        = string
 }
 
 variable "allowed_cidrs" {
-  type        = list(string)
-  description = "List of authorized cidrs"
-}
-
-variable "allowed_subnets" {
-  type        = list(string)
-  description = "List of authorized subnet ids"
-  default     = []
+  type        = map(string)
+  description = "Map of authorized cidrs, must be provided using remote states cloudpublic/cloudpublic/global/vars/terraform.state"
 }
 
 variable "extra_tags" {
@@ -69,16 +63,13 @@ variable "extra_tags" {
 
 variable "tier" {
   type        = string
-  description = <<DESC
-Tier for MySQL server sku: https://www.terraform.io/docs/providers/azurerm/r/mysql_server.html#tier
-Possible values are: GeneralPurpose, Basic, MemoryOptimized.
-DESC
+  description = "Tier for PostgreSQL server sku : https://docs.microsoft.com/en-us/azure/postgresql/concepts-pricing-tiers Possible values are: GeneralPurpose, Basic, MemoryOptimized"
   default     = "GeneralPurpose"
 }
 
 variable "capacity" {
   type        = number
-  description = "Capacity for MySQL server sku: https://www.terraform.io/docs/providers/azurerm/r/mysql_server.html#capacity"
+  description = "Capacity for PostgreSQL server sku - number of vCores : https://docs.microsoft.com/en-us/azure/postgresql/concepts-pricing-tiers"
   default     = 4
 }
 
@@ -106,22 +97,28 @@ variable "geo_redundant_backup_enabled" {
   default     = true
 }
 
-variable "mysql_options" {
-  type        = list(map(string))
-  default     = []
-  description = "List of configuration options: https://docs.microsoft.com/fr-fr/azure/mysql/howto-server-parameters#list-of-configurable-server-parameters"
+variable "postgresql_configurations" {
+  type        = map(string)
+  default     = {}
+  description = "PostgreSQL configurations to enable"
 }
 
-variable "mysql_version" {
+variable "postgresql_version" {
   type        = string
-  default     = "5.7"
-  description = "Valid values are 5.6 and 5.7"
+  default     = "11"
+  description = "Valid values are 9.5, 9.6, 10, 10.0, and 11"
 }
 
 variable "force_ssl" {
   type        = bool
   default     = true
   description = "Force usage of SSL"
+}
+
+variable "vnet_rules" {
+  type        = map(string)
+  description = "Map of vnet rules to create"
+  default     = {}
 }
 
 variable "databases_names" {
@@ -131,41 +128,48 @@ variable "databases_names" {
 
 variable "databases_charset" {
   type        = map(string)
-  description = "Valid mysql charset: https://dev.mysql.com/doc/refman/5.7/en/charset-charsets.html"
+  description = "Valid PostgreSQL charset : https://www.postgresql.org/docs/current/multibyte.html#CHARSET-TABLE"
   default     = {}
 }
 
 variable "databases_collation" {
   type        = map(string)
-  description = "Valid mysql collation: https://dev.mysql.com/doc/refman/5.7/en/charset-charsets.html"
+  description = "Valid PostgreSQL collation : http://www.postgresql.cn/docs/9.4/collation.html - be careful about https://docs.microsoft.com/en-us/windows/win32/intl/locale-names?redirectedfrom=MSDN"
   default     = {}
 }
 
-variable "enable_user_suffix" {
-  description = "True to append a _user suffix to database users"
+variable "enable_logs_to_storage" {
+  description = "Boolean flag to specify whether the logs should be sent to the Storage Account"
+  type        = bool
+  default     = false
+}
+
+variable "enable_logs_to_log_analytics" {
+  description = "Boolean flag to specify whether the logs should be sent to Log Analytics"
+  type        = bool
+  default     = false
+}
+
+variable "logs_storage_retention" {
+  description = "Retention in days for logs on Storage Account"
+  type        = number
+  default     = 30
+}
+
+variable "logs_storage_account_id" {
+  description = "Storage Account id for logs"
+  type        = string
+  default     = ""
+}
+
+variable "logs_log_analytics_workspace_id" {
+  description = "Log Analytics Workspace id for logs"
+  type        = string
+  default     = ""
+}
+
+variable "create_databases_users" {
+  description = "True to create a user named <db>_user per database with generated password and role db_owner."
   type        = bool
   default     = true
-}
-
-variable "logs_destinations_ids" {
-  type        = list(string)
-  description = "List of destination resources Ids for logs diagnostics destination. Can be Storage Account, Log Analytics Workspace and Event Hub. No more than one of each can be set. Empty list to disable logging."
-}
-
-variable "logs_categories" {
-  type        = list(string)
-  description = "Log categories to send to destinations."
-  default     = null
-}
-
-variable "logs_metrics_categories" {
-  type        = list(string)
-  description = "Metrics categories to send to destinations."
-  default     = null
-}
-
-variable "logs_retention_days" {
-  type        = number
-  description = "Number of days to keep logs on storage account"
-  default     = 30
 }
