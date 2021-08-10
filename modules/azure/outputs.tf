@@ -6,7 +6,7 @@ data "template_file" "kubeconfig" {
   template = file("${path.module}/kubeconfig.tpl")
 
   vars = {
-    cluster_name    = var.cluster_name
+    cluster_name    = var.aks_cluster_name
     endpoint        = module.aks.admin_host
     cluster_ca      = module.aks.admin_cluster_ca_certificate
     client_cert     = module.aks.admin_client_certificate

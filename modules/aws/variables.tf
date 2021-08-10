@@ -105,7 +105,7 @@ variable "eks_cache_asg_min_size" {
 variable "eks_dynamic_instance_type" {
   description = "EKS dynamic worker group instance type"
   type        = string
-  default     = "c5.4xlarge"
+  default     = "c5.2xlarge"
 }
 
 variable "eks_dynamic_instance_count" {

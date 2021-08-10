@@ -1,6 +1,6 @@
 eks_cluster_name                = "edge-cluster"
 region                          = "us-east-1"
-eks_dynamic_instance_count      = 8
+eks_dynamic_instance_count      = 4
 eks_dynamic_instance_type       = "c5.2xlarge"
 eks_cache_instance_type         = "r5.8xlarge"
 ec_instance_type                = "cache.r6g.8xlarge"
