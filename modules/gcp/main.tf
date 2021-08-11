@@ -1,97 +1,221 @@
-terraform {
-  required_version = ">= 0.12.7"
-}
-provider "google" {
-  version = "~> 2.9.0"
-  project = var.project
-  region  = var.region
-}
-
-provider "google-beta" {
-  version = "~> 2.9.0"
-  project = var.project
-  region  = var.region
-}
-
-module "gke_cluster" {
-  source = "github.com/gruntwork-io/terraform-google-gke.git//modules/gke-cluster?ref=v0.4.0"
-
-
-  name = var.cluster_name
-
-  project  = var.project
-  location = var.location
-  network  = module.vpc_network.network
-
-  subnetwork                   = module.vpc_network.public_subnetwork
-  cluster_secondary_range_name = module.vpc_network.public_subnetwork_secondary_range_name
-
-  alternative_default_service_account = var.override_default_node_pool_service_account ? module.gke_service_account.email : null
-}
-
-
-resource "google_container_node_pool" "node_pool" {
+data "google_compute_zones" "available" {
   provider = google-beta
+  project = var.project_id
+  region  = var.region
+}
 
-  name     = "private-pool"
-  project  = var.project
-  location = var.location
-  cluster  = module.gke_cluster.name
+module "vpc" {
+  source = "./modules/vpc"
+  region = var.region
+  project_id = var.project_id
+  vpc_name = var.vpc_name
+}
 
-  initial_node_count = var.initial_node_count
+module "gke" {
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+  version = "16.0.1"
+  project_id                        = var.project_id
+  name                              = var.cluster_name
+  region                            = var.region
+  zones                             = var.zones
+  network                           = module.vpc.network_name
+  subnetwork                        = module.vpc.subnetwork_name
+  ip_range_pods                     = ""
+  ip_range_services                 = ""
+  create_service_account            = true
+  remove_default_node_pool          = true
+  disable_legacy_metadata_endpoints = false
+  cluster_autoscaling               = var.gke_cluster_autoscaling
+  kubernetes_version = var.gke_version
+  cluster_resource_labels = merge(var.default_tags, var.tags)
 
-  node_config {
-    image_type   = "COS"
-    machine_type = var.machine_type
+  node_pools = [
+    {
+      name            = "base"
+      node_count      = var.gke_nodegroup_base_machine_count
+      service_account = var.compute_engine_service_account
+      machine_type    = var.gke_nodegroup_base_machinetype
+      node_locations  = data.google_compute_zones.available.names[0]
+      auto_upgrade    = false
+    },
+    {
+      name            = "dynamic"
+      node_count      = var.gke_nodegroup_dynamic_machine_count
+      service_account = var.compute_engine_service_account
+      machine_type    = var.gke_nodegroup_dynamic_machinetype
+      node_locations  = data.google_compute_zones.available.names[0]
+      auto_upgrade    = false
+    },
+    {
+      name            = "cache"
+      node_count      = var.gke_nodegroup_cache_machine_count
+      service_account = var.compute_engine_service_account
+      machine_type    = var.gke_nodegroup_cache_machinetype
+      node_locations  = data.google_compute_zones.available.names[0]
+      auto_upgrade    = false
+    },
+    {
+      name            = "db"
+      node_count      = var.external_db ? var.gke_nodegroup_db_machine_count : 0
+      service_account = var.compute_engine_service_account
+      machine_type    = var.gke_nodegroup_db_machinetype
+      node_locations  = data.google_compute_zones.available.names[0]
+      auto_upgrade    = false
+    },
+  ]
 
-    disk_size_gb = "50"
-    disk_type    = "pd-standard"
-    preemptible  = false
-
-    service_account = module.gke_service_account.email
-
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
+  node_pools_metadata = {
+    all = {
+      shutdown-script = file("${path.module}/data/shutdown-script.sh")
+    }
   }
 
-  lifecycle {
-    ignore_changes = [initial_node_count]
+  node_pools_labels = {
+    base = {
+      "edge.identiq.com/role" = "base"
+    }
+    dynamic = {
+      "edge.identiq.com/role" = "dynamic"
+    }
+    cache = {
+      "edge.identiq.com/role" = "cache"
+    }
+    db = {
+      "edge.identiq.com/role" = "db"
+    }
+  }
+}
+
+module "private-service-access" {
+  count       = var.external_db || var.external_redis ? 1 : 0
+  source      = "git@github.com:terraform-google-modules/terraform-google-sql-db.git//modules/private_service_access/?ref=v6.0.0"
+  project_id  = var.project_id
+  vpc_network = module.vpc.network_name
+  depends_on  = [module.vpc]
+}
+
+module "postgresql-db" {
+  count       = var.external_db ? 1 : 0
+  source  = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
+  version = "6.0.0"
+  name = var.cluster_name
+  random_instance_name = true
+  user_name = var.external_db_user_name
+  database_version = var.external_db_postgres_version
+  project_id = var.project_id
+  zone = data.google_compute_zones.available.names[0]
+  region = var.region
+  tier = var.external_db_postgres_machine_type
+  disk_size = var.external_db_postgres_disk_size
+  user_labels = merge(var.default_tags, var.tags)
+  deletion_protection = false
+  ip_configuration = {
+    ipv4_enabled = true
+    private_network = module.vpc.network_id
+    require_ssl = true
+    authorized_networks = var.external_db_authorized_networks
+  }
+  depends_on  = [module.private-service-access]
+}
+data "google_client_config" "provider" {}
+provider "kubernetes" {
+  host                   = module.gke.endpoint
+  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+  token = data.google_client_config.provider.access_token
+}
+resource "kubernetes_secret" "edge_db_secret" {
+  count = var.external_db ? 1 : 0
+  metadata {
+    name = "edge-postgresql"
+  }
+  data = {
+    "postgresql-password"      = module.postgresql-db[0].generated_user_password
+    "postgresql-root-password" = module.postgresql-db[0].generated_user_password
   }
 
-  timeouts {
-    create = "30m"
-    update = "30m"
-    delete = "30m"
+  depends_on = [
+    module.gke,
+    module.postgresql-db[0]
+  ]
+}
+
+resource "kubernetes_service" "edge_db_service" {
+  count = var.external_db ? 1 : 0
+  metadata {
+    name = "edge-postgresql"
   }
+
+  spec {
+    type          = "ExternalName"
+    external_name = module.postgresql-db[0].private_ip_address
+  }
+
+  depends_on = [
+    module.gke,
+    module.postgresql-db[0]
+  ]
 }
 
-module "gke_service_account" {
-  source = "github.com/gruntwork-io/terraform-google-gke.git//modules/gke-service-account?ref=v0.4.0"
-
-  name        = var.cluster_service_account_name
-  project     = var.project
-  description = var.cluster_service_account_description
+module "memorystore-redis" {
+  count           = var.external_redis ? 1 : 0
+  source          = "terraform-google-modules/memorystore/google"
+  version         = "4.0.0"
+  name            = var.cluster_name
+  project         = var.project_id
+  memory_size_gb  = var.external_redis_memory_size_gb
+  region          = var.region
+  labels          = merge(var.default_tags, var.tags)
+  redis_version   = var.external_redis_version
+  location_id     = data.google_compute_zones.available.names[0]
+  redis_configs   = var.external_redis_configs
+  tier            = var.external_redis_tier
 }
-
-module "vpc_network" {
-  source = "github.com/gruntwork-io/terraform-google-network.git//modules/vpc-network?ref=v0.2.1"
-
-  name_prefix = "${var.cluster_name}-network-${random_string.suffix.result}"
-  project     = var.project
-  region      = var.region
-
-  cidr_block           = var.vpc_cidr_block
-  secondary_cidr_block = var.vpc_secondary_cidr_block
+resource "kubernetes_secret" "edge_redis_secret" {
+  count = var.external_redis ? 1 : 0
+  metadata {
+    name = "edge-identities-redis"
+  }
+  data = {
+    redis-password = ""
+  }
+  depends_on = [
+    module.gke,
+    module.memorystore-redis[0]
+  ]
 }
-
-# Use a random suffix to prevent overlap in network names
-resource "random_string" "suffix" {
-  length  = 4
-  special = false
-  upper   = false
+resource "kubernetes_service" "edge_redis_service" {
+  count = var.external_redis ? 1 : 0
+  metadata {
+    name = "edge-identities-redis-master"
+  }
+  spec {
+    type          = "ExternalName"
+    external_name = module.memorystore-redis[0].host
+  }
+  depends_on = [
+    module.gke,
+    module.memorystore-redis[0]
+  ]
 }
-
-output connect {
-  value = "gcloud container clusters get-credentials ${var.cluster_name} --region ${var.location} --project ${var.project}"
+resource "kubernetes_storage_class" "ssd" {
+  metadata {
+    name = "ssd"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class":"true"
+    }
+  }
+  storage_provisioner = "kubernetes.io/gce-pd"
+  parameters = {
+    type = "pd-ssd"
+  }
+  depends_on = [module.gke]
+}
+resource "null_resource" "patch-standard-sc" {
+  provisioner "local-exec" {
+    command = <<EOT
+gcloud container clusters get-credentials ${var.cluster_name} --region ${var.region} --project ${var.project_id}
+kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+EOT
+  }
+  depends_on = [module.gke]
 }
