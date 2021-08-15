@@ -20,9 +20,11 @@ module "edge-aws" {
   vpc_enable_vpn_gateway    = var.vpc_enable_vpn_gateway
   vpc_enable_dns_hostnames  = var.vpc_enable_dns_hostnames
   vpc_enable_dns_support    = var.vpc_enable_dns_support
+  region                    = var.region
+  
+  # vpc endpoint
   vpc_endpoint_type         = var.vpc_endpoint_type
   vpc_endpoint_service_name = var.vpc_endpoint_service_name
-  region                    = var.region
 
   # eks
   eks_cluster_name             = var.eks_cluster_name
