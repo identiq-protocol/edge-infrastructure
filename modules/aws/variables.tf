@@ -32,6 +32,16 @@ variable "vpc_enable_dns_support" {
   default     = true
 }
 
+variable "vpc_endpoint_service_name" {
+  description = "Endpoint service name to configure with Identiq endpoint service"
+  default     = ""
+}
+
+variable "vpc_endpoint_type" {
+  description = "Endpoint service type to create, default unless otherwise is Interface"
+  default     = "Interface"
+}
+
 variable "region" {
   description = "region"
 }
@@ -418,14 +428,4 @@ variable "default_tags" {
 variable "tags" {
   description = "Any tags the user wishes to add to all resources of the edge"
   type        = map(string)
-}
-
-variable "vpc_endpoint_service_name" {
-  description = "Endpoint service name to configure with Identiq endpoint service"
-  default     = ""
-}
-
-variable "vpc_endpoint_type" {
-  description = "Endpoint service type to create, default unless otherwise is Interface"
-  default     = "Interface"
 }
