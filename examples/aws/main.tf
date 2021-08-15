@@ -14,13 +14,15 @@ provider "aws" {
 module "edge-aws" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=master"
   # vpc
-  vpc_name                 = var.vpc_name
-  vpc_cidrsubnet           = var.vpc_cidrsubnet
-  vpc_enable_nat_gateway   = var.vpc_enable_nat_gateway
-  vpc_enable_vpn_gateway   = var.vpc_enable_vpn_gateway
-  vpc_enable_dns_hostnames = var.vpc_enable_dns_hostnames
-  vpc_enable_dns_support   = var.vpc_enable_dns_support
-  region                   = var.region
+  vpc_name                  = var.vpc_name
+  vpc_cidrsubnet            = var.vpc_cidrsubnet
+  vpc_enable_nat_gateway    = var.vpc_enable_nat_gateway
+  vpc_enable_vpn_gateway    = var.vpc_enable_vpn_gateway
+  vpc_enable_dns_hostnames  = var.vpc_enable_dns_hostnames
+  vpc_enable_dns_support    = var.vpc_enable_dns_support
+  vpc_endpoint_type         = var.vpc_endpoint_type
+  vpc_endpoint_service_name = var.vpc_endpoint_service_name
+  region                    = var.region
 
   # eks
   eks_cluster_name             = var.eks_cluster_name
@@ -99,4 +101,8 @@ output "nat_ips" {
 
 output "vpc_id" {
   value = module.edge-aws.vpc_id
+}
+
+output "endpoint_address" {
+  value = var.vpc_endpoint_service_name != "" ? module.edge-aws.endpoint_address : ""
 }
