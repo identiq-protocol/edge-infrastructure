@@ -42,6 +42,7 @@ module "redis" {
   tags                                 = merge(var.tags, var.default_tags)
   snapshot_name                        = var.ec_snapshot_name
   snapshot_window                      = var.ec_snapshot_window
+  snapshot_retention_limit             = var.ec_snapshot_retention_limit
 }
 
 resource "kubernetes_secret" "edge_redis_secret" {

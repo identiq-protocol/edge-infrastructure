@@ -88,6 +88,7 @@ module "edge-aws" {
   ec_transit_encryption_enabled           = var.ec_transit_encryption_enabled
   ec_parameter                            = var.ec_parameter
   ec_snapshot_name                        = var.ec_snapshot_name
+  ec_snapshot_retention_limit             = var.ec_snapshot_retention_limit
   ec_snapshot_window                      = var.ec_snapshot_window
 
   # General

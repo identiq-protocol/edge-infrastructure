@@ -238,6 +238,13 @@ variable "ec_snapshot_name" {
   description = "The name of a snapshot from which to restore data into the new node group. Changing the snapshot_name forces a new resource."
   default     = null
 }
+
+variable "ec_snapshot_retention_limit" {
+  type        = number
+  description = "The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them."
+  default     = 14
+}
+
 variable "ec_snapshot_window" {
   description = "Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period."
   default     = "sun:07:00-sun:09:00"
