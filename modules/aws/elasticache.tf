@@ -40,6 +40,8 @@ module "redis" {
   transit_encryption_enabled           = var.ec_transit_encryption_enabled
   parameter                            = var.ec_parameter
   tags                                 = merge(var.tags, var.default_tags)
+  snapshot_name                        = var.ec_snapshot_name
+  snapshot_window                      = var.ec_snapshot_window
 }
 
 resource "kubernetes_secret" "edge_redis_secret" {
