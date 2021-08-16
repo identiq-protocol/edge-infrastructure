@@ -1,11 +1,3 @@
-# AWS Edge infrastructure
-
-This Terraform module creates Identiq's edge infrastructure on which the edge application will deployed on.
-The infstructarue consists of the following components:
- * [EKS](https://aws.amazon.com/eks) cluster
- * PostgreSQL (Containerized or RDS)
- * Redis (Containerized or Elasticache)
-
 ## Requirements
 
 No requirements.
@@ -62,7 +54,7 @@ No requirements.
 | <a name="input_ec_parameter"></a> [ec\_parameter](#input\_ec\_parameter) | A list of Redis parameters to apply. Note that parameters may differ from one Redis family to another | <pre>list(object({<br>    name  = string<br>    value = string<br>  }))</pre> | <pre>[<br>  {<br>    "name": "reserved-memory-percent",<br>    "value": "10"<br>  }<br>]</pre> | no |
 | <a name="input_ec_snapshot_name"></a> [ec\_snapshot\_name](#input\_ec\_snapshot\_name) | The name of a snapshot from which to restore data into the new node group. Changing the snapshot\_name forces a new resource. | `any` | `null` | no |
 | <a name="input_ec_snapshot_retention_limit"></a> [ec\_snapshot\_retention\_limit](#input\_ec\_snapshot\_retention\_limit) | The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them. | `number` | `14` | no |
-| <a name="input_ec_snapshot_window"></a> [ec\_snapshot\_window](#input\_ec\_snapshot\_window) | Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. | `string` | `"sun:07:00-sun:09:00"` | no |
+| <a name="input_ec_snapshot_window"></a> [ec\_snapshot\_window](#input\_ec\_snapshot\_window) | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. | `string` | `"07:00-09:00"` | no |
 | <a name="input_ec_transit_encryption_enabled"></a> [ec\_transit\_encryption\_enabled](#input\_ec\_transit\_encryption\_enabled) | Whether to enable Elastic cache encryption in transit. If this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis | `bool` | `false` | no |
 | <a name="input_eks_additional_policies"></a> [eks\_additional\_policies](#input\_eks\_additional\_policies) | EKS additional policies to be added to workers | `list` | `[]` | no |
 | <a name="input_eks_base_asg_min_size"></a> [eks\_base\_asg\_min\_size](#input\_eks\_base\_asg\_min\_size) | EKS base worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |

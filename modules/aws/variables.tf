@@ -246,8 +246,8 @@ variable "ec_snapshot_retention_limit" {
 }
 
 variable "ec_snapshot_window" {
-  description = "Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period."
-  default     = "sun:07:00-sun:09:00"
+  description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster."
+  default     = "07:00-09:00"
 }
 
 variable "ec_transit_encryption_enabled" {
