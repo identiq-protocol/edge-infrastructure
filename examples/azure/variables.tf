@@ -166,7 +166,7 @@ variable "aks_db_agents_os_disk_size_gb" {
 variable "aks_db_agents_vm_size" {
   description = "AKS 'db' node pool - the default virtual machine size for the Kubernetes agents"
   type        = string
-  default     = "Standard_D4d_v4"
+  default     = "Standard_D4ds_v4"
 }
 
 variable "aks_db_enable_auto_scaling" {
@@ -202,7 +202,7 @@ variable "aks_cache_agents_os_disk_size_gb" {
 variable "aks_cache_agents_vm_size" {
   description = "AKS 'cache' node pool - the default virtual machine size for the Kubernetes agents"
   type        = string
-  default     = "Standard_E4d_v4"
+  default     = "Standard_E8s_v4"
 }
 
 variable "aks_cache_enable_auto_scaling" {
