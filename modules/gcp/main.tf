@@ -173,6 +173,7 @@ module "memorystore-redis" {
   location_id     = data.google_compute_zones.available.names[0]
   redis_configs   = var.external_redis_configs
   tier            = var.external_redis_tier
+  transit_encryption_mode = "DISABLED"
 }
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_redis ? 1 : 0
