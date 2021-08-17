@@ -177,3 +177,8 @@ variable "external_redis_tier" {
   description = "external redis(memorystore) service tier of the instance."
   default = "BASIC"
 }
+
+variable "external_redis_transit_encryption_mode" {
+  description = "The TLS mode of the Redis instance, If not provided, TLS is disabled for the instance."
+  default = "DISABLED"
+}

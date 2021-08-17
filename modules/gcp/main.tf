@@ -174,6 +174,7 @@ module "memorystore-redis" {
   redis_configs   = var.external_redis_configs
   tier            = var.external_redis_tier
   transit_encryption_mode = "DISABLED"
+  authorized_network = module.vpc.network_name
 }
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_redis ? 1 : 0
