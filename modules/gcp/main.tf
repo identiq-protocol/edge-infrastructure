@@ -20,8 +20,8 @@ module "gke" {
   zones                             = var.zones
   network                           = module.vpc.network_name
   subnetwork                        = module.vpc.subnetwork_name
-  ip_range_pods                     = ""
-  ip_range_services                 = ""
+  ip_range_pods                     = var.gke_ip_range_pods
+  ip_range_services                 = var.gke_ip_range_services
   create_service_account            = true
   remove_default_node_pool          = true
   disable_legacy_metadata_endpoints = false
@@ -88,7 +88,8 @@ module "gke" {
 
 module "private-service-access" {
   count       = var.external_db || var.external_redis ? 1 : 0
-  source      = "git@github.com:terraform-google-modules/terraform-google-sql-db.git//modules/private_service_access/?ref=v6.0.0"
+  source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
+  version = "6.0.0"
   project_id  = var.project_id
   vpc_network = module.vpc.network_name
   depends_on  = [module.vpc]
@@ -107,12 +108,13 @@ module "postgresql-db" {
   region = var.region
   tier = var.external_db_postgres_machine_type
   disk_size = var.external_db_postgres_disk_size
+  disk_autoresize = var.external_db_postgres_disk_autoresize
   user_labels = merge(var.default_tags, var.tags)
-  deletion_protection = false
+  deletion_protection = var.external_db_deletion_protection
   ip_configuration = {
     ipv4_enabled = true
     private_network = module.vpc.network_id
-    require_ssl = true
+    require_ssl = false
     authorized_networks = var.external_db_authorized_networks
   }
   depends_on  = [module.private-service-access]
