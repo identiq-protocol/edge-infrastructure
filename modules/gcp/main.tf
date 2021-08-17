@@ -49,6 +49,7 @@ module "gke" {
     {
       name            = "cache"
       node_count      = var.external_redis ? 0 : var.gke_nodegroup_cache_machine_count
+      min_node_count  = var.external_redis ? 0 : 1
       service_account = var.compute_engine_service_account
       machine_type    = var.gke_nodegroup_cache_machinetype
       node_locations  = data.google_compute_zones.available.names[0]
@@ -57,6 +58,7 @@ module "gke" {
     {
       name            = "db"
       node_count      = var.external_db ? 0 : var.gke_nodegroup_db_machine_count
+      min_node_count  = var.external_redis ? 0 : 1
       service_account = var.compute_engine_service_account
       machine_type    = var.gke_nodegroup_db_machinetype
       node_locations  = data.google_compute_zones.available.names[0]
