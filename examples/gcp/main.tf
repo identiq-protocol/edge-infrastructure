@@ -5,7 +5,6 @@
 #terraform {
 #  backend "s3" {
 #    region   = "us-east-1"
-#    role_arn = "arn:aws:iam::123456789:role/allow-rw-s3"
 #    bucket   = "terraform-state"
 #    key      = "production/aws/edge"
 #    encrypt  = "true"
