@@ -14,14 +14,14 @@ provider "aws" {
 module "edge-aws" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=master"
   # vpc
-  vpc_name                  = var.vpc_name
-  vpc_cidrsubnet            = var.vpc_cidrsubnet
-  vpc_enable_nat_gateway    = var.vpc_enable_nat_gateway
-  vpc_enable_vpn_gateway    = var.vpc_enable_vpn_gateway
-  vpc_enable_dns_hostnames  = var.vpc_enable_dns_hostnames
-  vpc_enable_dns_support    = var.vpc_enable_dns_support
-  region                    = var.region
-  
+  vpc_name                 = var.vpc_name
+  vpc_cidrsubnet           = var.vpc_cidrsubnet
+  vpc_enable_nat_gateway   = var.vpc_enable_nat_gateway
+  vpc_enable_vpn_gateway   = var.vpc_enable_vpn_gateway
+  vpc_enable_dns_hostnames = var.vpc_enable_dns_hostnames
+  vpc_enable_dns_support   = var.vpc_enable_dns_support
+  region                   = var.region
+
   # vpc endpoint
   vpc_endpoint_type         = var.vpc_endpoint_type
   vpc_endpoint_service_name = var.vpc_endpoint_service_name
@@ -87,6 +87,9 @@ module "edge-aws" {
   ec_at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
   ec_transit_encryption_enabled           = var.ec_transit_encryption_enabled
   ec_parameter                            = var.ec_parameter
+  ec_snapshot_name                        = var.ec_snapshot_name
+  ec_snapshot_retention_limit             = var.ec_snapshot_retention_limit
+  ec_snapshot_window                      = var.ec_snapshot_window
 
   # General
   default_tags = var.default_tags

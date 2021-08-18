@@ -234,6 +234,22 @@ variable "ec_parameter" {
   ]
 }
 
+variable "ec_snapshot_name" {
+  description = "The name of a snapshot from which to restore data into the new node group. Changing the snapshot_name forces a new resource."
+  default     = null
+}
+
+variable "ec_snapshot_retention_limit" {
+  type        = number
+  description = "The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them."
+  default     = 3
+}
+
+variable "ec_snapshot_window" {
+  description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster."
+  default     = "03:00-05:00"
+}
+
 variable "ec_transit_encryption_enabled" {
   description = "Whether to enable Elastic cache encryption in transit. If this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis"
   type        = bool
