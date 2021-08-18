@@ -242,12 +242,12 @@ variable "ec_snapshot_name" {
 variable "ec_snapshot_retention_limit" {
   type        = number
   description = "The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them."
-  default     = 14
+  default     = 3
 }
 
 variable "ec_snapshot_window" {
   description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster."
-  default     = "07:00-09:00"
+  default     = "03:00-05:00"
 }
 
 variable "ec_transit_encryption_enabled" {
