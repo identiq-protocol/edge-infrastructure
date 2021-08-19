@@ -11,8 +11,8 @@ data "http" "iam_policy" {
 
 resource "aws_iam_policy" "worker_autoscaling" {
   name       = "${var.eks_cluster_name}-worker-autoscaling"
-  policy     = data.http.iam_policy.body
-  depends_on = [data.http.iam_policy]
+  policy     = data.aws_iam_policy_document.worker_autoscaling.json
+  depends_on = [data.aws_iam_policy_document.worker_autoscaling]
 }
 
 data "aws_iam_policy_document" "worker_autoscaling" {
