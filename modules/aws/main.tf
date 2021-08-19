@@ -1,4 +1,4 @@
-module "my-cluster" {
+module "eks" {
   source                   = "terraform-aws-modules/eks/aws"
   version                  = "17.1.0"
   cluster_name             = var.eks_cluster_name
@@ -65,11 +65,11 @@ module "my-cluster" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = module.my-cluster.cluster_id
+  name = module.eks.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.my-cluster.cluster_id
+  name = module.eks.cluster_id
 }
 
 provider "kubernetes" {
@@ -88,7 +88,7 @@ provider "kubernetes" {
 #    command = "kubectl patch storageclass gp2 -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"false\"}}}'"
 #  }
 #  depends_on = [
-#    module.my-cluster,
+#    module.eks,
 #  ]
 #}
 #
@@ -108,6 +108,6 @@ provider "kubernetes" {
 #    "encrypted" = "true"
 #  }
 #  depends_on = [
-#    module.my-cluster,
+#    module.eks,
 #  ]
 #}

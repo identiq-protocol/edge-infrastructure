@@ -21,7 +21,7 @@ module "redis" {
       to_port                  = 65535
       protocol                 = "-1"
       cidr_blocks              = []
-      source_security_group_id = module.my-cluster.worker_security_group_id
+      source_security_group_id = module.eks.worker_security_group_id
       description              = "Allow all inbound traffic from trusted Security Groups"
     },
   ]
@@ -59,7 +59,7 @@ resource "kubernetes_secret" "edge_redis_secret" {
     redis-password = ""
   }
   depends_on = [
-    module.my-cluster,
+    module.eks,
     module.redis[0]
   ]
 }
@@ -78,7 +78,7 @@ resource "kubernetes_service" "edge_redis_service" {
     external_name = module.redis[0].endpoint
   }
   depends_on = [
-    module.my-cluster,
+    module.eks,
     module.redis[0]
   ]
 }
