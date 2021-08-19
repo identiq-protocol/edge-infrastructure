@@ -46,7 +46,12 @@ module "eks" {
           key = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"
           propagate_at_launch = "false"
           value = "owned"
-        }
+        },
+        {
+          key = "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role"
+          propagate_at_launch = "false"
+          value = "dynamic"
+        },
       ]
       override_instance_types = [var.eks_dynamic_instance_type]
       spot_instance_pools     = var.eks_dynamic_instance_count
