@@ -15,7 +15,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_my-cluster"></a> [my-cluster](#module\_my-cluster) | terraform-aws-modules/eks/aws | 17.1.0 |
+| <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | 17.1.0 |
 | <a name="module_rds"></a> [rds](#module\_rds) | terraform-aws-modules/rds/aws | 2.35.0 |
 | <a name="module_redis"></a> [redis](#module\_redis) | git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git | 0.40.0 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | 3.2.0 |

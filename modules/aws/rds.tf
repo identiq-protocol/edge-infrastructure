@@ -23,7 +23,7 @@ module "rds" {
   port                                  = var.rds_engine == "mariadb" ? 3306 : 5432
   multi_az                              = var.rds_multi_az
   subnet_ids                            = module.vpc.private_subnets
-  vpc_security_group_ids                = [module.my-cluster.worker_security_group_id]
+  vpc_security_group_ids                = [module.eks.worker_security_group_id]
   maintenance_window                    = var.rds_maintenance_window
   backup_window                         = var.rds_backup_window
   enabled_cloudwatch_logs_exports       = [var.rds_engine == "mariadb" ? "general" : "postgresql"]
@@ -51,7 +51,7 @@ resource "kubernetes_secret" "edge_db_secret" {
   }
 
   depends_on = [
-    module.my-cluster,
+    module.eks,
     module.rds[0]
   ]
 }
@@ -73,7 +73,7 @@ resource "kubernetes_service" "edge_db_service" {
   }
 
   depends_on = [
-    module.my-cluster,
+    module.eks,
     module.rds[0]
   ]
 }
