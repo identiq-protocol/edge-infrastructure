@@ -1,4 +1,4 @@
-output "gke_connect" {
+output "connect" {
   value = "gcloud container clusters get-credentials ${var.cluster_name} --region ${var.region} --project ${var.project_id}"
   description = "command to generate gke kubeconfig "
 }
