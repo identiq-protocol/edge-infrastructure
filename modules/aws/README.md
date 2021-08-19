@@ -70,7 +70,7 @@ No requirements.
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_db_instance_count"></a> [eks\_db\_instance\_count](#input\_eks\_db\_instance\_count) | EKS database worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_db_instance_type"></a> [eks\_db\_instance\_type](#input\_eks\_db\_instance\_type) | EKS database worker group instance type | `string` | `"m5.large"` | no |
-| <a name="input_eks_dynamic_asg_autoscaling"></a> [eks\_dynamic\_asg\_autoscaling](#input\_eks\_dynamic\_asg\_autoscaling) | EKS dynamic worker group enable autoscaling | `bool` | `false` | no |
+| <a name="input_eks_dynamic_asg_autoscaling"></a> [eks\_dynamic\_asg\_autoscaling](#input\_eks\_dynamic\_asg\_autoscaling) | EKS dynamic worker group enable autoscaling | `bool` | `true` | no |
 | <a name="input_eks_dynamic_asg_min_size"></a> [eks\_dynamic\_asg\_min\_size](#input\_eks\_dynamic\_asg\_min\_size) | EKS dynamic worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_dynamic_instance_count"></a> [eks\_dynamic\_instance\_count](#input\_eks\_dynamic\_instance\_count) | EKS dynamic worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `4` | no |
 | <a name="input_eks_dynamic_instance_type"></a> [eks\_dynamic\_instance\_type](#input\_eks\_dynamic\_instance\_type) | EKS dynamic worker group instance type | `string` | `"c5.2xlarge"` | no |

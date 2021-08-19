@@ -126,7 +126,7 @@ variable "eks_dynamic_instance_count" {
 variable "eks_dynamic_asg_autoscaling" {
   description = "EKS dynamic worker group enable autoscaling"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "eks_dynamic_asg_min_size" {
