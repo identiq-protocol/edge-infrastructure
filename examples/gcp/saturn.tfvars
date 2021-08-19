@@ -12,5 +12,5 @@ external_db = true
 gke_nodegroup_base_machinetype = "c2-standard-8"
 gke_nodegroup_dynamic_machinetype = "c2-standard-8"
 gke_nodegroup_dynamic_machine_count = 4
-gke_nodegroup_cache_machinetype = "n2-highmem-8"
+gke_nodegroup_cache_machinetype = "n2-custom-16-71168-ext"
 external_redis_memory_size_gb = 64
