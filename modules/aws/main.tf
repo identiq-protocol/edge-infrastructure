@@ -77,7 +77,7 @@ module "eks" {
     }
   ]
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
-  depends_on                  = [aws_iam_policy.lb_controller_policy]
+  depends_on                  = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
   tags                        = merge(var.tags, var.default_tags)
 }
 
