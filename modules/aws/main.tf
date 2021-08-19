@@ -59,9 +59,14 @@ module "eks" {
       public_ip               = false
     }
   ]
-  workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], var.eks_additional_policies)
+  workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy]
-  tags                        = merge(var.tags, var.default_tags)
+  tags                        = merge(var.tags, var.default_tags,
+    {
+      "k8s.io/cluster-autoscaler/enabled" = false
+      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}" = "owned"
+    }
+  )
 }
 
 data "aws_eks_cluster" "cluster" {
