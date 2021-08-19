@@ -1,11 +1,11 @@
 region             = "us-east1"
-project_id         = "identiq-perf"
-cluster_name = "edge-one"
+project_id         = "default"
+cluster_name = "identiq-edge"
 tags = {
   owner       = "identiq"
   application = "identiq-edge"
-  cluster_name = "edge-one"
-  environment  = "perf"
+  cluster_name = "identiq-edge"
+  environment  = "dev"
 }
 external_db = true
 #external_redis = true
