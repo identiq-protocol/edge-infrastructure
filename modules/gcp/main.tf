@@ -32,6 +32,7 @@ module "gke" {
   node_pools = [
     {
       name            = "base"
+      autoscaling     = false
       node_count      = var.gke_nodegroup_base_machine_count
       service_account = var.compute_engine_service_account
       machine_type    = var.gke_nodegroup_base_machinetype
@@ -40,6 +41,7 @@ module "gke" {
     },
     {
       name            = "dynamic"
+      autoscaling     = false
       node_count      = var.gke_nodegroup_dynamic_machine_count
       service_account = var.compute_engine_service_account
       machine_type    = var.gke_nodegroup_dynamic_machinetype
@@ -48,8 +50,8 @@ module "gke" {
     },
     {
       name            = "cache"
+      autoscaling     = false
       node_count      = var.external_redis ? 0 : var.gke_nodegroup_cache_machine_count
-      min_node_count  = var.external_redis ? 0 : 1
       service_account = var.compute_engine_service_account
       machine_type    = var.gke_nodegroup_cache_machinetype
       node_locations  = data.google_compute_zones.available.names[0]
@@ -57,8 +59,8 @@ module "gke" {
     },
     {
       name            = "db"
+      autoscaling     = false
       node_count      = var.external_db ? 0 : var.gke_nodegroup_db_machine_count
-      min_node_count  = var.external_redis ? 0 : 1
       service_account = var.compute_engine_service_account
       machine_type    = var.gke_nodegroup_db_machinetype
       node_locations  = data.google_compute_zones.available.names[0]
