@@ -36,6 +36,18 @@ module "eks" {
     },
     {
       name                    = "dynamic"
+      tags = [
+        {
+          key = "k8s.io/cluster-autoscaler/enabled"
+          propagate_at_launch = "false"
+          value = var.eks_dynamic_asg_autoscaling
+        },
+        {
+          key = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"
+          propagate_at_launch = "false"
+          value = "owned"
+        }
+      ]
       override_instance_types = [var.eks_dynamic_instance_type]
       spot_instance_pools     = var.eks_dynamic_instance_count
       on_demand_base_capacity = var.eks_dynamic_instance_count
@@ -61,12 +73,7 @@ module "eks" {
   ]
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy]
-  tags                        = merge(var.tags, var.default_tags,
-    {
-      "k8s.io/cluster-autoscaler/enabled" = false
-      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}" = "owned"
-    }
-  )
+  tags                        = merge(var.tags, var.default_tags)
 }
 
 data "aws_eks_cluster" "cluster" {
