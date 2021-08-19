@@ -247,7 +247,7 @@ variable "ec_snapshot_retention_limit" {
 
 variable "ec_snapshot_window" {
   description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster."
-  default     = "03:00-05:00"
+  default     = "06:30-07:30"
 }
 
 variable "ec_transit_encryption_enabled" {
