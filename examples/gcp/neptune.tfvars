@@ -5,7 +5,6 @@ tags = {
   owner       = "identiq"
   application = "identiq-edge"
   cluster_name = "identiq-edge"
-  environment  = "dev"
 }
 external_db = true
 #external_redis = true
