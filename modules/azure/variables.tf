@@ -274,7 +274,7 @@ variable "aks_base_agents_os_disk_size_gb" {
 variable "aks_base_agents_vm_size" {
   description = "AKS 'base' node pool - the default virtual machine size for the Kubernetes agents"
   type        = string
-  default     = "Standard_F16s_v2"
+  default     = "Standard_F8s_v2"
 }
 
 variable "aks_base_enable_auto_scaling" {
@@ -316,7 +316,7 @@ variable "postgresql_tier" {
 variable "postgresql_capacity" {
   description = "Capacity for PostgreSQL server sku - number of vCores : https://docs.microsoft.com/en-us/azure/postgresql/concepts-pricing-tiers"
   type        = number
-  default     = 4
+  default     = 2
 }
 
 variable "postgresql_force_ssl" {
@@ -370,7 +370,13 @@ variable "postgresql_auto_grow_enabled" {
 variable "postgresql_configurations" {
   description = "PostgreSQL configurations to enable"
   type        = map(string)
-  default     = {}
+  default = {
+    "maintenance_work_mem" = "2097151",
+    "max_wal_size"         = "4096",
+    "synchronous_commit"   = "off",
+    "wal_buffers"          = "8192",
+    "enable_hashagg"       = "on"
+  }
 }
 
 variable "postgresql_databases_names" {
