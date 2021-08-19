@@ -17,7 +17,7 @@ jobs:
       uses: terraform-docs/gh-actions@v0.10.0
       with:
         working-dir: modules/aws,modules/azure,modules/gcp
-        output-file: README.MD
+        output-file: README.md
         output-method: replace
         git-push: "true"
 
