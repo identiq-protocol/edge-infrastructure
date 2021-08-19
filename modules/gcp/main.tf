@@ -202,7 +202,8 @@ resource "kubernetes_service" "edge_redis_service" {
   }
   depends_on = [
     module.gke,
-    module.memorystore-redis[0]
+    module.memorystore-redis[0],
+    kubernetes_secret.edge_redis_secret
   ]
 }
 resource "kubernetes_storage_class" "ssd" {
