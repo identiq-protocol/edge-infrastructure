@@ -29,7 +29,7 @@ steps:
      azure:
          - ls -l
          - terraform-docs markdown . --output-mode replace --header-from codefresh/azure-docs-header.md --output-file modules/azure/README.md
-     gcp
+     gcp:
          - ls -l
          - terraform-docs markdown . --output-mode replace --header-from codefresh/gcp-docs-header.md --output-file modules/gcp/README.md
   commit_and_push:
