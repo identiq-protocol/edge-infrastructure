@@ -3,11 +3,6 @@
 
 version: "1.0"
 mode: sequential
-stages:
-  - "clone"
-  - "docs"
-  - "commit_and_push"
-
 steps:
   clone:
     title: "Cloning repository"
