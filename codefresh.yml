@@ -21,7 +21,7 @@ steps:
    title: Generate terraform docs
    stage: docs
    commands:
-     - cd edge-infrastructure/modules/aws
+     - cd /codefresh/volume/${{CF_REPO_NAME}}/modules/aws
      - ls -la
      - terraform-docs markdown . --output-mode inject --header-from .docs/header.md --output-file README.md
   commit_and_push:
@@ -37,5 +37,5 @@ steps:
       git_user_email: codefresh@identiq.com
       allow_empty: false
       add:
-        - modules/aws/README.md
+        - edge-infrastructure/modules/aws/README.md
 
