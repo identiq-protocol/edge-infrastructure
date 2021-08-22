@@ -13,17 +13,28 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.ref }}
     
-    - name: Copy documentation template files
+    - name: Copy aws documentation template file
       uses: canastro/copy-file-action@master
       with:
         source: ".github/templates/docs-aws.md.template"
         target: "modules/aws/README.md"
+      
+    - name: Copy azure documentation template file
+      uses: canastro/copy-file-action@master
+      with:
+        source: ".github/templates/docs-azure.md.template"
+        target: "modules/azure/README.md"
+
+    - name: Copy gcp documentation template file
+      uses: canastro/copy-file-action@master
+      with:
+        source: ".github/templates/docs-gcp.md.template"
+        target: "modules/gcp/README.md"
 
     - name: Render terraform docs inside the USAGE.md and push changes back to PR branch
       uses: terraform-docs/gh-actions@v0.10.0
       with:
-        #working-dir: modules/aws,modules/azure,modules/gcp
-        working-dir: modules/aws
+        working-dir: modules/aws,modules/azure,modules/gcp
         output-file: README.md
         output-method: inject
         git-push: "true"
