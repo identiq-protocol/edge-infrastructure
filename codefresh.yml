@@ -37,5 +37,5 @@ steps:
       git_user_email: codefresh@identiq.com
       allow_empty: false
       add:
-        - edge-infrastructure/modules/aws/README.md
+        - modules/aws/README.md
 
