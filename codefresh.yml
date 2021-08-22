@@ -6,7 +6,7 @@ version: "1.0"
 stages:
   - "clone"
   - "docs"
-  - "test"
+  - "commit_and_push"
 
 steps:
   clone:
@@ -18,33 +18,25 @@ steps:
     revision: "${{CF_BRANCH}}"
     git: "codefresh"
     stage: "clone"
- :
+  docs:
    image: cytopia/terraform-docs:v0.14.1
    title: Generate terraform docs
    stage: docs
    commands:
      - cd modules/aws
      - terraform-docs markdown . --output-mode inject --header-from .ci/header.md --output-file README.md
-  build:
-    title: "Building Docker image"
-    type: "build"
-    image_name: "identiq-protocol/edge-infrastructure"
-    working_directory: "${{clone}}"
-    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    dockerfile: "Dockerfile"
-    stage: "build"
 
-commit_and_push:
-  title: Commit changes and push
-  type: git-commit
-  arguments:
-    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
-    git: github
-    working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
-    commit_message: terraform-docs: automated action (aws README.md)
-    git_user_name: codefresh-ci
-    git_user_email: codefresh@identiq.com
-    allow_empty: false
-    add:
-      - modules/aws/README.md
+  commit_and_push:
+    title: Commit changes and push
+    type: git-commit
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+      git: github
+      working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
+      commit_message: terraform-docs: automated action (aws README.md)
+      git_user_name: codefresh-ci
+      git_user_email: codefresh@identiq.com
+      allow_empty: false
+      add:
+        - modules/aws/README.md
 
