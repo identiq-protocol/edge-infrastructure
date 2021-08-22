@@ -46,4 +46,6 @@ steps:
       allow_empty: false
       add:
         - modules/aws/README.md
+        - modules/azure/README.md
+        - modules/gcp/README.md
 
