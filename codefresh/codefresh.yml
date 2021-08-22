@@ -21,6 +21,7 @@ steps:
    title: Generate aws, azure terraform docs
    stage: docs
    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+   type: parallel
    steps:
      aws:
        commands:
