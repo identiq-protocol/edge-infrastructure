@@ -25,13 +25,13 @@ steps:
      aws:
        commands:
          - ls -l
-         - terraform-docs markdown . --output-mode replace --header-from codefresh/aws-docs-header.md --output-file module/aws/README.md
+         - terraform-docs markdown . --output-mode replace --header-from codefresh/aws-docs-header.md --output-file modules/aws/README.md
      azure:
          - ls -l
-         - terraform-docs markdown . --output-mode replace --header-from codefresh/azure-docs-header.md --output-file module/azure/README.md
+         - terraform-docs markdown . --output-mode replace --header-from codefresh/azure-docs-header.md --output-file modules/azure/README.md
      gcp
          - ls -l
-         - terraform-docs markdown . --output-mode replace --header-from codefresh/gcp-docs-header.md --output-file module/gcp/README.md
+         - terraform-docs markdown . --output-mode replace --header-from codefresh/gcp-docs-header.md --output-file modules/gcp/README.md
   commit_and_push:
     title: Commit changes and push
     type: git-commit
