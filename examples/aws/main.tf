@@ -67,6 +67,7 @@ module "edge-aws" {
   rds_instance_class                        = var.rds_instance_class
   rds_backup_retention_period               = var.rds_backup_retention_period
   rds_monitoring_interval                   = var.rds_monitoring_interval
+  rds_storage_type                          = var.rds_storage_type
   rds_iops                                  = var.rds_iops
   rds_apply_immediately                     = var.rds_apply_immediately
   rds_parameters                            = var.rds_parameters
