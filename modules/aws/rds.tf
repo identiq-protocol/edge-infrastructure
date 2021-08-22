@@ -33,6 +33,7 @@ module "rds" {
   performance_insights_enabled          = var.rds_performance_insights_enabled
   performance_insights_retention_period = var.rds_performance_insights_retention_period
   monitoring_interval                   = var.rds_monitoring_interval
+  storage_type                          = var.rds_storage_type
   iops                                  = var.rds_iops
   apply_immediately                     = var.rds_apply_immediately
   parameters                            = var.rds_parameters
