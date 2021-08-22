@@ -2,6 +2,10 @@
 # https://codefresh.io/docs/docs/yaml-examples/examples/
 
 version: "1.0"
+stages:
+ - clone
+ - docs
+ - commit_and_push
 steps:
   clone:
     title: "Cloning repository"
@@ -22,6 +26,7 @@ steps:
   commit_and_push:
     title: Commit changes and push
     type: git-commit
+    stage: "commit_and_push"
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
