@@ -26,7 +26,7 @@ variable "gke_zones" {
 }
 variable "gke_version" {
   description = "gke Kubernetes version"
-  default = "1.20.9-gke.700"
+  default = "1.19.12-gke.2100"
 }
 
 variable "gke_nodegroup_base_machinetype" {
