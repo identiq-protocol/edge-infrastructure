@@ -24,13 +24,19 @@ steps:
    type: parallel
    steps:
      aws:
+       image: cytopia/terraform-docs:0.14.1
+       title: aws
        commands:
          - ls -l
          - terraform-docs markdown . --output-mode replace --header-from codefresh/aws-docs-header.md --output-file modules/aws/README.md
      azure:
+       image: cytopia/terraform-docs:0.14.1
+       title: azure
          - ls -l
          - terraform-docs markdown . --output-mode replace --header-from codefresh/azure-docs-header.md --output-file modules/azure/README.md
      gcp:
+       image: cytopia/terraform-docs:0.14.1
+       title: gcp
          - ls -l
          - terraform-docs markdown . --output-mode replace --header-from codefresh/gcp-docs-header.md --output-file modules/gcp/README.md
   commit_and_push:
