@@ -1,0 +1,49 @@
+# More examples of Codefresh YAML can be found at
+# https://codefresh.io/docs/docs/yaml-examples/examples/
+
+version: "1.0"
+stages:
+ - clone
+ - docs
+ - commit_and_push
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "identiq-protocol/edge-infrastructure"
+    # CF_BRANCH value is auto set when pipeline is triggered
+    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
+    revision: "${{CF_BRANCH}}"
+    git: "codefresh"
+    stage: "clone"
+  docs:
+   image: cytopia/terraform-docs:0.14.1
+   title: Generate aws, azure terraform docs
+   stage: docs
+   working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+   steps:
+     aws:
+       commands:
+         - ls -l
+         - terraform-docs markdown . --output-mode replace --header-from codefresh/aws-docs-header.md --output-file module/aws/README.md
+     azure:
+         - ls -l
+         - terraform-docs markdown . --output-mode replace --header-from codefresh/azure-docs-header.md --output-file module/azure/README.md
+     gcp
+         - ls -l
+         - terraform-docs markdown . --output-mode replace --header-from codefresh/gcp-docs-header.md --output-file module/gcp/README.md
+  commit_and_push:
+    title: Commit changes and push
+    type: git-commit
+    stage: "commit_and_push"
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+      git: github
+      working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
+      commit_message: terraform-docs automated action (aws README.md)
+      git_user_name: codefresh-ci
+      git_user_email: codefresh@identiq.com
+      allow_empty: false
+      add:
+        - modules/aws/README.md
+
