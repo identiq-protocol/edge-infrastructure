@@ -19,13 +19,12 @@ steps:
     git: "codefresh"
     stage: "clone"
   docs:
-   image: cytopia/terraform-docs:v0.14.1
+   image: cytopia/terraform-docs:0.14.1
    title: Generate terraform docs
    stage: docs
    commands:
      - cd modules/aws
      - terraform-docs markdown . --output-mode inject --header-from .ci/header.md --output-file README.md
-
   commit_and_push:
     title: Commit changes and push
     type: git-commit
