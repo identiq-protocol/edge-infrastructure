@@ -46,7 +46,7 @@ steps:
     stage: check_for_changes
     fail_fast: false
     commands:
-      - git diff --exit-code modules/aws/README.mda
+      - git diff --exit-code modules/aws/README.md
       - git diff --exit-code modules/azure/README.md
       - git diff --exit-code modules/gcp/README.md
   commit_and_push:
