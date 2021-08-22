@@ -2,7 +2,6 @@
 # https://codefresh.io/docs/docs/yaml-examples/examples/
 
 version: "1.0"
-mode: sequential
 steps:
   clone:
     title: "Cloning repository"
