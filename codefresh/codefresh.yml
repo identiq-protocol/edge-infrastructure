@@ -18,7 +18,7 @@ steps:
     stage: "clone"
   docs:
    image: cytopia/terraform-docs:0.14.1
-   title: Generate aws, azure terraform docs
+   title: Generate aws, azure and gcp terraform docs
    stage: docs
    type: parallel
    steps:
