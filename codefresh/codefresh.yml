@@ -44,6 +44,7 @@ steps:
     image: alpine:3.9
     title: Check if docs files has changed
     stage: check_for_changes
+    fail_fast: false
     commands:
       - git diff --exit-code modules/aws/README.mda
       - git diff --exit-code modules/azure/README.md
