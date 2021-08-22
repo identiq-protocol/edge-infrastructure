@@ -22,8 +22,8 @@ steps:
    stage: docs
    commands:
      - cd /codefresh/volume/${{CF_REPO_NAME}}/modules/aws
-     - ls -la
-     - terraform-docs markdown . --output-mode inject --header-from .docs/header.md --output-file README.md
+     - ls -l
+     - terraform-docs markdown . --output-mode replace --header-from .docs/header.md --output-file README.md
   commit_and_push:
     title: Commit changes and push
     type: git-commit
