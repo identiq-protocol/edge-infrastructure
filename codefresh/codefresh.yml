@@ -49,7 +49,7 @@ steps:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
       working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
-      commit_message: terraform-docs automated action (aws README.md)
+      commit_message: terraform-docs automated action
       git_user_name: codefresh-ci
       git_user_email: codefresh@identiq.com
       allow_empty: false
@@ -57,8 +57,4 @@ steps:
         - modules/aws/README.md
         - modules/azure/README.md
         - modules/gcp/README.md
-      when:
-        steps:
-          any:
-            myTestCondition: steps.check_for_change.result == 'failure'
 
