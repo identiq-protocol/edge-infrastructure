@@ -42,12 +42,12 @@ steps:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
   check_for_changes:
     image: alpine:3.9
-      title: Check if docs files has changed
-      stage: check_for_changes
-      commands:
-        - git diff --exit-code modules/aws/README.md
-        - git diff --exit-code modules/azure/README.md
-        - git diff --exit-code modules/gcp/README.md
+    title: Check if docs files has changed
+    stage: check_for_changes
+    commands:
+      - git diff --exit-code modules/aws/README.mda
+      - git diff --exit-code modules/azure/README.md
+      - git diff --exit-code modules/gcp/README.md
   commit_and_push:
     title: Commit changes and push
     type: git-commit
@@ -66,7 +66,6 @@ steps:
         - modules/gcp/README.md
       when:
         steps:
-          - name: check_for_changes
-            on: failure  
-          
+          any:
+            myTestCondition: steps.check_for_change.result == 'failure'
 
