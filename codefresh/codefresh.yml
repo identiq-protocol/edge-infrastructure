@@ -27,21 +27,18 @@ steps:
        title: aws
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/aws
        commands:
-         - ls -l
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/aws-docs-header.md --output-file README.md
      azure:
        image: cytopia/terraform-docs:0.14.1
        title: azure
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/azure
        commands:
-         - ls -l
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/azure-docs-header.md --output-file README.md
      gcp:
        image: cytopia/terraform-docs:0.14.1
        title: gcp
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
        commands:
-         - ls -l
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
   commit_and_push:
     title: Commit changes and push
