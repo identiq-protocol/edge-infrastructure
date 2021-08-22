@@ -33,7 +33,7 @@ steps:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
       working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
-      commit_message: terraform-docs: automated action (aws README.md)
+      commit_message: terraform-docs automated action (aws README.md)
       git_user_name: codefresh-ci
       git_user_email: codefresh@identiq.com
       allow_empty: false
