@@ -23,7 +23,7 @@ steps:
    commands:
      - cd edge-infrastructure/modules/aws
      - ls -la
-     - terraform-docs markdown . --output-mode inject --header-from .ci/header.md --output-file README.md
+     - terraform-docs markdown . --output-mode inject --header-from .docs/header.md --output-file README.md
   commit_and_push:
     title: Commit changes and push
     type: git-commit
