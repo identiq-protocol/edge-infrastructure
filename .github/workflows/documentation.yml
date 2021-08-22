@@ -16,7 +16,7 @@ jobs:
     - name: Copy documentation template files
       uses: canastro/copy-file-action@master
       with:
-        source: "github/templates/docs-aws.md.template"
+        source: ".github/templates/docs-aws.md.template"
         target: "modules/aws/README.md"
 
     - name: Render terraform docs inside the USAGE.md and push changes back to PR branch
