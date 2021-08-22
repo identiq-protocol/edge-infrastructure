@@ -22,7 +22,7 @@ steps:
    stage: docs
    commands:
      - ls -l
-     - cd modules/aws
+     - cd edge-infrastructure/modules/aws
      - terraform-docs markdown . --output-mode inject --header-from .ci/header.md --output-file README.md
   commit_and_push:
     title: Commit changes and push
