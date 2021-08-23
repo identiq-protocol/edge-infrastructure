@@ -71,12 +71,12 @@ steps:
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     fail_fast: false
     commands:
-      - git diff examples/aws/variables.tf --exit-code
-      - git diff examples/azure/variables.tf --exit-code
-      - git diff examples/gcp/variables.tf --exit-code
-      - git diff modules/aws/README.md --exit-code
-      - git diff modules/azure/README.md --exit-code
-      - git diff modules/gcp/README.md --exit-code
+      - git diff --exit-code examples/aws/variables.tf 
+      - git diff --exit-code examples/azure/variables.tf 
+      - git diff --exit-code examples/gcp/variables.tf 
+      - git diff --exit-code modules/aws/README.md 
+      - git diff --exit-code modules/azure/README.md 
+      - git diff --exit-code modules/gcp/README.md 
   commit_and_push:
     title: Commit changes and push
     type: git-commit
