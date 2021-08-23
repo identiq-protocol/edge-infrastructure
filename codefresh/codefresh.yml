@@ -6,6 +6,7 @@ stages:
  - clone
  - copy_module_variables
  - docs
+ - check_diff
  - commit_and_push
 steps:
   clone:
@@ -63,6 +64,18 @@ steps:
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
        commands:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
+  check_diff:
+    title: Check if variable and doc files have changed
+    stage: "check_diff"
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
+    fail_fast: false
+    commands:
+      - git diff examples/aws/variables.tf --exit-code
+      - git diff examples/azure/variables.tf --exit-code
+      - git diff examples/gcp/variables.tf --exit-code
+      - git diff modules/aws/README.md --exit-code
+      - git diff modules/azure/README.md --exit-code
+      - git diff modules/gcp/README.md --exit-code
   commit_and_push:
     title: Commit changes and push
     type: git-commit
@@ -83,4 +96,9 @@ steps:
         - modules/aws/README.md
         - modules/azure/README.md
         - modules/gcp/README.md
-
+     when:
+      steps
+        - name: check_diff
+          on:
+            - failure
+     
