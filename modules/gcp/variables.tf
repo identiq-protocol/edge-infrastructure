@@ -28,7 +28,11 @@ variable "gke_version" {
   description = "gke Kubernetes version"
   default = "1.19.12-gke.2100"
 }
-
+variable "gke_enable_private_nodes" {
+  type        = bool
+  description = "(Beta) Whether nodes have internal IP addresses only"
+  default     = true
+}
 variable "gke_nodegroup_base_machinetype" {
   description = "gke base nodegroup machine type"
   default = "c2-standard-8"

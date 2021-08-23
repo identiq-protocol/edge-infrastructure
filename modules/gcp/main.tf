@@ -26,6 +26,7 @@ module "gke" {
   remove_default_node_pool          = true
   disable_legacy_metadata_endpoints = false
   cluster_autoscaling               = var.gke_cluster_autoscaling
+  enable_private_nodes              = var.gke_enable_private_nodes
   kubernetes_version = var.gke_version
   cluster_resource_labels = merge(var.default_tags, var.tags)
 

@@ -20,6 +20,7 @@ module "edge-gcp" {
   cluster_name = var.cluster_name
   tags = var.tags
   default_tags = var.default_tags
+  gke_enable_private_nodes = var.gke_enable_private_nodes
 
   # vpc
   vpc_name                 = var.vpc_name
