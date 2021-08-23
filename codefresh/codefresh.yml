@@ -96,7 +96,7 @@ steps:
         - modules/aws/README.md
         - modules/azure/README.md
         - modules/gcp/README.md
-     when:
+    when:
       steps
         - name: check_diff
           on:
