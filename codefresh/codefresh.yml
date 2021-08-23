@@ -79,6 +79,11 @@ steps:
   commit_and_push:
     title: Commit changes and push
     type: git-commit
+    when:
+      steps:
+       - name: check_diff
+         on:
+           - failure
     stage: "commit_and_push"
     fail_fast: false
     arguments:
@@ -96,9 +101,4 @@ steps:
         - modules/aws/README.md
         - modules/azure/README.md
         - modules/gcp/README.md
-    when:
-      steps
-        - name: check_diff
-          on:
-            - failure
      
