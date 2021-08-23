@@ -68,7 +68,7 @@ steps:
     title: Check if variable and doc files have changed
     stage: "check_diff"
     image: alpine/git:latest
-    working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     fail_fast: false
     commands:
       - git diff examples/aws/variables.tf --exit-code
@@ -86,7 +86,6 @@ steps:
          on:
            - failure
     stage: "commit_and_push"
-    fail_fast: false
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
