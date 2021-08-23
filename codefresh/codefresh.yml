@@ -22,17 +22,17 @@ steps:
    stage: copy_module_variables
    type: parallel
    steps:
-     aws:
+     aws_copy_variables:
        image: alpine:3.14.1
        title: aws
        commands:
          - cp modules/aws/variables.tf examples/aws/
-     azure:
+     azure_copy_variables:
        image: alpine:3.14.1
        title: azure
        commands:
          - cp modules/azure/variables.tf examples/azure/
-     gcp:
+     gcp_copy_variables:
        image: alpine:3.14.1
        title: gcp
        commands:
@@ -42,19 +42,19 @@ steps:
    stage: docs
    type: parallel
    steps:
-     aws:
+     aws_docs:
        image: cytopia/terraform-docs:0.14.1
        title: aws
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/aws
        commands:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/aws-docs-header.md --output-file README.md
-     azure:
+     azure_docs:
        image: cytopia/terraform-docs:0.14.1
        title: azure
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/azure
        commands:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/azure-docs-header.md --output-file README.md
-     gcp:
+     gcp_docs:
        image: cytopia/terraform-docs:0.14.1
        title: gcp
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
