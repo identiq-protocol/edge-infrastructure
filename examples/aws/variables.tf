@@ -387,6 +387,12 @@ variable "rds_iops" {
   default     = 3000
 }
 
+variable "rds_storage_type" {
+  description = "One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not."
+  type        = string
+  default     = "gp2"
+}
+
 variable "rds_apply_immediately" {
   description = "Specifies whether any database modifications are applied immediately, or during the next maintenance window"
   type        = bool
