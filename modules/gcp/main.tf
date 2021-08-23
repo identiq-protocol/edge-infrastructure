@@ -125,9 +125,16 @@ module "postgresql-db" {
   depends_on  = [module.private-service-access]
 }
 data "google_client_config" "provider" {}
+data "google_container_cluster" "gke_cluster" {
+  name     = var.cluster_name
+  location = var.region
+  project  = var.project_id
+}
 provider "kubernetes" {
-  host                   = module.gke.endpoint
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+  host                   = "https://${data.google_container_cluster.gke_cluster.endpoint}"
+  cluster_ca_certificate = base64decode(
+  data.google_container_cluster.gke_cluster.master_auth[0].cluster_ca_certificate,
+  )
   token = data.google_client_config.provider.access_token
 }
 resource "kubernetes_secret" "edge_db_secret" {
