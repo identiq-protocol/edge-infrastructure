@@ -26,6 +26,7 @@ steps:
        image: alpine:3.14.1
        title: aws
        commands:
+         - ls -l
          - cp modules/aws/variables.tf examples/aws/
      azure_copy_variables:
        image: alpine:3.14.1
