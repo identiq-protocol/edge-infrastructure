@@ -4,8 +4,8 @@
 version: "1.0"
 stages:
  - clone
+ - copy_module_variables
  - docs
- - check_for_changes
  - commit_and_push
 steps:
   clone:
@@ -17,6 +17,26 @@ steps:
     revision: "${{CF_BRANCH}}"
     git: "codefresh"
     stage: "clone"
+  copy_module_variables:
+   title: Copy module variables into the example directory
+   stage: copy_module_variables
+   type: parallel
+   steps:
+     aws:
+       image: alpine:3.14.1
+       title: aws
+       commands:
+         - cp modules/aws/variables.tf examples/aws/
+     azure:
+       image: alpine:3.14.1
+       title: azure
+       commands:
+         - cp modules/azure/variables.tf examples/azure/
+     gcp:
+       image: alpine:3.14.1
+       title: gcp
+       commands:
+         - cp modules/gcp/variables.tf examples/gcp/
   docs:
    title: Generate aws, azure and gcp terraform docs
    stage: docs
@@ -49,11 +69,14 @@ steps:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
       working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
-      commit_message: terraform-docs automated action
+      commit_message: Automated docs and variables updates
       git_user_name: codefresh-ci
       git_user_email: codefresh@identiq.com
       allow_empty: false
       add:
+        - examples/aws/variables.tf
+        - examples/azure/variables.tf
+        - examples/gcp/variables.tf
         - modules/aws/README.md
         - modules/azure/README.md
         - modules/gcp/README.md
