@@ -118,6 +118,7 @@ module "postgresql-db" {
   disk_autoresize = var.external_db_postgres_disk_autoresize
   user_labels = merge(var.default_tags, var.tags)
   deletion_protection = var.external_db_deletion_protection
+  backup_configuration = var.external_db_postgres_backup_configuration
   ip_configuration = {
     ipv4_enabled = true
     private_network = module.vpc.network_id
