@@ -1,10 +1,10 @@
 output "gke_connect" {
-  value = "gcloud container clusters get-credentials ${var.cluster_name} --region ${var.region} --project ${var.project_id}"
+  value       = "gcloud container clusters get-credentials ${var.cluster_name} --region ${var.region} --project ${var.project_id}"
   description = "command to generate gke kubeconfig "
 }
 
 output "network_name" {
-  value = module.vpc.network_name
+  value       = module.vpc.network_name
   description = "The name of the VPC being created"
 }
 
