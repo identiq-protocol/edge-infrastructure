@@ -30,5 +30,5 @@ module "cloud-nat" {
   router                             = google_compute_router.router.name
   name                               = "nat-config"
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-  nat_ips                            = [google_compute_address.external_nat_address.address]
+  nat_ips                            = [google_compute_address.external_nat_address.name]
 }
