@@ -27,6 +27,8 @@ module "gke" {
   disable_legacy_metadata_endpoints = false
   cluster_autoscaling               = var.gke_cluster_autoscaling
   enable_private_nodes              = var.gke_enable_private_nodes
+  add_master_webhook_firewall_rules = true
+  firewall_inbound_ports            = ["1-65535"]
   kubernetes_version = var.gke_version
   cluster_resource_labels = merge(var.default_tags, var.tags)
 
