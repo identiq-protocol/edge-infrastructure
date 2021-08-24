@@ -7,3 +7,8 @@ output "network_name" {
   value       = module.edge-gcp.network_name
   description = "The name of the VPC being created"
 }
+
+output "nat_ip" {
+  value       = module.edge-gcp.nat_ip
+  description = "The address of the nat address for nat gateway"
+}
