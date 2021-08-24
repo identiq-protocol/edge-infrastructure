@@ -11,7 +11,7 @@ resource "google_compute_subnetwork" "private-subnetwork" {
 
 }
 resource "google_compute_address" "external_nat_address" {
-  name         = "nat_ip"
+  name         = "nat-ip"
   subnetwork   = google_compute_subnetwork.private-subnetwork.name
   address_type = "EXTERNAL"
   region       =  var.region
