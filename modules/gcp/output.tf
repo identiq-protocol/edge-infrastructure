@@ -7,3 +7,7 @@ output "network_name" {
   value = module.vpc.network_name
   description = "The name of the VPC being created"
 }
+
+output "nat_ip" {
+  value = module.vpc.nat_ip
+}
