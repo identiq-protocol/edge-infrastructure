@@ -26,11 +26,12 @@ steps:
     image: alpine
     commands:
     - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
-  push_tag:
-    title: push tag
-    image: alpine/git:latest
-    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-    commands:
-      - git checkout master
-      - git tag $SEMVERSIONER_RESULT master
-      - git push origin $SEMVERSIONER_RESULT
+  github_release:
+    type: github-release
+    title: Typical usage example
+    description: |-
+      The git_context_name, repo_owner and repo_name vars
+      will be taken automatically from the trigger.
+      Requires the pipeline to be started by a github trigger
+    arguments:
+      release_tag: ${{SEMVERSIONER_RESULT}}
