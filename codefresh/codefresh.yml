@@ -10,6 +10,7 @@ stages:
  - commit_and_push
  - get_latest_tag
  - print_var
+ - push_tag
 steps:
   clone:
     title: "Cloning repository"
@@ -104,8 +105,8 @@ steps:
         - modules/azure/README.md
         - modules/gcp/README.md
   get_latest_tag:
-    title: Check if variable and doc files have changed
-    stage: "get_latest_tag"
+    title: get latest tag 
+    stage: "push_tag"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
@@ -113,11 +114,13 @@ steps:
       - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
   bumpVersion:
     type: semversioner
+    stage: "push_tag"
     arguments:
       SEMVERSIONER_VERSION: ${{LATEST_TAG}}
       SEMVERSIONER_ACTION: bump
       SEMVERSIONER_PART: patch
   checkVersion:
+    stage: "push_tag"
     image: alpine
     commands:
     - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
