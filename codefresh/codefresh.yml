@@ -8,6 +8,7 @@ stages:
  - docs
  - check_diff
  - commit_and_push
+ - get_latest_tag
 steps:
   clone:
     title: "Cloning repository"
