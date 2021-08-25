@@ -115,5 +115,5 @@ steps:
     title: Check if variable and doc files have changed
     stage: "print_var"
     image: alpine
-       - echo VAR1
+       - echo $LATEST_TAG
      
