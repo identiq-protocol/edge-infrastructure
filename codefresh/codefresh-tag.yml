@@ -35,3 +35,4 @@ steps:
       Requires the pipeline to be started by a github trigger
     arguments:
       release_name: ${{SEMVERSIONER_RESULT}}
+      release_tag: ${{SEMVERSIONER_RESULT}}
