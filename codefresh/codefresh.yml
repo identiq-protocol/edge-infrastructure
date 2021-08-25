@@ -115,6 +115,5 @@ steps:
     title: Check if variable and doc files have changed
     stage: "print_var"
     image: alpine
-    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
       - echo ${{steps.get_latest_tag.output.LATEST_TAG}}
      
