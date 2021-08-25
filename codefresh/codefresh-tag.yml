@@ -1,0 +1,43 @@
+# More examples of Codefresh YAML can be found at
+# https://codefresh.io/docs/docs/yaml-examples/examples/
+
+version: "1.0"
+stages:
+ - push_tag
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "identiq-protocol/edge-infrastructure"
+    revision: "${{CF_BRANCH}}"
+    git: "codefresh"
+    stage: "clone"
+  get_latest_tag:
+    title: get latest tag 
+    stage: "push_tag"
+    image: alpine/git:latest
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+    commands:
+      - git checkout master
+      - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
+  bumpVersion:
+    type: semversioner
+    stage: "push_tag"
+    arguments:
+      SEMVERSIONER_VERSION: ${{LATEST_TAG}}
+      SEMVERSIONER_ACTION: bump
+      SEMVERSIONER_PART: patch
+  checkVersion:
+    stage: "push_tag"
+    image: alpine
+    commands:
+    - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
+  push_tag:
+    title: push tag
+    stage: "push_tag"
+    image: alpine/git:latest
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+    commands:
+      - git checkout master
+      - git tag mytag master
+      - git push origin $SEMVERSIONER_RESULT
