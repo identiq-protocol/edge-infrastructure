@@ -109,6 +109,7 @@ steps:
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     fail_fast: false
     commands:
+      - git checkout master
       - cf_export VAR1=`git describe --tags --abbrev=0`
       - echo $VAR1
      
