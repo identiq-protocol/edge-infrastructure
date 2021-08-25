@@ -9,6 +9,7 @@ stages:
  - check_diff
  - commit_and_push
  - get_latest_tag
+ - print_var
 steps:
   clone:
     title: "Cloning repository"
@@ -107,9 +108,13 @@ steps:
     stage: "get_latest_tag"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-    fail_fast: false
     commands:
       - git checkout master
       - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
+  print_var:
+    title: Check if variable and doc files have changed
+    stage: "print_var"
+    image: alpine
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
       - echo ${{steps.get_latest_tag.output.LATEST_TAG}}
      
