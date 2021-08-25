@@ -15,6 +15,7 @@ steps:
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
       - git checkout master
+      - git pull
       - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
   bumpVersion:
     type: semversioner
