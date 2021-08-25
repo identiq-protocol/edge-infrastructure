@@ -34,4 +34,4 @@ steps:
       will be taken automatically from the trigger.
       Requires the pipeline to be started by a github trigger
     arguments:
-      release_tag: ${{SEMVERSIONER_RESULT}}
+      release_name: ${{SEMVERSIONER_RESULT}}
