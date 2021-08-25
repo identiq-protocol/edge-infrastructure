@@ -7,7 +7,7 @@ steps:
     title: "Cloning repository"
     type: "git-clone"
     repo: "identiq-protocol/edge-infrastructure"
-    revision: "${{CF_BRANCH}}"
+    revision: master
     git: "codefresh"
   get_latest_tag:
     title: get latest tag
@@ -15,7 +15,6 @@ steps:
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
       - git checkout master
-      - git pull
       - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
   bumpVersion:
     type: semversioner
