@@ -115,5 +115,5 @@ steps:
     title: Check if variable and doc files have changed
     stage: "print_var"
     image: alpine
-      - echo ${{steps.get_latest_tag.output.LATEST_TAG}}
+       - echo VAR1
      
