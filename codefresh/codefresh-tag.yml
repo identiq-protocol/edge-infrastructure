@@ -10,7 +10,7 @@ steps:
     revision: "${{CF_BRANCH}}"
     git: "codefresh"
   get_latest_tag:
-    title: get latest tag 
+    title: get latest tag
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
@@ -26,11 +26,11 @@ steps:
     image: alpine
     commands:
     - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
-  push_tag:
-    title: push tag
-    image: alpine/git:latest
-    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-    commands:
-      - git checkout master
-      - git tag mytag master
-      - git push origin $SEMVERSIONER_RESULT
+#  push_tag:
+#    title: push tag
+#    image: alpine/git:latest
+#    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+#    commands:
+#      - git checkout master
+#      - git tag mytag master
+#      - git push origin $SEMVERSIONER_RESULT
