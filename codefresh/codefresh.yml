@@ -111,10 +111,13 @@ steps:
     commands:
       - git checkout master
       - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
-  print_var:
-    title: Check if variable and doc files have changed
-    stage: "print_var"
+  bumpVersion:
+    type: semversioner
+    arguments:
+      SEMVERSIONER_VERSION: ${{LATEST_TAG}}
+      SEMVERSIONER_ACTION: bump
+      SEMVERSIONER_PART: major
+  checkVersion:
     image: alpine
     commands:
-       - echo $LATEST_TAG
-     
+    - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
