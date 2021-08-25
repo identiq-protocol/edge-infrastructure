@@ -116,7 +116,7 @@ steps:
     arguments:
       SEMVERSIONER_VERSION: ${{LATEST_TAG}}
       SEMVERSIONER_ACTION: bump
-      SEMVERSIONER_PART: major
+      SEMVERSIONER_PART: patch
   checkVersion:
     image: alpine
     commands:
