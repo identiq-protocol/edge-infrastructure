@@ -32,5 +32,5 @@ steps:
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
       - git checkout master
-      - git tag mytag master
+      - git tag $SEMVERSIONER_RESULT master
       - git push origin $SEMVERSIONER_RESULT
