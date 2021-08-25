@@ -110,6 +110,6 @@ steps:
     fail_fast: false
     commands:
       - git checkout master
-      - cf_export VAR1=`git describe --tags --abbrev=0`
-      - echo $VAR1
+      - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
+      - echo ${{steps.get_latest_tag.output.LATEST_TAG}}
      
