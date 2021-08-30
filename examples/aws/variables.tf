@@ -2,6 +2,11 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+variable "vpc_name" {
+  description = "Name to be used on all the resources as identifier"
+  default     = "identiq-vpc"
+}
+
 variable "vpc_cidrsubnet" {
   description = "The CIDR block for the VPC"
   default     = "10.0.0.0/16"
