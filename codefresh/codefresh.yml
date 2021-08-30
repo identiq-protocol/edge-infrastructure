@@ -152,7 +152,7 @@ steps:
   github_release:
     type: github-release
     stage: "Create release"
-    title: Typical usage example
+    title: Create new release
     description: |-
       The git_context_name, repo_owner and repo_name vars
       will be taken automatically from the trigger.

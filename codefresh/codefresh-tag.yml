@@ -7,7 +7,7 @@ steps:
     title: "Cloning repository"
     type: "git-clone"
     repo: "identiq-protocol/edge-infrastructure"
-    revision: master
+    revision: "${{CF_BRANCH}}"
     git: "codefresh"
   get_latest_tag:
     title: get latest tag
