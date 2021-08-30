@@ -3,14 +3,11 @@
 
 version: "1.0"
 stages:
- - clone
- - copy_module_variables
- - docs
- - check_diff
- - commit_and_push
- - get_latest_tag
- - print_var
- - push_tag
+ - 'Clone'
+ - 'Copy module variables'
+ - 'Generate documentation'
+ - 'Commit and push generated files'
+ - 'Create release'
 steps:
   clone:
     title: "Cloning repository"
@@ -20,10 +17,10 @@ steps:
     # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
     revision: "${{CF_BRANCH}}"
     git: "codefresh"
-    stage: "clone"
+    stage: "Clone"
   copy_module_variables:
    title: Copy module variables into the example directory
-   stage: copy_module_variables
+   stage: "Copy module variables"
    type: parallel
    steps:
      aws_copy_variables:
@@ -46,7 +43,7 @@ steps:
          - cp modules/gcp/variables.tf examples/gcp/
   docs:
    title: Generate aws, azure and gcp terraform docs
-   stage: docs
+   stage: "Generate documentation"
    type: parallel
    steps:
      aws_docs:
@@ -69,7 +66,7 @@ steps:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
   check_diff:
     title: Check if variable and doc files have changed
-    stage: "check_diff"
+    stage: "Commit and push generated files"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     fail_fast: false
@@ -81,14 +78,14 @@ steps:
       - git diff --exit-code modules/azure/README.md 
       - git diff --exit-code modules/gcp/README.md 
   commit_and_push:
-    title: Commit changes and push
+    title: Commit changes and push auto genereted files 
+    stage: "Commit and push generated files"
     type: git-commit
     when:
       steps:
        - name: check_diff
          on:
            - failure
-    stage: "commit_and_push"
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
@@ -106,21 +103,32 @@ steps:
         - modules/gcp/README.md
   get_latest_tag:
     title: get latest tag 
-    stage: "push_tag"
+    stage: "Create release"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
       - git checkout master
-      - cf_export LATEST_TAG=`git describe --tags --abbrev=0`
+      - cf_export LATEST_TAG=`git tag --sort=committerdate | tail -1`
   bumpVersion:
     type: semversioner
-    stage: "push_tag"
+    stage: "Create release"
     arguments:
       SEMVERSIONER_VERSION: ${{LATEST_TAG}}
       SEMVERSIONER_ACTION: bump
       SEMVERSIONER_PART: patch
   checkVersion:
-    stage: "push_tag"
+    stage: "Create release"
     image: alpine
     commands:
     - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
+  github_release:
+    type: github-release
+    stage: "Create release"
+    title: Typical usage example
+    description: |-
+      The git_context_name, repo_owner and repo_name vars
+      will be taken automatically from the trigger.
+      Requires the pipeline to be started by a github trigger
+    arguments:
+      release_name: ${{SEMVERSIONER_RESULT}}
+      release_tag: ${{SEMVERSIONER_RESULT}}
