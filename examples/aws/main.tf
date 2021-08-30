@@ -12,7 +12,7 @@ provider "aws" {
 #}
 
 module "edge-aws" {
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.10"
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
   # vpc
   vpc_name                 = var.vpc_name
   vpc_cidrsubnet           = var.vpc_cidrsubnet
@@ -98,16 +98,16 @@ module "edge-aws" {
 
 output "connect" {
   value = module.edge-aws.connect
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.10"
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
 
 output "nat_ips" {
   value = module.edge-aws.nat_ips
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.10"
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
 
 output "vpc_id" {
   value = module.edge-aws.vpc_id
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.10"
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
 
 output "endpoint_address" {
   value = var.vpc_endpoint_service_name != "" ? module.edge-aws.endpoint_address : ""
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.10"
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
