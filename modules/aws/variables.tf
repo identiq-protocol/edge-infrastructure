@@ -387,12 +387,6 @@ variable "rds_iops" {
   default     = 3000
 }
 
-variable "rds_apply_immediately" {
-  description = "Specifies whether any database modifications are applied immediately, or during the next maintenance window"
-  type        = bool
-  default     = "true"
-}
-
 variable "rds_parameters" {
   description = "A list of DB parameters (map) to apply"
   type        = list(map(string))
