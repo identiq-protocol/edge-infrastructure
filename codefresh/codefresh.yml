@@ -129,7 +129,6 @@ steps:
       condition:
         all:
           filesChanged: 'match("${{CF_COMMIT_MESSAGE}}","/^0$/") == false
- #         masterBranch: '"${{CF_BRANCH}}" == "master"'
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
