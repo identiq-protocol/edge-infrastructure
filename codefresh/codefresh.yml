@@ -130,7 +130,7 @@ steps:
     when:
       condition:
         all:
-          filesChanged: 'match("${{DIFF_STATUS}}","/^0$/") == false'
+          filesChanged: 'match("${{DIFF_STATUS}}","/^0$/", true) == false'
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
