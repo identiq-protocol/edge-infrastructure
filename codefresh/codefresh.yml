@@ -6,6 +6,8 @@ stages:
  - 'Clone'
  - 'Copy module variables'
  - 'Generate docs'
+ - 'Get latest tag'
+ - 'Example source pinning'
  - 'Commit and push'
  - 'Create release'
 steps:
@@ -21,7 +23,6 @@ steps:
   copy_module_variables:
    title: Copy module variables into the example directory
    stage: "Copy module variables"
-   type: parallel
    steps:
      aws_copy_variables:
        image: alpine:3.14.1
@@ -44,7 +45,6 @@ steps:
   docs:
    title: Generate aws, azure and gcp terraform docs
    stage: "Generate docs"
-   type: parallel
    steps:
      aws_docs:
        image: cytopia/terraform-docs:0.14.1
@@ -64,33 +64,67 @@ steps:
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
        commands:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
-  check_diff:
-    title: Check if variable and doc files have changed
-    stage: "Commit and push"
+  get_latest_tag:
+    title: get latest tag 
+    stage: "Get latest tag"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-    fail_fast: false
     commands:
-      - git diff --exit-code examples/aws/variables.tf 
-      - git diff --exit-code examples/azure/variables.tf 
-      - git diff --exit-code examples/gcp/variables.tf 
-      - git diff --exit-code modules/aws/README.md 
-      - git diff --exit-code modules/azure/README.md 
-      - git diff --exit-code modules/gcp/README.md 
+      - git checkout master
+      - cf_export LATEST_TAG=`git tag --sort=committerdate | tail -1`
+      - git checkout $CF_BRANCH
+  example_source_pinning:
+   title: Pining example terraform source to latest new tag
+   stage: "Example source pinning"
+   steps:
+     aws_example:
+       image: hairyhenderson/sed
+       title: aws
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/aws
+       commands:
+         - sed -i '/edge-aws/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
+     azure_example:
+       image: hairyhenderson/sed
+       title: azure
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/azure
+       commands:
+         - sed -i '/edge-azure/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
+     gcp_example:
+       image: hairyhenderson/sed
+       title: gcp
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/gcp
+       commands:
+         - sed -i '/edge-azure/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
+#  check_diff:
+#    title: Check if variable and doc files have changed
+#    stage: "Commit and push"
+#    image: alpine/git:latest
+#    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+#    fail_fast: false
+#    commands:
+#      - git diff --exit-code examples/aws/variables.tf 
+#      - git diff --exit-code examples/azure/variables.tf 
+#      - git diff --exit-code examples/gcp/variables.tf 
+#      - git diff --exit-code modules/aws/README.md 
+#      - git diff --exit-code modules/azure/README.md 
+#      - git diff --exit-code modules/gcp/README.md 
   commit_and_push:
     title: Commit changes and push auto genereted files 
     stage: "Commit and push"
     type: git-commit
-    when:
-      steps:
-       - name: check_diff
-         on:
-           - failure
+#    when:
+#      steps:
+#       - name: check_diff
+#         on:
+#           - failure
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
       working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
-      commit_message: Automated docs and variables updates
+      commit_message: Automated docs, variables and tag updates
       git_user_name: codefresh-ci
       git_user_email: codefresh@identiq.com
       allow_empty: false
@@ -98,18 +132,12 @@ steps:
         - examples/aws/variables.tf
         - examples/azure/variables.tf
         - examples/gcp/variables.tf
+        - examples/aws/main.tf
+        - examples/azure/main.tf
+        - examples/gcp/main.tf
         - modules/aws/README.md
         - modules/azure/README.md
         - modules/gcp/README.md
-  get_latest_tag:
-    title: get latest tag 
-    stage: "Create release"
-    image: alpine/git:latest
-    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-    commands:
-      - git checkout master
-      - cf_export LATEST_TAG=`git tag --sort=committerdate | tail -1`
-      - git checkout $CF_BRANCH
   bumpVersion:
     type: semversioner
     stage: "Create release"
