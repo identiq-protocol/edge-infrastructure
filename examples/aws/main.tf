@@ -12,7 +12,7 @@ provider "aws" {
 #}
 
 module "edge-aws" {
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=master"
   # vpc
   vpc_name                 = var.vpc_name
   vpc_cidrsubnet           = var.vpc_cidrsubnet
@@ -67,6 +67,7 @@ module "edge-aws" {
   rds_instance_class                        = var.rds_instance_class
   rds_backup_retention_period               = var.rds_backup_retention_period
   rds_monitoring_interval                   = var.rds_monitoring_interval
+  rds_storage_type                          = var.rds_storage_type
   rds_iops                                  = var.rds_iops
   rds_apply_immediately                     = var.rds_apply_immediately
   rds_parameters                            = var.rds_parameters
@@ -98,16 +99,16 @@ module "edge-aws" {
 
 output "connect" {
   value = module.edge-aws.connect
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
+}
 
 output "nat_ips" {
   value = module.edge-aws.nat_ips
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
+}
 
 output "vpc_id" {
   value = module.edge-aws.vpc_id
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
+}
 
 output "endpoint_address" {
   value = var.vpc_endpoint_service_name != "" ? module.edge-aws.endpoint_address : ""
- source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.11"
+}
