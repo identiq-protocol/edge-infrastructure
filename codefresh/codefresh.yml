@@ -84,28 +84,28 @@ steps:
     stage: "Next tag"
     image: alpine
     commands:
-    - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
+      - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
   example_source_pinning:
    title: Pining example terraform source to latest new tag
    stage: "Example source pinning"
    steps:
      aws_example:
-       image: hairyhenderson/sed:latest
        title: aws
+       image: alpine
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/aws
        commands:
          - sed -i '/edge-aws/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
      azure_example:
-       image: hairyhenderson/sed:latest
        title: azure
+       image: alpine
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/azure
        commands:
          - sed -i '/edge-azure/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/azure\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
      gcp_example:
-       image: hairyhenderson/sed:latest
        title: gcp
+       image: alpine
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/gcp
        commands:
          - sed -i '/gke/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/gcp\/?ref=TAG_PLACE_HOLDER\"' main.tf
