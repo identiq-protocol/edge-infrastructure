@@ -4,6 +4,7 @@
 version: "1.0"
 stages:
  - 'Clone'
+ - 'Get latest tag'
  - 'Copy module variables'
  - 'Generate docs'
  - 'Next tag'
@@ -20,6 +21,15 @@ steps:
     revision: "${{CF_BRANCH}}"
     git: "codefresh"
     stage: "Clone"
+  get_latest_tag:
+    title: get latest tag 
+    stage: "Get latest tag"
+    image: alpine/git:latest
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+    commands:
+      - git checkout master
+      - cf_export LATEST_TAG=`git tag --sort version:refname | tail -1`
+      - git checkout $CF_BRANCH
   copy_module_variables:
    title: Copy module variables into the example directory
    stage: "Copy module variables"
@@ -66,17 +76,6 @@ steps:
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
        commands:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
-  get_latest_tag:
-    title: get latest tag 
-    stage: "Next tag"
-    image: alpine/git:latest
-    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-    commands:
-      - git stash
-      - git checkout master
-      - cf_export LATEST_TAG=`git tag --sort version:refname | tail -1`
-      - git checkout $CF_BRANCH
-      - git stash pop
   bumpVersion:
     type: semversioner
     stage: "Next tag"
