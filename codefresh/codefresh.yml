@@ -6,9 +6,8 @@ stages:
  - 'Clone'
  - 'Copy module variables'
  - 'Generate docs'
- - 'Get latest tag'
- - 'Example source pinning'
  - 'Next tag'
+ - 'Example source pinning'
  - 'Commit and push'
  - 'Create release'
 steps:
@@ -111,28 +110,10 @@ steps:
        commands:
          - sed -i '/gke/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
-#  check_diff:
-#    title: Check if variable and doc files have changed
-#    stage: "Commit and push"
-#    image: alpine/git:latest
-#    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-#    fail_fast: false
-#    commands:
-#      - git diff --exit-code examples/aws/variables.tf 
-#      - git diff --exit-code examples/azure/variables.tf 
-#      - git diff --exit-code examples/gcp/variables.tf 
-#      - git diff --exit-code modules/aws/README.md 
-#      - git diff --exit-code modules/azure/README.md 
-#      - git diff --exit-code modules/gcp/README.md 
   commit_and_push:
     title: Commit changes and push auto genereted files 
     stage: "Commit and push"
     type: git-commit
-#    when:
-#      steps:
-#       - name: check_diff
-#         on:
-#           - failure
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
       git: github
