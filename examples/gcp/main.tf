@@ -25,17 +25,17 @@ module "edge-gcp" {
   vpc_name                 = var.vpc_name
 
   # gke
-  gke_version = var.gke_version
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.10"
   # gke nodegroups
-  gke_nodegroup_base_machinetype = var.gke_nodegroup_base_machinetype
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.10"
   gke_nodegroup_base_machine_count = var.gke_nodegroup_base_machine_count
-  gke_nodegroup_dynamic_machinetype = var.gke_nodegroup_dynamic_machinetype
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.10"
   gke_nodegroup_dynamic_machine_count = var.gke_nodegroup_dynamic_machine_count
-  gke_nodegroup_db_machinetype = var.gke_nodegroup_db_machinetype
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.10"
   gke_nodegroup_db_machine_count = var.gke_nodegroup_db_machine_count
-  gke_nodegroup_cache_machinetype = var.gke_nodegroup_cache_machinetype
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.10"
   gke_nodegroup_cache_machine_count = var.gke_nodegroup_cache_machine_count
-
+ source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.10"
   # external db - cloud SQL
   external_db = var.external_db
   external_db_authorized_networks = var.external_db_authorized_networks
