@@ -72,9 +72,11 @@ steps:
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     commands:
+      - git stash
       - git checkout master
       - cf_export LATEST_TAG=`git tag --sort=committerdate | tail -1`
       - git checkout $CF_BRANCH
+      - git stash pop
   bumpVersion:
     type: semversioner
     stage: "Next tag"
