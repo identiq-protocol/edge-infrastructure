@@ -23,7 +23,7 @@ steps:
   copy_module_variables:
    title: Copy module variables into the example directory
    stage: "Copy module variables"
-   image: alpine:3.14.1
+   type: parallel
    steps:
      aws_copy_variables:
        image: alpine:3.14.1
@@ -46,7 +46,7 @@ steps:
   docs:
    title: Generate aws, azure and gcp terraform docs
    stage: "Generate docs"
-   image: alpine:3.14.1
+   type: parallel
    steps:
      aws_docs:
        image: cytopia/terraform-docs:0.14.1
@@ -90,7 +90,7 @@ steps:
   example_source_pinning:
    title: Pining example terraform source to latest new tag
    stage: "Example source pinning"
-   image: alpine:3.14.1
+   type: parallel
    steps:
      aws_example:
        title: aws
