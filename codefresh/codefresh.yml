@@ -5,8 +5,8 @@ version: "1.0"
 stages:
  - 'Clone'
  - 'Copy module variables'
- - 'Generate documentation'
- - 'Commit and push generated files'
+ - 'Generate docs'
+ - 'Commit and push'
  - 'Create release'
 steps:
   clone:
@@ -43,7 +43,7 @@ steps:
          - cp modules/gcp/variables.tf examples/gcp/
   docs:
    title: Generate aws, azure and gcp terraform docs
-   stage: "Generate documentation"
+   stage: "Generate docs"
    type: parallel
    steps:
      aws_docs:
@@ -66,7 +66,7 @@ steps:
          - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
   check_diff:
     title: Check if variable and doc files have changed
-    stage: "Commit and push generated files"
+    stage: "Commit and push"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     fail_fast: false
@@ -79,7 +79,7 @@ steps:
       - git diff --exit-code modules/gcp/README.md 
   commit_and_push:
     title: Commit changes and push auto genereted files 
-    stage: "Commit and push generated files"
+    stage: "Commit and push"
     type: git-commit
     when:
       steps:
@@ -109,6 +109,7 @@ steps:
     commands:
       - git checkout master
       - cf_export LATEST_TAG=`git tag --sort=committerdate | tail -1`
+      - git checkout $CF_BRANCH
   bumpVersion:
     type: semversioner
     stage: "Create release"
