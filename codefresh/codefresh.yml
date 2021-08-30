@@ -24,12 +24,12 @@ steps:
    title: Copy module variables into the example directory
    stage: "Copy module variables"
    steps:
-     aws_copy_variables:
-       image: alpine:3.14.1
-       title: aws
-       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-       commands:
-         - cp modules/aws/variables.tf examples/aws/
+#     aws_copy_variables:
+#       image: alpine:3.14.1
+#       title: aws
+#       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+#       commands:
+#         - cp modules/aws/variables.tf examples/aws/
      azure_copy_variables:
        image: alpine:3.14.1
        title: azure
