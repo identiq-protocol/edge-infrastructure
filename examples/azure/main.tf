@@ -12,7 +12,7 @@ provider "azurerm" {
 #}
 
 module "edge-azure" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.13"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.14"
 
   # Azure ad
   ad_application_dispaly_name = var.ad_application_dispaly_name
@@ -103,16 +103,16 @@ module "edge-azure" {
 
 output "connect" {
   value = module.edge-azure.connect
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.13"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.14"
 }
 
 output "nat_ip" {
   value = module.edge-azure.nat_ip
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.13"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.14"
 =======
  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.12"
 
 output "nat_ip" {
   value = module.edge-azure.nat_ip
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.13"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.14"
 >>>>>>> bf5a6b8b98512374b013a2d477f600f607f3c1ed
