@@ -427,13 +427,6 @@ variable "rds_parameters" {
   }]
 }
 
-variable "default_tags" {
-  description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
-  default = {
-    Terraform = "true"
-  }
-}
-
 variable "tags" {
   description = "Any tags the user wishes to add to all resources of the edge"
   type        = map(string)
