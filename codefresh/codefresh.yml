@@ -74,7 +74,7 @@ steps:
     commands:
       - git stash
       - git checkout master
-      - cf_export LATEST_TAG=`git tag --sort=committerdate | tail -1`
+      - cf_export LATEST_TAG=`git tag --sort version:refname | tail -1`
       - git checkout $CF_BRANCH
       - git stash pop
   bumpVersion:
