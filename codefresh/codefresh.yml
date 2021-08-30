@@ -98,7 +98,7 @@ steps:
        working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/aws
        commands:
          - "sed -i '/edge-aws/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf"
-         - sed -i "s/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g'
+         - "sed -i "s/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
      azure_example:
        title: azure
        image: alpine
