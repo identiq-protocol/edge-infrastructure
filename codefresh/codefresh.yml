@@ -23,13 +23,14 @@ steps:
   copy_module_variables:
    title: Copy module variables into the example directory
    stage: "Copy module variables"
+   image: alpine:3.14.1
    steps:
-#     aws_copy_variables:
-#       image: alpine:3.14.1
-#       title: aws
-#       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
-#       commands:
-#         - cp modules/aws/variables.tf examples/aws/
+     aws_copy_variables:
+       image: alpine:3.14.1
+       title: aws
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+       commands:
+         - cp modules/aws/variables.tf examples/aws/
      azure_copy_variables:
        image: alpine:3.14.1
        title: azure
@@ -45,6 +46,7 @@ steps:
   docs:
    title: Generate aws, azure and gcp terraform docs
    stage: "Generate docs"
+   image: alpine:3.14.1
    steps:
      aws_docs:
        image: cytopia/terraform-docs:0.14.1
@@ -85,31 +87,32 @@ steps:
     image: alpine
     commands:
       - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
-#  example_source_pinning:
-#   title: Pining example terraform source to latest new tag
-#   stage: "Example source pinning"
-#   steps:
-#     aws_example:
-#       title: aws
-#       image: alpine
-#       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/aws
-#       commands:
-#         - sed -i '/edge-aws/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
-#         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
-#     azure_example:
-#       title: azure
-#       image: alpine
-#       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/azure
-#       commands:
-#         - sed -i '/edge-azure/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/azure\/?ref=TAG_PLACE_HOLDER\"' main.tf
-#         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
-#     gcp_example:
-#       title: gcp
-#       image: alpine
-#       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/gcp
-#       commands:
-#         - sed -i '/gke/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/gcp\/?ref=TAG_PLACE_HOLDER\"' main.tf
-#         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
+  example_source_pinning:
+   title: Pining example terraform source to latest new tag
+   stage: "Example source pinning"
+   image: alpine:3.14.1
+   steps:
+     aws_example:
+       title: aws
+       image: alpine
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/aws
+       commands:
+         - sed -i '/edge-aws/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
+     azure_example:
+       title: azure
+       image: alpine
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/azure
+       commands:
+         - sed -i '/edge-azure/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/azure\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
+     gcp_example:
+       title: gcp
+       image: alpine
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/gcp
+       commands:
+         - sed -i '/gke/!b;n;c\ source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/gcp\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i 's/TAG_PLACE_HOLDER/${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}/g"
   commit_and_push:
     title: Commit changes and push auto genereted files 
     stage: "Commit and push"
