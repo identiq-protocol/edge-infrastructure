@@ -27,24 +27,25 @@ module "edge-aws" {
   vpc_endpoint_service_name = var.vpc_endpoint_service_name
 
   # eks
-  eks_cluster_name             = var.eks_cluster_name
-  eks_cluster_version          = var.eks_cluster_version
-  eks_map_roles                = var.eks_map_roles
-  eks_map_users                = var.eks_map_users
-  eks_additional_policies      = var.eks_additional_policies
-  eks_wait_for_cluster_timeout = var.eks_wait_for_cluster_timeout
-  eks_db_instance_type         = var.eks_db_instance_type
-  eks_db_instance_count        = var.eks_db_instance_count
-  eks_db_asg_min_size          = var.eks_db_asg_min_size
-  eks_cache_instance_type      = var.eks_cache_instance_type
-  eks_cache_instance_count     = var.eks_cache_instance_count
-  eks_cache_asg_min_size       = var.eks_cache_asg_min_size
-  eks_dynamic_instance_count   = var.eks_dynamic_instance_count
-  eks_dynamic_instance_type    = var.eks_dynamic_instance_type
-  eks_dynamic_asg_min_size     = var.eks_dynamic_asg_min_size
-  eks_base_instance_type       = var.eks_base_instance_type
-  eks_base_instance_count      = var.eks_base_instance_count
-  eks_base_asg_min_size        = var.eks_base_asg_min_size
+  eks_cluster_name              = var.eks_cluster_name
+  eks_cluster_version           = var.eks_cluster_version
+  eks_map_roles                 = var.eks_map_roles
+  eks_map_users                 = var.eks_map_users
+  eks_additional_policies       = var.eks_additional_policies
+  eks_wait_for_cluster_timeout  = var.eks_wait_for_cluster_timeout
+  eks_db_instance_type          = var.eks_db_instance_type
+  eks_db_instance_count         = var.eks_db_instance_count
+  eks_db_asg_min_size           = var.eks_db_asg_min_size
+  eks_cache_instance_type       = var.eks_cache_instance_type
+  eks_cache_instance_count      = var.eks_cache_instance_count
+  eks_cache_asg_min_size        = var.eks_cache_asg_min_size
+  eks_dynamic_instance_count    = var.eks_dynamic_instance_count
+  eks_dynamic_instance_type     = var.eks_dynamic_instance_type
+  eks_dynamic_asg_min_size      = var.eks_dynamic_asg_min_size
+  eks_base_instance_type        = var.eks_base_instance_type
+  eks_base_instance_count       = var.eks_base_instance_count
+  eks_base_asg_min_size         = var.eks_base_asg_min_size
+  eks_cluster_enabled_log_types = var.eks_cluster_enabled_log_types
 
   # rds
   external_db                               = var.external_db

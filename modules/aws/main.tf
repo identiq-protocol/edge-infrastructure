@@ -35,22 +35,22 @@ module "eks" {
       public_ip               = false
     },
     {
-      name                    = "dynamic"
+      name = "dynamic"
       tags = [
         {
-          key = "k8s.io/cluster-autoscaler/enabled"
+          key                 = "k8s.io/cluster-autoscaler/enabled"
           propagate_at_launch = "false"
-          value = var.eks_dynamic_asg_autoscaling
+          value               = var.eks_dynamic_asg_autoscaling
         },
         {
-          key = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"
+          key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"
           propagate_at_launch = "false"
-          value = "owned"
+          value               = "owned"
         },
         {
-          key = "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role"
+          key                 = "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role"
           propagate_at_launch = "false"
-          value = "dynamic"
+          value               = "dynamic"
         },
       ]
       override_instance_types = [var.eks_dynamic_instance_type]
@@ -76,6 +76,7 @@ module "eks" {
       public_ip               = false
     }
   ]
+  cluster_enabled_log_type    = var.eks_cluster_enabled_log_types
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
   tags                        = merge(var.tags, var.default_tags)

@@ -304,7 +304,7 @@ variable "aks_base_agents_max_pods" {
 variable "external_db" {
   description = "Database will be installed outside of AKS cluster"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "postgresql_tier" {

@@ -153,6 +153,12 @@ variable "eks_base_asg_min_size" {
   default     = 0
 }
 
+variable "eks_cluster_enabled_log_types" {
+  default     = []
+  description = "A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)"
+  type        = list(string)
+}
+
 variable "external_redis" {
   description = "Redis will be installed outside of EKS cluster (Elasticache)"
   type        = bool

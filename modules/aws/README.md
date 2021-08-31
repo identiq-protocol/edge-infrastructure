@@ -6,7 +6,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.54.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.53.0 |
 | <a name="provider_http"></a> [http](#provider\_http) | 2.4.1 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.4.1 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
@@ -65,6 +65,7 @@ No requirements.
 | <a name="input_eks_cache_asg_min_size"></a> [eks\_cache\_asg\_min\_size](#input\_eks\_cache\_asg\_min\_size) | EKS cache worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_cache_instance_count"></a> [eks\_cache\_instance\_count](#input\_eks\_cache\_instance\_count) | EKS cache worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_cache_instance_type"></a> [eks\_cache\_instance\_type](#input\_eks\_cache\_instance\_type) | EKS cache worker group instance type | `string` | `"r5.2xlarge"` | no |
+| <a name="input_eks_cluster_enabled_log_types"></a> [eks\_cluster\_enabled\_log\_types](#input\_eks\_cluster\_enabled\_log\_types) | A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | `list(string)` | `[]` | no |
 | <a name="input_eks_cluster_name"></a> [eks\_cluster\_name](#input\_eks\_cluster\_name) | Name of EKS cluster | `any` | n/a | yes |
 | <a name="input_eks_cluster_version"></a> [eks\_cluster\_version](#input\_eks\_cluster\_version) | Kubernetes version to use for the EKS cluster | `string` | `"1.19"` | no |
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
@@ -77,7 +78,7 @@ No requirements.
 | <a name="input_eks_map_roles"></a> [eks\_map\_roles](#input\_eks\_map\_roles) | EKS additional IAM roles to add to the aws-auth configmap | `list` | `[]` | no |
 | <a name="input_eks_map_users"></a> [eks\_map\_users](#input\_eks\_map\_users) | EKS additional IAM users to add to the aws-auth configmap | `list` | `[]` | no |
 | <a name="input_eks_wait_for_cluster_timeout"></a> [eks\_wait\_for\_cluster\_timeout](#input\_eks\_wait\_for\_cluster\_timeout) | A timeout (in seconds) to wait for EKS cluster to be available | `number` | `300` | no |
-| <a name="input_external_db"></a> [external\_db](#input\_external\_db) | Database will be installed outside of EKS cluster (RDS) | `bool` | `false` | no |
+| <a name="input_external_db"></a> [external\_db](#input\_external\_db) | Database will be installed outside of EKS cluster (RDS) | `bool` | `true` | no |
 | <a name="input_external_db_name"></a> [external\_db\_name](#input\_external\_db\_name) | External db name (if enabled) | `string` | `"edge"` | no |
 | <a name="input_external_redis"></a> [external\_redis](#input\_external\_redis) | Redis will be installed outside of EKS cluster (Elasticache) | `bool` | `false` | no |
 | <a name="input_external_redis_name"></a> [external\_redis\_name](#input\_external\_redis\_name) | External redis name (if enabled) | `string` | `"edge"` | no |
@@ -92,7 +93,7 @@ No requirements.
 | <a name="input_rds_engine"></a> [rds\_engine](#input\_rds\_engine) | The database engine to use | `string` | `"postgres"` | no |
 | <a name="input_rds_engine_version"></a> [rds\_engine\_version](#input\_rds\_engine\_version) | The engine version to use | `string` | `"13.3"` | no |
 | <a name="input_rds_instance_class"></a> [rds\_instance\_class](#input\_rds\_instance\_class) | The instance type of the RDS instance | `string` | `"db.m5.large"` | no |
-| <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `3000` | no |
+| <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `null` | no |
 | <a name="input_rds_maintenance_window"></a> [rds\_maintenance\_window](#input\_rds\_maintenance\_window) | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | `"Sun:00:00-Sun:03:00"` | no |
 | <a name="input_rds_monitoring_interval"></a> [rds\_monitoring\_interval](#input\_rds\_monitoring\_interval) | The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60 | `number` | `60` | no |
 | <a name="input_rds_multi_az"></a> [rds\_multi\_az](#input\_rds\_multi\_az) | Specifies if the RDS instance is multi-AZ | `bool` | `true` | no |
@@ -102,6 +103,7 @@ No requirements.
 | <a name="input_rds_performance_insights_retention_period"></a> [rds\_performance\_insights\_retention\_period](#input\_rds\_performance\_insights\_retention\_period) | The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years). | `number` | `7` | no |
 | <a name="input_rds_skip_final_snapshot"></a> [rds\_skip\_final\_snapshot](#input\_rds\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final\_snapshot\_identifier | `bool` | `true` | no |
 | <a name="input_rds_storage_encrypted"></a> [rds\_storage\_encrypted](#input\_rds\_storage\_encrypted) | Specifies whether the DB instance is encrypted | `bool` | `true` | no |
+| <a name="input_rds_storage_type"></a> [rds\_storage\_type](#input\_rds\_storage\_type) | One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not. | `string` | `"gp2"` | no |
 | <a name="input_rds_username"></a> [rds\_username](#input\_rds\_username) | Username for the master DB user | `string` | `"edge"` | no |
 | <a name="input_region"></a> [region](#input\_region) | region | `any` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources of the edge | `map(string)` | n/a | yes |
