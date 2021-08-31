@@ -14,8 +14,6 @@ resource "azuread_service_principal" "app" {
 
 # Create Service Principal password
 resource "azuread_service_principal_password" "app" {
-  end_date             = "2299-12-30T23:00:00Z" # Forever
-#  value                = random_string.password.result
   service_principal_id = azuread_service_principal.app.id
 }
 
