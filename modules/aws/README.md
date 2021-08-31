@@ -6,7 +6,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.53.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.54.0 |
 | <a name="provider_http"></a> [http](#provider\_http) | 2.4.1 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.4.1 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
@@ -25,6 +25,7 @@ No requirements.
 | Name | Type |
 |------|------|
 | [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
@@ -34,6 +35,7 @@ No requirements.
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_eks_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
 | [aws_eks_cluster_auth.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster_auth) | data source |
+| [aws_iam_policy_document.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [http_http.iam_policy](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
 
 ## Inputs
@@ -54,7 +56,7 @@ No requirements.
 | <a name="input_ec_parameter"></a> [ec\_parameter](#input\_ec\_parameter) | A list of Redis parameters to apply. Note that parameters may differ from one Redis family to another | <pre>list(object({<br>    name  = string<br>    value = string<br>  }))</pre> | <pre>[<br>  {<br>    "name": "reserved-memory-percent",<br>    "value": "10"<br>  }<br>]</pre> | no |
 | <a name="input_ec_snapshot_name"></a> [ec\_snapshot\_name](#input\_ec\_snapshot\_name) | The name of a snapshot from which to restore data into the new node group. Changing the snapshot\_name forces a new resource. | `any` | `null` | no |
 | <a name="input_ec_snapshot_retention_limit"></a> [ec\_snapshot\_retention\_limit](#input\_ec\_snapshot\_retention\_limit) | The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them. | `number` | `3` | no |
-| <a name="input_ec_snapshot_window"></a> [ec\_snapshot\_window](#input\_ec\_snapshot\_window) | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. | `string` | `"03:00-05:00"` | no |
+| <a name="input_ec_snapshot_window"></a> [ec\_snapshot\_window](#input\_ec\_snapshot\_window) | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. | `string` | `"06:30-07:30"` | no |
 | <a name="input_ec_transit_encryption_enabled"></a> [ec\_transit\_encryption\_enabled](#input\_ec\_transit\_encryption\_enabled) | Whether to enable Elastic cache encryption in transit. If this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis | `bool` | `false` | no |
 | <a name="input_eks_additional_policies"></a> [eks\_additional\_policies](#input\_eks\_additional\_policies) | EKS additional policies to be added to workers | `list` | `[]` | no |
 | <a name="input_eks_base_asg_min_size"></a> [eks\_base\_asg\_min\_size](#input\_eks\_base\_asg\_min\_size) | EKS base worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
@@ -68,6 +70,7 @@ No requirements.
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_db_instance_count"></a> [eks\_db\_instance\_count](#input\_eks\_db\_instance\_count) | EKS database worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_db_instance_type"></a> [eks\_db\_instance\_type](#input\_eks\_db\_instance\_type) | EKS database worker group instance type | `string` | `"m5.large"` | no |
+| <a name="input_eks_dynamic_asg_autoscaling"></a> [eks\_dynamic\_asg\_autoscaling](#input\_eks\_dynamic\_asg\_autoscaling) | EKS dynamic worker group enable autoscaling | `bool` | `true` | no |
 | <a name="input_eks_dynamic_asg_min_size"></a> [eks\_dynamic\_asg\_min\_size](#input\_eks\_dynamic\_asg\_min\_size) | EKS dynamic worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_dynamic_instance_count"></a> [eks\_dynamic\_instance\_count](#input\_eks\_dynamic\_instance\_count) | EKS dynamic worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `4` | no |
 | <a name="input_eks_dynamic_instance_type"></a> [eks\_dynamic\_instance\_type](#input\_eks\_dynamic\_instance\_type) | EKS dynamic worker group instance type | `string` | `"c5.2xlarge"` | no |

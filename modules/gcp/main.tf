@@ -1,19 +1,19 @@
 data "google_compute_zones" "available" {
   provider = google-beta
-  project = var.project_id
-  region  = var.region
+  project  = var.project_id
+  region   = var.region
 }
 
 module "vpc" {
-  source = "./modules/vpc"
-  region = var.region
+  source     = "./modules/vpc"
+  region     = var.region
   project_id = var.project_id
-  vpc_name = var.vpc_name
+  vpc_name   = var.vpc_name
 }
 
 module "gke" {
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version = "16.0.1"
+  source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+  version                           = "16.0.1"
   project_id                        = var.project_id
   name                              = var.cluster_name
   region                            = var.region
@@ -26,8 +26,11 @@ module "gke" {
   remove_default_node_pool          = true
   disable_legacy_metadata_endpoints = false
   cluster_autoscaling               = var.gke_cluster_autoscaling
-  kubernetes_version = var.gke_version
-  cluster_resource_labels = merge(var.default_tags, var.tags)
+  enable_private_nodes              = var.gke_enable_private_nodes
+  add_master_webhook_firewall_rules = true
+  firewall_inbound_ports            = ["1-65535"]
+  kubernetes_version                = var.gke_version
+  cluster_resource_labels           = merge(var.default_tags, var.tags)
 
   node_pools = [
     {
@@ -92,41 +95,49 @@ module "gke" {
 
 module "private-service-access" {
   count       = var.external_db || var.external_redis ? 1 : 0
-  source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "6.0.0"
+  source      = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
+  version     = "6.0.0"
   project_id  = var.project_id
   vpc_network = module.vpc.network_name
   depends_on  = [module.vpc]
 }
 
 module "postgresql-db" {
-  count       = var.external_db ? 1 : 0
-  source  = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
-  version = "6.0.0"
-  name = var.cluster_name
+  count                = var.external_db ? 1 : 0
+  source               = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
+  version              = "6.0.0"
+  name                 = var.cluster_name
   random_instance_name = true
-  user_name = var.external_db_user_name
-  database_version = var.external_db_postgres_version
-  project_id = var.project_id
-  zone = data.google_compute_zones.available.names[0]
-  region = var.region
-  tier = var.external_db_postgres_machine_type
-  disk_size = var.external_db_postgres_disk_size
-  disk_autoresize = var.external_db_postgres_disk_autoresize
-  user_labels = merge(var.default_tags, var.tags)
-  deletion_protection = var.external_db_deletion_protection
+  user_name            = var.external_db_user_name
+  database_version     = var.external_db_postgres_version
+  project_id           = var.project_id
+  zone                 = data.google_compute_zones.available.names[0]
+  region               = var.region
+  tier                 = var.external_db_postgres_machine_type
+  disk_size            = var.external_db_postgres_disk_size
+  disk_autoresize      = var.external_db_postgres_disk_autoresize
+  user_labels          = merge(var.default_tags, var.tags)
+  deletion_protection  = var.external_db_deletion_protection
+  backup_configuration = var.external_db_postgres_backup_configuration
   ip_configuration = {
-    ipv4_enabled = true
-    private_network = module.vpc.network_id
-    require_ssl = false
+    ipv4_enabled        = true
+    private_network     = module.vpc.network_id
+    require_ssl         = false
     authorized_networks = var.external_db_authorized_networks
   }
-  depends_on  = [module.private-service-access]
+  depends_on = [module.private-service-access]
 }
 data "google_client_config" "provider" {}
+data "google_container_cluster" "gke_cluster" {
+  name     = var.cluster_name
+  location = var.region
+  project  = var.project_id
+}
 provider "kubernetes" {
-  host                   = module.gke.endpoint
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+  host = "https://${data.google_container_cluster.gke_cluster.endpoint}"
+  cluster_ca_certificate = base64decode(
+    data.google_container_cluster.gke_cluster.master_auth[0].cluster_ca_certificate,
+  )
   token = data.google_client_config.provider.access_token
 }
 resource "kubernetes_secret" "edge_db_secret" {
@@ -163,20 +174,20 @@ resource "kubernetes_service" "edge_db_service" {
 }
 
 module "memorystore-redis" {
-  count           = var.external_redis ? 1 : 0
-  source          = "terraform-google-modules/memorystore/google"
-  version         = "4.0.0"
-  name            = var.cluster_name
-  project         = var.project_id
-  memory_size_gb  = var.external_redis_memory_size_gb
-  region          = var.region
-  labels          = merge(var.default_tags, var.tags)
-  redis_version   = var.external_redis_version
-  location_id     = data.google_compute_zones.available.names[0]
-  redis_configs   = var.external_redis_configs
-  tier            = var.external_redis_tier
+  count                   = var.external_redis ? 1 : 0
+  source                  = "terraform-google-modules/memorystore/google"
+  version                 = "4.0.0"
+  name                    = var.cluster_name
+  project                 = var.project_id
+  memory_size_gb          = var.external_redis_memory_size_gb
+  region                  = var.region
+  labels                  = merge(var.default_tags, var.tags)
+  redis_version           = var.external_redis_version
+  location_id             = data.google_compute_zones.available.names[0]
+  redis_configs           = var.external_redis_configs
+  tier                    = var.external_redis_tier
   transit_encryption_mode = "DISABLED"
-  authorized_network = module.vpc.network_name
+  authorized_network      = module.vpc.network_name
 }
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_redis ? 1 : 0
@@ -209,7 +220,7 @@ resource "kubernetes_storage_class" "ssd" {
   metadata {
     name = "ssd"
     annotations = {
-      "storageclass.kubernetes.io/is-default-class":"true"
+      "storageclass.kubernetes.io/is-default-class" : "true"
     }
   }
   storage_provisioner = "kubernetes.io/gce-pd"

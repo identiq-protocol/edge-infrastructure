@@ -8,3 +8,6 @@ output "subnetwork_name" {
 output "network_id" {
   value = google_compute_network.vpc_network.id
 }
+output "nat_ip" {
+  value = google_compute_address.external_nat_address.address
+}

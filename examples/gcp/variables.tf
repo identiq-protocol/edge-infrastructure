@@ -4,7 +4,7 @@ variable "vpc_name" {
 }
 variable "region" {
   description = "The region to host all resources in"
-  default = "us-east1"
+  default     = "us-east1"
 }
 variable "project_id" {
   description = "The project ID to host all resources in"
@@ -18,48 +18,52 @@ variable "default_tags" {
 
 variable "tags" {
   description = "Any tags the user wishes to add to all resources"
-  type = map(string)
+  type        = map(string)
 }
 variable "gke_zones" {
   description = "The zones for gke control plane"
-  default = []
+  default     = []
 }
 variable "gke_version" {
   description = "gke Kubernetes version"
-  default = "1.20.9-gke.700"
+  default     = "1.19.12-gke.2100"
 }
-
+variable "gke_enable_private_nodes" {
+  type        = bool
+  description = "(Beta) Whether nodes have internal IP addresses only"
+  default     = true
+}
 variable "gke_nodegroup_base_machinetype" {
   description = "gke base nodegroup machine type"
-  default = "c2-standard-8"
+  default     = "c2-standard-8"
 }
 variable "gke_nodegroup_dynamic_machinetype" {
   description = "gke dynamic nodegroup machine type"
-  default = "c2-standard-8"
+  default     = "c2-standard-8"
 }
 variable "gke_nodegroup_cache_machinetype" {
   description = "gke cache nodegroup machine type"
-  default = "c2-standard-8"
+  default     = "c2-standard-8"
 }
 variable "gke_nodegroup_db_machinetype" {
   description = "gke db nodegroup machine type"
-  default = "c2-standard-8"
+  default     = "c2-standard-8"
 }
 variable "gke_nodegroup_base_machine_count" {
   description = "gke base nodegroup max count of machines"
-  default = "1"
+  default     = "1"
 }
 variable "gke_nodegroup_dynamic_machine_count" {
   description = "gke dynamic nodegroup max count of machines"
-  default = "1"
+  default     = "1"
 }
 variable "gke_nodegroup_cache_machine_count" {
   description = "gke cache nodegroup max count of machines"
-  default = "1"
+  default     = "1"
 }
 variable "gke_nodegroup_db_machine_count" {
   description = "gke db nodegroup max count of machines"
-  default = "1"
+  default     = "1"
 }
 variable "cluster_name" {
   description = "The cluster name"
@@ -74,23 +78,23 @@ variable "regional" {
 variable "zones" {
   type        = list(string)
   description = "The zone to host the cluster in (required if is a zonal cluster)"
-  default = []
+  default     = []
 }
 
 variable "compute_engine_service_account" {
   description = "Service account to associate to the nodes in the cluster"
-  default = "default"
+  default     = "default"
 }
 variable "gke_ip_range_pods" {
   type        = string
   description = "The _name_ of the secondary subnet ip range to use for pods"
-  default = ""
+  default     = ""
 }
 
 variable "gke_ip_range_services" {
   type        = string
   description = "The _name_ of the secondary subnet range to use for services"
-  default = ""
+  default     = ""
 }
 variable "gke_cluster_autoscaling" {
   type = object({
@@ -119,15 +123,15 @@ variable "gke_cluster_autoscaling" {
 }
 variable "external_db_postgres_version" {
   description = "External database(cloud SQL) postgres version"
-  default = "POSTGRES_13"
+  default     = "POSTGRES_13"
 }
 variable "external_db_postgres_machine_type" {
   description = "External database(cloud SQL) machine type"
-  default = "db-custom-2-8192"
+  default     = "db-custom-2-8192"
 }
 variable "external_db_postgres_disk_size" {
   description = "External database(cloud SQL) disk size"
-  default = "1000"
+  default     = "1000"
 }
 variable "external_db_postgres_disk_autoresize" {
   description = "Configuration to increase Posgres storage size."
@@ -144,7 +148,7 @@ variable "external_db_authorized_networks" {
 }
 variable "external_db" {
   description = "Whenever to create and use external cloud managed db instance"
-  default = false
+  default     = false
 }
 variable "external_db_user_name" {
   description = "The name of the default user for external db"
@@ -158,27 +162,27 @@ variable "external_db_deletion_protection" {
 }
 variable "external_redis" {
   description = "Whenever to create and use external cloud managed redis instance"
-  default = false
+  default     = false
 }
 variable "external_redis_memory_size_gb" {
   description = "external redis(memorystore) memory size in GB per node"
-  default = 64
+  default     = 64
 }
 variable "external_redis_version" {
   description = "external redis(memorystore) version"
-  default = "REDIS_5_0"
+  default     = "REDIS_5_0"
 }
 variable "external_redis_configs" {
   description = "external redis(memorystore) configuration parameters"
-  default = {}
+  default     = {}
 }
 
 variable "external_redis_tier" {
   description = "external redis(memorystore) service tier of the instance."
-  default = "BASIC"
+  default     = "BASIC"
 }
 
 variable "external_redis_transit_encryption_mode" {
   description = "The TLS mode of the Redis instance, If not provided, TLS is disabled for the instance."
-  default = "DISABLED"
+  default     = "DISABLED"
 }

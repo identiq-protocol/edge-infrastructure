@@ -123,6 +123,11 @@ variable "eks_dynamic_instance_count" {
   type        = number
   default     = 4
 }
+variable "eks_dynamic_asg_autoscaling" {
+  description = "EKS dynamic worker group enable autoscaling"
+  type        = bool
+  default     = true
+}
 
 variable "eks_dynamic_asg_min_size" {
   description = "EKS dynamic worker group minimimum number of instances (asg_min_size)"
@@ -379,7 +384,13 @@ variable "rds_monitoring_interval" {
 variable "rds_iops" {
   description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'"
   type        = number
-  default     = 3000
+  default     = null
+}
+
+variable "rds_storage_type" {
+  description = "One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not."
+  type        = string
+  default     = "gp2"
 }
 
 variable "rds_apply_immediately" {
