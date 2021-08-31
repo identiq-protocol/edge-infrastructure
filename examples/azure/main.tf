@@ -65,6 +65,7 @@ module "edge-azure" {
 
   # Postgresql
   external_db                                = var.external_db
+  postgresql_client_name                     = var.postgresql_client_name
   postgresql_administrator_login             = var.postgresql_administrator_login
   postgresql_allowed_cidrs                   = var.postgresql_allowed_cidrs
   postgresql_auto_grow_enabled               = var.postgresql_auto_grow_enabled

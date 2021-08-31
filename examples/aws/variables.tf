@@ -270,7 +270,7 @@ variable "ec_transit_encryption_enabled" {
 variable "external_db" {
   description = "Database will be installed outside of EKS cluster (RDS)"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "external_db_name" {

@@ -379,6 +379,12 @@ variable "postgresql_configurations" {
   }
 }
 
+variable "postgresql_client_name" {
+  description = "Name for the postgresql client"
+  type        = string
+  default     = "edge"
+}
+
 variable "postgresql_databases_names" {
   description = "The list of names of the PostgreSQL Database, which needs to be a valid PostgreSQL identifier."
   type        = list(string)
