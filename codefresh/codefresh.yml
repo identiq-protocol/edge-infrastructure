@@ -121,7 +121,7 @@ steps:
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
     fail_fast: false
     commands:
-      - git diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md
+      - git --no-pager diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md
       - cf_export DIFF_STATUS=`git diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md | wc -l`
   commit_and_push:
     title: Commit changes and push auto genereted files 
