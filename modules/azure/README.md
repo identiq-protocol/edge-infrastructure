@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 # Azure Edge infrastructure
 
 This Terraform module creates Identiq's edge infrastructure on which the edge application will deployed on.
@@ -8,18 +9,25 @@ The infstructarue consists of the following components:
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | =1.6.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | =2.74.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.4.1 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | =2.1.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | =3.1.0 |
+| <a name="requirement_template"></a> [template](#requirement\_template) | =2.2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | n/a |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
-| <a name="provider_template"></a> [template](#provider\_template) | n/a |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | =1.6.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | =2.74.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.4.1 |
+| <a name="provider_local"></a> [local](#provider\_local) | =2.1.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | =3.1.0 |
+| <a name="provider_template"></a> [template](#provider\_template) | =2.2.0 |
 
 ## Modules
 
@@ -34,29 +42,29 @@ No requirements.
 
 | Name | Type |
 |------|------|
-| [azuread_application.app](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
-| [azuread_service_principal.app](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
-| [azuread_service_principal_password.app](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal_password) | resource |
-| [azurerm_kubernetes_cluster_node_pool.base](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool) | resource |
-| [azurerm_kubernetes_cluster_node_pool.cache](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool) | resource |
-| [azurerm_kubernetes_cluster_node_pool.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool) | resource |
-| [azurerm_kubernetes_cluster_node_pool.dynamic](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool) | resource |
-| [azurerm_nat_gateway.nat_gw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/nat_gateway) | resource |
-| [azurerm_nat_gateway_public_ip_prefix_association.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/nat_gateway_public_ip_prefix_association) | resource |
-| [azurerm_private_endpoint.db_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
-| [azurerm_public_ip_prefix.nat_ip](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip_prefix) | resource |
-| [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
-| [azurerm_role_assignment.assignment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
-| [azurerm_subnet_nat_gateway_association.nat_gw_a](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet_nat_gateway_association) | resource |
-| [kubernetes_endpoints.external-db-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/endpoints) | resource |
-| [kubernetes_endpoints.external-redis-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/endpoints) | resource |
-| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service) | resource |
-| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service) | resource |
-| [local_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [random_password.db_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
-| [template_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [azuread_application.app](https://registry.terraform.io/providers/hashicorp/azuread/1.6.0/docs/resources/application) | resource |
+| [azuread_service_principal.app](https://registry.terraform.io/providers/hashicorp/azuread/1.6.0/docs/resources/service_principal) | resource |
+| [azuread_service_principal_password.app](https://registry.terraform.io/providers/hashicorp/azuread/1.6.0/docs/resources/service_principal_password) | resource |
+| [azurerm_kubernetes_cluster_node_pool.base](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/kubernetes_cluster_node_pool) | resource |
+| [azurerm_kubernetes_cluster_node_pool.cache](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/kubernetes_cluster_node_pool) | resource |
+| [azurerm_kubernetes_cluster_node_pool.db](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/kubernetes_cluster_node_pool) | resource |
+| [azurerm_kubernetes_cluster_node_pool.dynamic](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/kubernetes_cluster_node_pool) | resource |
+| [azurerm_nat_gateway.nat_gw](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/nat_gateway) | resource |
+| [azurerm_nat_gateway_public_ip_prefix_association.example](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/nat_gateway_public_ip_prefix_association) | resource |
+| [azurerm_private_endpoint.db_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/private_endpoint) | resource |
+| [azurerm_public_ip_prefix.nat_ip](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/public_ip_prefix) | resource |
+| [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/resource_group) | resource |
+| [azurerm_role_assignment.assignment](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/role_assignment) | resource |
+| [azurerm_subnet_nat_gateway_association.nat_gw_a](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/subnet_nat_gateway_association) | resource |
+| [kubernetes_endpoints.external-db-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/endpoints) | resource |
+| [kubernetes_endpoints.external-redis-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/endpoints) | resource |
+| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/secret) | resource |
+| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/secret) | resource |
+| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/service) | resource |
+| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/service) | resource |
+| [local_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/local/2.1.0/docs/resources/file) | resource |
+| [random_password.db_password](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/password) | resource |
+| [template_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/template/2.2.0/docs/data-sources/file) | data source |
 
 ## Inputs
 
@@ -108,7 +116,7 @@ No requirements.
 | <a name="input_aks_rbac_aad_managed"></a> [aks\_rbac\_aad\_managed](#input\_aks\_rbac\_aad\_managed) | Is the Azure Active Directory integration Managed, meaning that Azure will create/manage the Service Principal used for integration | `bool` | `true` | no |
 | <a name="input_aks_sku_tier"></a> [aks\_sku\_tier](#input\_aks\_sku\_tier) | The SKU Tier that should be used for this Kubernetes Cluster. Possible values are Free and Paid | `string` | `"Paid"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable | `map` | <pre>{<br>  "Terraform": "true"<br>}</pre> | no |
-| <a name="input_external_db"></a> [external\_db](#input\_external\_db) | Database will be installed outside of AKS cluster | `bool` | `true` | no |
+| <a name="input_external_db"></a> [external\_db](#input\_external\_db) | Database will be installed outside of AKS cluster | `bool` | `false` | no |
 | <a name="input_external_redis"></a> [external\_redis](#input\_external\_redis) | Redis will be installed outside of AKS cluster | `bool` | `false` | no |
 | <a name="input_nat_gateway_idle_timeout_in_minutes"></a> [nat\_gateway\_idle\_timeout\_in\_minutes](#input\_nat\_gateway\_idle\_timeout\_in\_minutes) | The idle timeout which should be used in minutes | `number` | `10` | no |
 | <a name="input_nat_gateway_sku_name"></a> [nat\_gateway\_sku\_name](#input\_nat\_gateway\_sku\_name) | The SKU which should be used. At this time the only supported value is `Standard` | `string` | `"Standard"` | no |
@@ -117,7 +125,6 @@ No requirements.
 | <a name="input_postgresql_auto_grow_enabled"></a> [postgresql\_auto\_grow\_enabled](#input\_postgresql\_auto\_grow\_enabled) | Enable/Disable auto-growing of the Postgresql storage. | `bool` | `false` | no |
 | <a name="input_postgresql_backup_retention_days"></a> [postgresql\_backup\_retention\_days](#input\_postgresql\_backup\_retention\_days) | Bbackup retention days for the Postgresql server, supported values are between 7 and 35 days. | `number` | `10` | no |
 | <a name="input_postgresql_capacity"></a> [postgresql\_capacity](#input\_postgresql\_capacity) | Capacity for PostgreSQL server sku - number of vCores : https://docs.microsoft.com/en-us/azure/postgresql/concepts-pricing-tiers | `number` | `2` | no |
-| <a name="input_postgresql_client_name"></a> [postgresql\_client\_name](#input\_postgresql\_client\_name) | Name for the postgresql client | `string` | `"edge"` | no |
 | <a name="input_postgresql_configurations"></a> [postgresql\_configurations](#input\_postgresql\_configurations) | PostgreSQL configurations to enable | `map(string)` | <pre>{<br>  "enable_hashagg": "on",<br>  "maintenance_work_mem": "2097151",<br>  "max_wal_size": "4096",<br>  "synchronous_commit": "off",<br>  "wal_buffers": "8192"<br>}</pre> | no |
 | <a name="input_postgresql_databases_charset"></a> [postgresql\_databases\_charset](#input\_postgresql\_databases\_charset) | Valid PostgreSQL charset : https://www.postgresql.org/docs/current/multibyte.html#CHARSET-TABLE | `map(string)` | <pre>{<br>  "edge": "UTF8"<br>}</pre> | no |
 | <a name="input_postgresql_databases_collation"></a> [postgresql\_databases\_collation](#input\_postgresql\_databases\_collation) | Valid PostgreSQL collation : http://www.postgresql.cn/docs/9.4/collation.html - be careful about https://docs.microsoft.com/en-us/windows/win32/intl/locale-names?redirectedfrom=MSDN | `map(string)` | <pre>{<br>  "edge": "en-US"<br>}</pre> | no |
@@ -149,3 +156,4 @@ No requirements.
 |------|-------------|
 | <a name="output_connect"></a> [connect](#output\_connect) | n/a |
 | <a name="output_nat_ip"></a> [nat\_ip](#output\_nat\_ip) | n/a |
+<!-- END_TF_DOCS -->
