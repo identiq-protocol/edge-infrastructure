@@ -160,6 +160,28 @@ variable "external_db_deletion_protection" {
   type        = bool
   default     = true
 }
+variable "external_db_postgres_backup_configuration" {
+  description = "The backup_configuration settings subblock for the database setings"
+  type = object({
+    enabled                        = bool
+    start_time                     = string
+    location                       = string
+    point_in_time_recovery_enabled = bool
+    transaction_log_retention_days = string
+    retained_backups               = number
+    retention_unit                 = string
+  })
+  default = {
+    enabled                        = true
+    start_time                     = null
+    location                       = null
+    point_in_time_recovery_enabled = false
+    transaction_log_retention_days = null
+    retained_backups               = 7
+    retention_unit                 = null
+  }
+}
+
 variable "external_redis" {
   description = "Whenever to create and use external cloud managed redis instance"
   default     = false

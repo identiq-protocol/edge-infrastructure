@@ -1,3 +1,12 @@
+<!-- BEGIN_TF_DOCS -->
+# AWS Edge infrastructure
+
+This Terraform module creates Identiq's edge infrastructure on which the edge application will deployed on.
+The infstructarue consists of the following components:
+ * [EKS](https://aws.amazon.com/eks) cluster
+ * PostgreSQL (Containerized or RDS)
+ * Redis (Containerized or Elasticache)
+
 ## Requirements
 
 No requirements.
@@ -6,10 +15,10 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.54.0 |
-| <a name="provider_http"></a> [http](#provider\_http) | 2.4.1 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.4.1 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_http"></a> [http](#provider\_http) | n/a |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -92,7 +101,7 @@ No requirements.
 | <a name="input_rds_engine"></a> [rds\_engine](#input\_rds\_engine) | The database engine to use | `string` | `"postgres"` | no |
 | <a name="input_rds_engine_version"></a> [rds\_engine\_version](#input\_rds\_engine\_version) | The engine version to use | `string` | `"13.3"` | no |
 | <a name="input_rds_instance_class"></a> [rds\_instance\_class](#input\_rds\_instance\_class) | The instance type of the RDS instance | `string` | `"db.m5.large"` | no |
-| <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `3000` | no |
+| <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `null` | no |
 | <a name="input_rds_maintenance_window"></a> [rds\_maintenance\_window](#input\_rds\_maintenance\_window) | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | `"Sun:00:00-Sun:03:00"` | no |
 | <a name="input_rds_monitoring_interval"></a> [rds\_monitoring\_interval](#input\_rds\_monitoring\_interval) | The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60 | `number` | `60` | no |
 | <a name="input_rds_multi_az"></a> [rds\_multi\_az](#input\_rds\_multi\_az) | Specifies if the RDS instance is multi-AZ | `bool` | `true` | no |
@@ -102,6 +111,7 @@ No requirements.
 | <a name="input_rds_performance_insights_retention_period"></a> [rds\_performance\_insights\_retention\_period](#input\_rds\_performance\_insights\_retention\_period) | The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years). | `number` | `7` | no |
 | <a name="input_rds_skip_final_snapshot"></a> [rds\_skip\_final\_snapshot](#input\_rds\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final\_snapshot\_identifier | `bool` | `true` | no |
 | <a name="input_rds_storage_encrypted"></a> [rds\_storage\_encrypted](#input\_rds\_storage\_encrypted) | Specifies whether the DB instance is encrypted | `bool` | `true` | no |
+| <a name="input_rds_storage_type"></a> [rds\_storage\_type](#input\_rds\_storage\_type) | One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not. | `string` | `"gp2"` | no |
 | <a name="input_rds_username"></a> [rds\_username](#input\_rds\_username) | Username for the master DB user | `string` | `"edge"` | no |
 | <a name="input_region"></a> [region](#input\_region) | region | `any` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources of the edge | `map(string)` | n/a | yes |
@@ -122,3 +132,4 @@ No requirements.
 | <a name="output_endpoint_address"></a> [endpoint\_address](#output\_endpoint\_address) | n/a |
 | <a name="output_nat_ips"></a> [nat\_ips](#output\_nat\_ips) | n/a |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | n/a |
+<!-- END_TF_DOCS -->
