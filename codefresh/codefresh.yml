@@ -1,0 +1,205 @@
+version: "1.0"
+stages:
+ - 'Clone'
+ - 'Check skip ci'
+ - 'Get latest tag'
+ - 'Copy module variables'
+ - 'Generate docs'
+ - 'Next tag'
+ - 'Example source pinning'
+ - 'Commit and push'
+ - 'Create release'
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "identiq-protocol/edge-infrastructure"
+    revision: "${{CF_BRANCH}}"
+    git: "codefresh"
+    stage: "Clone"
+    when:
+      condition:
+        all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+  get_latest_tag:
+    title: Get latest tag 
+    stage: "Get latest tag"
+    image: alpine/git:latest
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+    commands:
+      - git checkout master
+      - cf_export LATEST_TAG=`git tag --sort version:refname | tail -1`
+      - git checkout $CF_BRANCH
+    when:
+      condition:
+        all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+  copy_module_variables:
+   title: Copy module variables into the example directory
+   stage: "Copy module variables"
+   type: parallel
+   when:
+     condition:
+       all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+   steps:
+     aws_copy_variables:
+       image: alpine:3.14.1
+       title: aws
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+       commands:
+         - cp modules/aws/variables.tf examples/aws/
+     azure_copy_variables:
+       image: alpine:3.14.1
+       title: azure
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+       commands:
+         - cp modules/azure/variables.tf examples/azure/
+     gcp_copy_variables:
+       image: alpine:3.14.1
+       title: gcp
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+       commands:
+         - cp modules/gcp/variables.tf examples/gcp/
+  docs:
+   title: Generate aws, azure and gcp terraform docs
+   stage: "Generate docs"
+   when:
+    condition:
+      all:
+        noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+        masterBranch: '"${{CF_BRANCH}}" == "master"'
+   type: parallel
+   steps:
+     aws_docs:
+       image: cytopia/terraform-docs:0.14.1
+       title: aws
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/aws
+       commands:
+         - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/aws-docs-header.md --output-file README.md
+     azure_docs:
+       image: cytopia/terraform-docs:0.14.1
+       title: azure
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/azure
+       commands:
+         - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/azure-docs-header.md --output-file README.md
+     gcp_docs:
+       image: cytopia/terraform-docs:0.14.1
+       title: gcp
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp
+       commands:
+         - terraform-docs markdown . --output-mode replace --header-from ../../codefresh/gcp-docs-header.md --output-file README.md
+  bumpVersion:
+    type: semversioner
+    stage: "Next tag"
+    when:
+      condition:
+        all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+    arguments:
+      SEMVERSIONER_VERSION: ${{LATEST_TAG}}
+      SEMVERSIONER_ACTION: bump
+      SEMVERSIONER_PART: patch
+  checkVersion:
+    stage: "Next tag"
+    when:
+      condition:
+        all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+    image: alpine
+    commands:
+      - 'echo VERSION=${{steps.bumpVersion.output.SEMVERSIONER_RESULT}}'
+  example_source_pinning:
+   title: Pinning example terraform source to latest new tag
+   when:
+     condition:
+       all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+   stage: "Example source pinning"
+   type: parallel
+   steps:
+     aws_example:
+       title: aws
+       image: alpine
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/aws
+       commands:
+         - sed -i '/edge-aws/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
+     azure_example:
+       title: azure
+       image: alpine
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/azure
+       commands:
+         - sed -i '/edge-azure/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/azure\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
+     gcp_example:
+       title: gcp
+       image: alpine
+       working_directory: /codefresh/volume/${{CF_REPO_NAME}}/examples/gcp
+       commands:
+         - sed -i '/edge-gcp/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/gcp\/?ref=TAG_PLACE_HOLDER\"' main.tf
+         - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
+  check_diff:
+    title: Check if variable and doc files have changed
+    when:
+      condition:
+        all:
+         noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+         masterBranch: '"${{CF_BRANCH}}" == "master"'
+    stage: "Commit and push"
+    image: alpine/git:latest
+    working_directory: /codefresh/volume/${{CF_REPO_NAME}}
+    fail_fast: false
+    commands:
+      - git --no-pager diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md
+      - cf_export DIFF_STATUS=`git diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md | wc -l`
+  commit_and_push:
+    title: Commit changes and push auto genereted files 
+    stage: "Commit and push"
+    type: git-commit
+    when:
+      condition:
+        all:
+          filesChanged: 'match("${{DIFF_STATUS}}","/^0$/", true) == false'
+          noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+          masterBranch: '"${{CF_BRANCH}}" == "master"'
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+      git: codefresh
+      working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
+      commit_message: Automated docs, variables and tag updates [skip ci]
+      git_user_name: codefresh-ci
+      git_user_email: codefresh@identiq.com
+      allow_empty: false
+      add:
+        - examples/aws/variables.tf
+        - examples/azure/variables.tf
+        - examples/gcp/variables.tf
+        - examples/aws/main.tf
+        - examples/azure/main.tf
+        - examples/gcp/main.tf
+        - modules/aws/README.md
+        - modules/azure/README.md
+        - modules/gcp/README.md
+  github_release:
+    type: github-release
+    when:
+      condition:
+        all:
+          noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
+          masterBranch: '"${{CF_BRANCH}}" == "master"'
+    stage: "Create release"
+    title: Create new release
+    description: |-
+      The git_context_name, repo_owner and repo_name vars
+      will be taken automatically from the trigger.
+      Requires the pipeline to be started by a github trigger
+    arguments:
+      release_name: ${{SEMVERSIONER_RESULT}}
+      release_tag: ${{SEMVERSIONER_RESULT}}
