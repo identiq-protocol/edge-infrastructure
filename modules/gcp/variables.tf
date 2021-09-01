@@ -147,8 +147,8 @@ variable "external_db_authorized_networks" {
   description = "List of mapped public networks authorized to access to the instances. Default - short range of GCP health-checkers IPs"
 }
 variable "external_db" {
-  description = "Whenever to create and use external cloud managed db instance"
-  default     = false
+  description = "Whether to create and use external cloud managed db instance"
+  default     = true
 }
 variable "external_db_user_name" {
   description = "The name of the default user for external db"

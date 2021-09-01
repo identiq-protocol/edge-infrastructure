@@ -8,9 +8,9 @@ module "postgresql" {
   count               = var.external_db ? 1 : 0
   source              = "../terraform-azurerm-db-postgresql"
   tier                = var.postgresql_tier
-  capacity 	      = var.postgresql_capacity
+  capacity            = var.postgresql_capacity
   force_ssl           = var.postgresql_force_ssl
-  client_name         = var.aks_cluster_name
+  client_name         = var.postgresql_client_name
   environment         = var.postgresql_environment
   location            = var.region
   location_short      = var.region

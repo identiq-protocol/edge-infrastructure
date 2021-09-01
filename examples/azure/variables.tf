@@ -304,7 +304,7 @@ variable "aks_base_agents_max_pods" {
 variable "external_db" {
   description = "Database will be installed outside of AKS cluster"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "postgresql_tier" {
@@ -377,6 +377,12 @@ variable "postgresql_configurations" {
     "wal_buffers"          = "8192",
     "enable_hashagg"       = "on"
   }
+}
+
+variable "postgresql_client_name" {
+  description = "Name for the postgresql client"
+  type        = string
+  default     = "edge"
 }
 
 variable "postgresql_databases_names" {
