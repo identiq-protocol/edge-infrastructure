@@ -74,6 +74,7 @@ No requirements.
 | <a name="input_eks_cache_asg_min_size"></a> [eks\_cache\_asg\_min\_size](#input\_eks\_cache\_asg\_min\_size) | EKS cache worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_cache_instance_count"></a> [eks\_cache\_instance\_count](#input\_eks\_cache\_instance\_count) | EKS cache worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_cache_instance_type"></a> [eks\_cache\_instance\_type](#input\_eks\_cache\_instance\_type) | EKS cache worker group instance type | `string` | `"r5.2xlarge"` | no |
+| <a name="input_eks_cluster_enabled_log_types"></a> [eks\_cluster\_enabled\_log\_types](#input\_eks\_cluster\_enabled\_log\_types) | A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | `list(string)` | `[]` | no |
 | <a name="input_eks_cluster_name"></a> [eks\_cluster\_name](#input\_eks\_cluster\_name) | Name of EKS cluster | `any` | n/a | yes |
 | <a name="input_eks_cluster_version"></a> [eks\_cluster\_version](#input\_eks\_cluster\_version) | Kubernetes version to use for the EKS cluster | `string` | `"1.19"` | no |
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
@@ -86,7 +87,7 @@ No requirements.
 | <a name="input_eks_map_roles"></a> [eks\_map\_roles](#input\_eks\_map\_roles) | EKS additional IAM roles to add to the aws-auth configmap | `list` | `[]` | no |
 | <a name="input_eks_map_users"></a> [eks\_map\_users](#input\_eks\_map\_users) | EKS additional IAM users to add to the aws-auth configmap | `list` | `[]` | no |
 | <a name="input_eks_wait_for_cluster_timeout"></a> [eks\_wait\_for\_cluster\_timeout](#input\_eks\_wait\_for\_cluster\_timeout) | A timeout (in seconds) to wait for EKS cluster to be available | `number` | `300` | no |
-| <a name="input_external_db"></a> [external\_db](#input\_external\_db) | Database will be installed outside of EKS cluster (RDS) | `bool` | `false` | no |
+| <a name="input_external_db"></a> [external\_db](#input\_external\_db) | Database will be installed outside of EKS cluster (RDS) | `bool` | `true` | no |
 | <a name="input_external_db_name"></a> [external\_db\_name](#input\_external\_db\_name) | External db name (if enabled) | `string` | `"edge"` | no |
 | <a name="input_external_redis"></a> [external\_redis](#input\_external\_redis) | Redis will be installed outside of EKS cluster (Elasticache) | `bool` | `false` | no |
 | <a name="input_external_redis_name"></a> [external\_redis\_name](#input\_external\_redis\_name) | External redis name (if enabled) | `string` | `"edge"` | no |
