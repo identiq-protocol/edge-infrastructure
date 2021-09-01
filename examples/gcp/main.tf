@@ -12,7 +12,7 @@
 #}
 
 module "edge-gcp" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.2"
+  source = "../../modules/gcp"
 
   #gcp
   region                   = var.region
