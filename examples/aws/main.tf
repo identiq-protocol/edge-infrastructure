@@ -12,7 +12,7 @@ provider "aws" {
 #}
 
 module "edge-aws" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.4"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.5"
   # vpc
   vpc_name                 = var.vpc_name
   vpc_cidrsubnet           = var.vpc_cidrsubnet
