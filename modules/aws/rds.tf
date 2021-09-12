@@ -64,7 +64,7 @@ resource "kubernetes_service" "edge_db_service" {
     annotations = {
       "ad.datadoghq.com/service.check_names"  = "[\"postgres\"]"
       "ad.datadoghq.com/service.init_configs" = "[{}]"
-      "ad.datadoghq.com/service.instances" : "[{\"host\":\"edge-postgresql\",\"username\":\"edge\",\"password\":\"%%env_PGSQL_PASS%%\",\"ignore_databases\":[],\"collect_activity_metrics\":\"true\",\"collect_default_database\":\"true\",\"dbm\":\"true\",\"query_metrics\":{\"enabled\":\"true\"}}]"
+      "ad.datadoghq.com/service.instances"    = "[{\"host\":\"edge-postgresql\",\"username\":\"edge\",\"password\":\"%%env_PGSQL_PASS%%\",\"ignore_databases\":[],\"collect_activity_metrics\":\"true\",\"collect_default_database\":\"true\",\"dbm\":\"true\",\"query_metrics\":{\"enabled\":\"true\"}}]"
     }
   }
 
