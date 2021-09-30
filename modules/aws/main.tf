@@ -20,6 +20,7 @@ module "eks" {
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
       public_ip               = false
+      root_encrypted          = var.eks_db_root_encrypted
     },
     {
       name                    = "cache"
@@ -33,6 +34,7 @@ module "eks" {
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
       public_ip               = false
+      root_encrypted          = var.eks_cache_root_encrypted
     },
     {
       name = "dynamic"
@@ -62,6 +64,7 @@ module "eks" {
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic"
       public_ip               = false
+      root_encrypted          = var.eks_dynamic_root_encrypted
     },
     {
       name                    = "base"
@@ -74,6 +77,7 @@ module "eks" {
       subnets                 = [module.vpc.private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=base"
       public_ip               = false
+      root_encrypted          = var.eks_base_root_encrypted
     }
   ]
   cluster_enabled_log_types    = var.eks_cluster_enabled_log_types
