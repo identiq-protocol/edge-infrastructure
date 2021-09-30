@@ -94,6 +94,12 @@ variable "eks_db_asg_min_size" {
   default     = 0
 }
 
+variable "eks_db_root_encrypted" {
+  description = "Whether EKS db worker group instance root volume should be encrypted or not"
+  type        = bool
+  default     = true
+}
+
 variable "eks_cache_instance_type" {
   description = "EKS cache worker group instance type"
   type        = string
@@ -110,6 +116,12 @@ variable "eks_cache_asg_min_size" {
   description = "EKS cache worker group minimimum number of instances (asg_min_size)"
   type        = number
   default     = 0
+}
+
+variable "eks_cache_root_encrypted" {
+  description = "Whether EKS cache worker group instance root volume should be encrypted or not"
+  type        = bool
+  default     = true
 }
 
 variable "eks_dynamic_instance_type" {
@@ -135,6 +147,12 @@ variable "eks_dynamic_asg_min_size" {
   default     = 0
 }
 
+variable "eks_dynamic_root_encrypted" {
+  description = "Whether EKS dynamic worker group instance root volume should be encrypted or not"
+  type        = bool
+  default     = true
+}
+
 variable "eks_base_instance_type" {
   description = "EKS base worker group instance type"
   type        = string
@@ -151,6 +169,12 @@ variable "eks_base_asg_min_size" {
   description = "EKS base worker group minimimum number of instances (asg_min_size)"
   type        = number
   default     = 0
+}
+
+variable "eks_base_root_encrypted" {
+  description = "Whether EKS base worker group instance root volume should be encrypted or not"
+  type        = bool
+  default     = true
 }
 
 variable "eks_cluster_enabled_log_types" {
@@ -277,6 +301,54 @@ variable "external_db_name" {
   description = "External db name (if enabled)"
   type        = string
   default     = "edge"
+}
+
+variable "rds_sg_ingress_cidr_blocks" {
+  description = "List of IPv4 CIDR ranges to use on all ingress rules"
+  type        = list(string)
+  default     = []
+}
+
+variable "rds_sg_ingress_ipv6_cidr_blocks" {
+  description = "List of IPv6 CIDR ranges to use on all ingress rules"
+  type        = list(string)
+  default     = []
+}
+
+variable "rds_sg_ingress_prefix_list_ids" {
+  description = "List of prefix list IDs (for allowing access to VPC endpoints) to use on all ingress rules"
+  type        = list(string)
+  default     = []
+}
+
+variable "rds_sg_ingress_rules" {
+  description = "List of ingress rules to create by name"
+  type        = list(string)
+  default     = []
+}
+
+variable "rds_sg_ingress_with_cidr_blocks" {
+  description = "List of ingress rules to create where 'cidr_blocks' is used"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "rds_sg_ingress_with_ipv6_cidr_blocks" {
+  description = "List of ingress rules to create where 'ipv6_cidr_blocks' is used"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "rds_sg_ingress_with_self" {
+  description = "List of ingress rules to create where 'self' is defined"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "rds_sg_ingress_with_source_security_group_id" {
+  description = "List of ingress rules to create where 'source_security_group_id' is used"
+  type        = list(map(string))
+  default     = []
 }
 
 variable "rds_engine" {
@@ -461,4 +533,5 @@ variable "default_tags" {
 variable "tags" {
   description = "Any tags the user wishes to add to all resources of the edge"
   type        = map(string)
+  default     = {}
 }
