@@ -1,0 +1,65 @@
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: helm-operator
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+spec:
+  privileged: false
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: true
+  allowedCapabilities:
+    - '*'
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+    - '*'
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: helm-operator-psp
+  labels:
+    app: helm-operator
+    chart: helm-operator-1.0.2
+    release: helm-operator
+    heritage: Helm
+rules:
+    - apiGroups: ['policy']
+      resources: ['podsecuritypolicies']
+      verbs:     ['use']
+      resourceNames:
+        - helm-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+    name: helm-operator-psp
+    labels:
+        app: helm-operator
+        chart: helm-operator-1.0.2
+        release: helm-operator
+        heritage: Helm
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: helm-operator-psp
+subjects:
+    - kind: ServiceAccount
+      name: helm-operator
+      namespace: default
