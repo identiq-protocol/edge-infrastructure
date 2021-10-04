@@ -4,6 +4,37 @@ resource "random_password" "rds_password" {
   special = false
 }
 
+locals {
+  rds_sg_ingress_with_source_security_group_id_default = [
+    {
+      from_port                = 5432
+      to_port                  = 5432
+      protocol                 = "tcp"
+      description              = "PostgreSQL access from within edge EKS cluster"
+      source_security_group_id = module.eks.worker_security_group_id
+    }
+  ]
+}
+
+module "rds_sg" {
+  create       = var.external_db ? true : false
+  source      = "terraform-aws-modules/security-group/aws"
+  version     = "4.3.0"
+  name        = "${var.external_db_name}-db-sg"
+  description = "Security group for edge rds"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks                   = var.rds_sg_ingress_cidr_blocks
+  ingress_ipv6_cidr_blocks              = var.rds_sg_ingress_ipv6_cidr_blocks
+  ingress_prefix_list_ids               = var.rds_sg_ingress_prefix_list_ids
+  ingress_rules                         = var.rds_sg_ingress_rules
+  ingress_with_cidr_blocks              = var.rds_sg_ingress_with_cidr_blocks
+  ingress_with_ipv6_cidr_blocks         = var.rds_sg_ingress_with_ipv6_cidr_blocks
+  ingress_with_self                     = var.rds_sg_ingress_with_self
+  ingress_with_source_security_group_id = concat(var.rds_sg_ingress_with_source_security_group_id, local.rds_sg_ingress_with_source_security_group_id_default)
+  tags                                  = merge(var.tags, var.default_tags)
+}
+
 module "rds" {
   count                                 = var.external_db ? 1 : 0
   source                                = "terraform-aws-modules/rds/aws"
@@ -23,7 +54,7 @@ module "rds" {
   port                                  = var.rds_engine == "mariadb" ? 3306 : 5432
   multi_az                              = var.rds_multi_az
   subnet_ids                            = module.vpc.private_subnets
-  vpc_security_group_ids                = [module.eks.worker_security_group_id]
+  vpc_security_group_ids                = [module.rds_sg.security_group_id]
   maintenance_window                    = var.rds_maintenance_window
   backup_window                         = var.rds_backup_window
   enabled_cloudwatch_logs_exports       = [var.rds_engine == "mariadb" ? "general" : "postgresql"]
