@@ -2,6 +2,26 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+variable "external_vpc" {
+  description = "Sepcifies whether we want to use an externally created VPC"
+  default = false
+}
+
+variable "eks_vpc_id" {
+  description = "Specifies VPC ID in case of external VPC"
+  default = ""
+}
+
+variable "eks_private_subnets" {
+  description = "Specifies private subnet IDs in case of external VPC"
+  default = []
+}
+
+variable "eks_public_subnets" {
+  description = "Specifies public subnet IDs in case of external VPC"
+  default = []
+}
+
 variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
   default     = "identiq-vpc"

@@ -3,7 +3,7 @@ module "vpc" {
   version = "3.2.0"
   name    = var.vpc_name
   cidr    = var.vpc_cidrsubnet
-
+  count = var.external_vpc ? 1 : 0
   azs                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
   private_subnets      = [cidrsubnet(var.vpc_cidrsubnet, 4, 1), cidrsubnet(var.vpc_cidrsubnet, 4, 2), cidrsubnet(var.vpc_cidrsubnet, 4, 3)]
   public_subnets       = [cidrsubnet(var.vpc_cidrsubnet, 4, 4), cidrsubnet(var.vpc_cidrsubnet, 4, 5), cidrsubnet(var.vpc_cidrsubnet, 4, 6)]
