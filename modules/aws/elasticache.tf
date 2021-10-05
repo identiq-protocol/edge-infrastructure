@@ -84,6 +84,6 @@ resource "kubernetes_service" "edge_redis_service" {
 }
 
 locals {
-  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : module.vpc.private_subnets
-  ec_vpc_id          = var.external_vpc ? var.ec_vpc_id : module.vpc.vpc_id
+  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : module.vpc[0].private_subnets
+  ec_vpc_id          = var.external_vpc ? var.ec_vpc_id : module.vpc[0].vpc_id
 }

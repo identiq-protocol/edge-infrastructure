@@ -9,6 +9,6 @@ resource "aws_vpc_endpoint" "ep" {
 }
 
 locals {
-  ep_vpc_id          = var.external_vpc ? var.eks_vpc_id : module.vpc.vpc_id
-  ep_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc.private_subnets
+  ep_vpc_id          = var.external_vpc ? var.eks_vpc_id : module.vpc[0].vpc_id
+  ep_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
 }

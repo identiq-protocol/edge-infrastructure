@@ -111,6 +111,6 @@ resource "kubernetes_service" "edge_db_service" {
 }
 
 locals {
-  rds_private_subnets = var.external_vpc ? var.rds_private_subnets : module.vpc.private_subnets
-  rds_vpc_id          = var.external_vpc ? var.rds_vpc_id : module.vpc.vpc_id
+  rds_private_subnets = var.external_vpc ? var.rds_private_subnets : module.vpc[0].private_subnets
+  rds_vpc_id          = var.external_vpc ? var.rds_vpc_id : module.vpc[0].vpc_id
 }
