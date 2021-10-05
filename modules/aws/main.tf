@@ -80,6 +80,8 @@ module "eks" {
       root_encrypted          = var.eks_base_root_encrypted
     }
   ]
+  worker_ami_name_filter      = var.eks_worker_ami_name_filter
+  worker_ami_owner_id         = var.eks_worker_ami_owner_id
   cluster_enabled_log_types   = var.eks_cluster_enabled_log_types
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]

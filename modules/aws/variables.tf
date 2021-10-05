@@ -206,6 +206,17 @@ variable "eks_cluster_enabled_log_types" {
   type        = list(string)
 }
 
+variable "eks_worker_ami_name_filter" {
+  description = "Name filter for AWS EKS worker AMI. If not provided, the latest official AMI for the specified 'cluster_version' is used."
+  type        = string
+  default     = ""
+}
+variable "eks_worker_ami_owner_id" {
+  description = "The ID of the owner for the AMI to use for the AWS EKS workers. Valid values are an AWS account ID, 'self' (the current account), or an AWS owner alias (e.g. 'amazon', 'aws-marketplace', 'microsoft')."
+  type        = string
+  default     = "amazon"
+}
+
 variable "external_redis" {
   description = "Redis will be installed outside of EKS cluster (Elasticache)"
   type        = bool

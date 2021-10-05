@@ -3,11 +3,11 @@ output "connect" {
 }
 
 output "nat_ips" {
-  value = var.external_vpc ? [] : module.vpc.nat_public_ips
+  value = var.external_vpc ? [] : module.vpc[0].nat_public_ips
 }
 
 output "vpc_id" {
-  value = var.external_vpc ? var.eks_vpc_id : module.vpc.vpc_id
+  value = var.external_vpc ? var.eks_vpc_id : module.vpc[0].vpc_id
 }
 
 output "endpoint_address" {
