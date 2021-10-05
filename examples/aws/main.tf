@@ -13,7 +13,9 @@ provider "aws" {
 
 module "edge-aws" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.12"
+
   # vpc
+  external_vpc             = var.external_vpc
   vpc_name                 = var.vpc_name
   vpc_cidrsubnet           = var.vpc_cidrsubnet
   vpc_enable_nat_gateway   = var.vpc_enable_nat_gateway
@@ -27,6 +29,9 @@ module "edge-aws" {
   vpc_endpoint_service_name = var.vpc_endpoint_service_name
 
   # eks
+  eks_vpc_id                    = var.eks_vpc_id
+  eks_private_subnets           = var.eks_private_subnets
+  eks_public_subnets            = var.eks_public_subnets
   eks_cluster_name              = var.eks_cluster_name
   eks_cluster_version           = var.eks_cluster_version
   eks_map_roles                 = var.eks_map_roles
@@ -50,10 +55,14 @@ module "edge-aws" {
   eks_base_asg_min_size         = var.eks_base_asg_min_size
   eks_base_root_encrypted       = var.eks_base_root_encrypted
   eks_cluster_enabled_log_types = var.eks_cluster_enabled_log_types
+  eks_worker_ami_name_filter    = var.eks_worker_ami_name_filter
+  eks_worker_ami_owner_id       = var.eks_worker_ami_owner_id
 
   # rds
   external_db                                  = var.external_db
   external_db_name                             = var.external_db_name
+  rds_vpc_id                                   = var.rds_vpc_id
+  rds_private_subnets                          = var.rds_private_subnets
   rds_sg_ingress_cidr_blocks                   = var.rds_sg_ingress_cidr_blocks
   rds_sg_ingress_ipv6_cidr_blocks              = var.rds_sg_ingress_ipv6_cidr_blocks
   rds_sg_ingress_prefix_list_ids               = var.rds_sg_ingress_prefix_list_ids
@@ -89,6 +98,8 @@ module "edge-aws" {
   # Elastic cache
   external_redis                          = var.external_redis
   external_redis_name                     = var.external_redis_name
+  ec_vpc_id                               = var.ec_vpc_id
+  ec_private_subnets                      = var.ec_private_subnets
   ec_instance_type                        = var.ec_instance_type
   ec_cluster_mode_enabled                 = var.ec_cluster_mode_enabled
   ec_cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
