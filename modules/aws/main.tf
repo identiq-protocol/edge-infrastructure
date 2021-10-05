@@ -80,7 +80,7 @@ module "eks" {
       root_encrypted          = var.eks_base_root_encrypted
     }
   ]
-  cluster_enabled_log_types    = var.eks_cluster_enabled_log_types
+  cluster_enabled_log_types   = var.eks_cluster_enabled_log_types
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
   tags                        = merge(var.tags, var.default_tags)
@@ -135,8 +135,8 @@ provider "kubernetes" {
 #}
 
 locals {
-  eks_subnets = var.external_vpc ? concat(var.eks_private_subnets, var.eks_private_subnets) : concat(module.vpc.private_subnets, module.vpc.public_subnets)
+  eks_subnets         = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc.private_subnets, module.vpc.public_subnets)
   eks_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc.private_subnets
-  eks_public_subnets = var.external_vpc ? var.eks_public_subnets : module.vpc.public_subnets
-  eks_vpc_id = var.external_vpc ? var.eks_vpc_id : module.vpc.vpc_id
+  eks_public_subnets  = var.external_vpc ? var.eks_public_subnets : module.vpc.public_subnets
+  eks_vpc_id          = var.external_vpc ? var.eks_vpc_id : module.vpc.vpc_id
 }

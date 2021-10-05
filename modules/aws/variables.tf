@@ -4,22 +4,25 @@ data "aws_availability_zones" "available" {
 
 variable "external_vpc" {
   description = "Sepcifies whether we want to use an externally created VPC"
-  default = false
+  default     = false
 }
 
 variable "eks_vpc_id" {
   description = "Specifies VPC ID in case of external VPC"
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "eks_private_subnets" {
   description = "Specifies private subnet IDs in case of external VPC"
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 variable "eks_public_subnets" {
   description = "Specifies public subnet IDs in case of external VPC"
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 variable "vpc_name" {
@@ -214,6 +217,15 @@ variable "external_redis_name" {
   default     = "edge"
 }
 
+variable "ec_vpc_id" {
+  description = "VPC ID in case we external VPC is provided"
+  default     = ""
+}
+variable "ec_private_subnets" {
+  description = "Private subnets for elasticache in case external VPC is provided"
+  type        = list(string)
+  default     = []
+}
 variable "ec_instance_type" {
   description = "Elastic cache instance type"
   type        = string
@@ -323,6 +335,17 @@ variable "external_db_name" {
   default     = "edge"
 }
 
+variable "rds_vpc_id" {
+  description = "VPC ID in case we external VPC is provided"
+  type        = string
+  default     = ""
+}
+
+variable "rds_private_subnets" {
+  description = "Private subnets for RDS in case external VPC is provided"
+  type        = list(string)
+  default     = []
+}
 variable "rds_sg_ingress_cidr_blocks" {
   description = "List of IPv4 CIDR ranges to use on all ingress rules"
   type        = list(string)

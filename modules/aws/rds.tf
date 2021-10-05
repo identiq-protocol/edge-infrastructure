@@ -17,12 +17,12 @@ locals {
 }
 
 module "rds_sg" {
-  create       = var.external_db ? true : false
+  create      = var.external_db ? true : false
   source      = "terraform-aws-modules/security-group/aws"
   version     = "4.3.0"
   name        = "${var.external_db_name}-db-sg"
   description = "Security group for edge rds"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = local.rds_vpc_id
 
   ingress_cidr_blocks                   = var.rds_sg_ingress_cidr_blocks
   ingress_ipv6_cidr_blocks              = var.rds_sg_ingress_ipv6_cidr_blocks
@@ -53,7 +53,7 @@ module "rds" {
   password                              = random_password.rds_password[0].result
   port                                  = var.rds_engine == "mariadb" ? 3306 : 5432
   multi_az                              = var.rds_multi_az
-  subnet_ids                            = module.vpc.private_subnets
+  subnet_ids                            = local.rds_private_subnets
   vpc_security_group_ids                = [module.rds_sg.security_group_id]
   maintenance_window                    = var.rds_maintenance_window
   backup_window                         = var.rds_backup_window
@@ -108,4 +108,9 @@ resource "kubernetes_service" "edge_db_service" {
     module.eks,
     module.rds[0]
   ]
+}
+
+locals {
+  rds_private_subnets = var.external_vpc ? var.rds_private_subnets : module.vpc.private_subnets
+  rds_vpc_id          = var.external_vpc ? var.rds_vpc_id : module.vpc.vpc_id
 }
