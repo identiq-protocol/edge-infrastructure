@@ -3,8 +3,8 @@ module "eks" {
   version                  = "17.1.0"
   cluster_name             = var.eks_cluster_name
   cluster_version          = var.eks_cluster_version
-  subnets                  = concat(module.vpc.private_subnets, module.vpc.public_subnets)
-  vpc_id                   = module.vpc.vpc_id
+  subnets                  = local.eks_subnets
+  vpc_id                   = local.eks_vpc_id
   map_roles                = var.eks_map_roles
   map_users                = var.eks_map_users
   wait_for_cluster_timeout = var.eks_wait_for_cluster_timeout
@@ -17,7 +17,7 @@ module "eks" {
       asg_min_size            = var.external_db ? 0 : var.eks_db_asg_min_size
       asg_max_size            = var.external_db ? 0 : var.eks_db_instance_count
       asg_desired_capacity    = var.external_db ? 0 : var.eks_db_instance_count
-      subnets                 = [module.vpc.private_subnets[0]]
+      subnets                 = [local.eks_private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
       public_ip               = false
       root_encrypted          = var.eks_db_root_encrypted
@@ -31,7 +31,7 @@ module "eks" {
       asg_min_size            = var.external_redis ? 0 : var.eks_cache_asg_min_size
       asg_max_size            = var.external_redis ? 0 : var.eks_cache_instance_count
       asg_desired_capacity    = var.external_redis ? 0 : var.eks_cache_instance_count
-      subnets                 = [module.vpc.private_subnets[0]]
+      subnets                 = [local.eks_private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
       public_ip               = false
       root_encrypted          = var.eks_cache_root_encrypted
@@ -61,7 +61,7 @@ module "eks" {
       asg_min_size            = var.eks_dynamic_asg_min_size
       asg_max_size            = var.eks_dynamic_instance_count
       asg_desired_capacity    = var.eks_dynamic_instance_count
-      subnets                 = [module.vpc.private_subnets[0]]
+      subnets                 = [local.eks_private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic"
       public_ip               = false
       root_encrypted          = var.eks_dynamic_root_encrypted
@@ -74,13 +74,15 @@ module "eks" {
       asg_min_size            = var.eks_base_asg_min_size
       asg_max_size            = var.eks_base_instance_count
       asg_desired_capacity    = var.eks_base_instance_count
-      subnets                 = [module.vpc.private_subnets[0]]
+      subnets                 = [local.eks_private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=base"
       public_ip               = false
       root_encrypted          = var.eks_base_root_encrypted
     }
   ]
-  cluster_enabled_log_types    = var.eks_cluster_enabled_log_types
+  worker_ami_name_filter      = var.eks_worker_ami_name_filter
+  worker_ami_owner_id         = var.eks_worker_ami_owner_id
+  cluster_enabled_log_types   = var.eks_cluster_enabled_log_types
   workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                  = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
   tags                        = merge(var.tags, var.default_tags)
@@ -133,3 +135,10 @@ provider "kubernetes" {
 #    module.eks,
 #  ]
 #}
+
+locals {
+  eks_subnets         = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
+  eks_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
+  eks_public_subnets  = var.external_vpc ? var.eks_public_subnets : module.vpc[0].public_subnets
+  eks_vpc_id          = var.external_vpc ? var.eks_vpc_id : module.vpc[0].vpc_id
+}

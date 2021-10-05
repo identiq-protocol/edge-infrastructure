@@ -4,7 +4,7 @@ module "redis" {
   availability_zones = data.aws_availability_zones.available.names
   name               = var.external_redis_name
   zone_id            = ""
-  vpc_id             = module.vpc.vpc_id
+  vpc_id             = local.ec_vpc_id
   security_group_rules = [
     {
       type                     = "egress"
@@ -25,7 +25,7 @@ module "redis" {
       description              = "Allow all inbound traffic from trusted Security Groups"
     },
   ]
-  subnets                              = module.vpc.private_subnets
+  subnets                              = local.ec_private_subnets
   cluster_mode_enabled                 = var.ec_cluster_mode_enabled
   cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
   cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group
@@ -81,4 +81,9 @@ resource "kubernetes_service" "edge_redis_service" {
     module.eks,
     module.redis[0]
   ]
+}
+
+locals {
+  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : module.vpc[0].private_subnets
+  ec_vpc_id          = var.external_vpc ? var.ec_vpc_id : module.vpc[0].vpc_id
 }
