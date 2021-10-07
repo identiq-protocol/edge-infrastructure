@@ -70,7 +70,7 @@ resource "kubernetes_service" "edge_redis_service" {
     annotations = {
       "ad.datadoghq.com/service.check_names"  = "[\"redisdb\"]"
       "ad.datadoghq.com/service.init_configs" = "[{}]"
-      "ad.datadoghq.com/service.instances"    = "[{\"host\":\"%%host%%\",\"port\":\"6379\",\"password\":\"%%env_REDIS_PASSWORD%%\"}]"
+      "ad.datadoghq.com/service.instances"    = "[{\"host\":\"edge-identities-redis-master\",\"port\":\"6379\"}]"
     }
   }
   spec {
