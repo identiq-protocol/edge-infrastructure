@@ -89,11 +89,11 @@ module "eks" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = var.eks_cluster_name
+  name = split("/", module.eks.cluster_arn)[1]
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = var.eks_cluster_name
+  name = split("/", module.eks.cluster_arn)[1]
 }
 
 provider "kubernetes" {
