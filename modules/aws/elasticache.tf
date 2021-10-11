@@ -49,11 +49,6 @@ resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_redis ? 1 : 0
   metadata {
     name = "edge-identities-redis"
-    annotations = {
-      "ad.datadoghq.com/service.check_names"  = "[\"redisdb\"]"
-      "ad.datadoghq.com/service.init_configs" = "[{}]"
-      "ad.datadoghq.com/service.instances"    = "[{\"host\":\"%%host%%\",\"port\":\"6379\",\"password\":\"%%env_REDIS_PASSWORD%%\"}]"
-    }
   }
   data = {
     redis-password = ""
