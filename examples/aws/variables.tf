@@ -248,6 +248,11 @@ variable "ec_cluster_mode_enabled" {
   type        = bool
   default     = false
 }
+variable "ec_cluster_mode_creation_fix_enabled" {
+  description = "Elastic cache flag to enable/disable the fix that pass avilability_zones [] and allow to create new EC cluster"
+  type        = bool
+  default     = false
+}
 
 variable "ec_cluster_mode_num_node_groups" {
   description = "Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications"
