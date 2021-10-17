@@ -2,14 +2,15 @@ provider "aws" {
   region = var.region
 }
 
-#terraform {
-#  backend "s3" {
-#    region   = "us-east-1"
-#    bucket   = "terraform-state"
-#    key      = "production/aws/edge"
-#    encrypt  = "true"
-#  }
-#}
+terraform {
+  backend "s3" {
+    region  = "us-east-1"
+    bucket  = "identiq-production-terraform"
+    key     = "dev/aws/edge-test"
+    encrypt = "true"
+  }
+}
+
 
 module "edge-aws" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.18"
