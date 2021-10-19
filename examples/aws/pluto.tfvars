@@ -1,4 +1,4 @@
-eks_cluster_name                = "moshe"
+eks_cluster_name                = "edge-cluster"
 region                          = "us-east-1"
 eks_dynamic_instance_count      = 1
 eks_dynamic_instance_type       = "c5.2xlarge"
