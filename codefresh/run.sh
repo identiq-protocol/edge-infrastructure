@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "" > ~/.aws/credentials
 echo "terraform {" > backend.tf
 echo "  backend \"s3\" {" >> backend.tf
 echo "    region  = \"us-east-1\"" >> backend.tf
