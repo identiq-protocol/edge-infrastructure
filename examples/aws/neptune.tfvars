@@ -5,7 +5,7 @@ eks_dynamic_instance_type       = "c5.2xlarge"
 eks_cache_instance_type         = "r5.xlarge"
 ec_instance_type                = "cache.r6g.xlarge"
 #external_redis                  = false
-  #external_db                     = true
+#external_db                     = true
 #rds_apply_immediately           = false
 #rds_allow_major_version_upgrade = false
 # For configuring additional IAM roles to administer the cluster
