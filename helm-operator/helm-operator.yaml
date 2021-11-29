@@ -3,9 +3,10 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: helm-operator
+  namespace: default
   labels:
     app: helm-operator
-    chart: helm-operator-1.0.2
+    chart: helm-operator-1.4.0
     release: helm-operator
     heritage: Helm
 ---
@@ -19,28 +20,17 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: helm-operator-kube-config
+  namespace: default
 data:
   config: |
-    apiVersion: v1
-    clusters: []
-    contexts:
-    - context:
-        cluster: ""
-        namespace: default
-        user: ""
-      name: default
-    current-context: default
-    kind: Config
-    preferences: {}
-    users: []
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: helm-operator
   labels:
     app: helm-operator
-    chart: helm-operator-1.0.2
+    chart: helm-operator-1.4.0
     release: helm-operator
     heritage: Helm
 rules:
@@ -55,13 +45,13 @@ rules:
     verbs:
       - '*'
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: helm-operator
   labels:
     app: helm-operator
-    chart: helm-operator-1.0.2
+    chart: helm-operator-1.4.0
     release: helm-operator
     heritage: Helm
 roleRef:
@@ -85,9 +75,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: helm-operator
+  namespace: default
   labels:
     app: helm-operator
-    chart: helm-operator-1.0.2
+    chart: helm-operator-1.4.0
     release: helm-operator
     heritage: Helm
 spec:
@@ -105,9 +96,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: helm-operator
+  namespace: default
   labels:
     app: helm-operator
-    chart: helm-operator-1.0.2
+    chart: helm-operator-1.4.0
     release: helm-operator
     heritage: Helm
 spec:
@@ -129,6 +121,7 @@ spec:
       serviceAccountName: helm-operator
       imagePullSecrets:
         - name: identiq-docker-key
+      terminationGracePeriodSeconds: 300
       volumes:
       - name: git-key
         secret:
@@ -144,7 +137,7 @@ spec:
         edge.identiq.com/role: base
       containers:
       - name: flux-helm-operator
-        image: "identiq-docker.jfrog.io/helm-operator:1.0.1"
+        image: "identiq-docker.jfrog.io/fluxcd/helm-operator:1.4.0"
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -154,13 +147,19 @@ spec:
             port: 3030
             path: /healthz
           initialDelaySeconds: 1
+          periodSeconds: 10
           timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             port: 3030
             path: /healthz
           initialDelaySeconds: 1
+          periodSeconds: 10
           timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
         volumeMounts:
         - name: git-key
           mountPath: /etc/fluxd/ssh
@@ -184,10 +183,12 @@ spec:
         - --log-release-diffs=false
         - --workers=4
         - --tiller-namespace=kube-system
+        - --convert-release-storage=secrets
         resources:
           limits:
             cpu: 500m
             memory: 500Mi
           requests:
-            cpu: 50m
-            memory: 64Mi
+            cpu: 500m
+            memory: 500Mi
+
