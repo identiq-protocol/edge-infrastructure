@@ -82,7 +82,7 @@ No requirements.
 | <a name="input_eks_cache_root_encrypted"></a> [eks\_cache\_root\_encrypted](#input\_eks\_cache\_root\_encrypted) | Whether EKS cache worker group instance root volume should be encrypted or not | `bool` | `true` | no |
 | <a name="input_eks_cluster_enabled_log_types"></a> [eks\_cluster\_enabled\_log\_types](#input\_eks\_cluster\_enabled\_log\_types) | A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | `list(string)` | `[]` | no |
 | <a name="input_eks_cluster_name"></a> [eks\_cluster\_name](#input\_eks\_cluster\_name) | Name of EKS cluster | `any` | n/a | yes |
-| <a name="input_eks_cluster_version"></a> [eks\_cluster\_version](#input\_eks\_cluster\_version) | Kubernetes version to use for the EKS cluster | `string` | `"1.19"` | no |
+| <a name="input_eks_cluster_version"></a> [eks\_cluster\_version](#input\_eks\_cluster\_version) | Kubernetes version to use for the EKS cluster | `string` | `"1.21"` | no |
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_db_instance_count"></a> [eks\_db\_instance\_count](#input\_eks\_db\_instance\_count) | EKS database worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_db_instance_type"></a> [eks\_db\_instance\_type](#input\_eks\_db\_instance\_type) | EKS database worker group instance type | `string` | `"m5.large"` | no |

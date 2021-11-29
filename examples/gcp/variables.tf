@@ -26,7 +26,7 @@ variable "gke_zones" {
 }
 variable "gke_version" {
   description = "gke Kubernetes version"
-  default     = "1.19.12-gke.2100"
+  default     = "1.21.5-gke.1802"
 }
 variable "gke_enable_private_nodes" {
   type        = bool

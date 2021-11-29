@@ -72,7 +72,7 @@ No requirements.
 | <a name="input_gke_nodegroup_db_machinetype"></a> [gke\_nodegroup\_db\_machinetype](#input\_gke\_nodegroup\_db\_machinetype) | gke db nodegroup machine type | `string` | `"c2-standard-8"` | no |
 | <a name="input_gke_nodegroup_dynamic_machine_count"></a> [gke\_nodegroup\_dynamic\_machine\_count](#input\_gke\_nodegroup\_dynamic\_machine\_count) | gke dynamic nodegroup max count of machines | `string` | `"1"` | no |
 | <a name="input_gke_nodegroup_dynamic_machinetype"></a> [gke\_nodegroup\_dynamic\_machinetype](#input\_gke\_nodegroup\_dynamic\_machinetype) | gke dynamic nodegroup machine type | `string` | `"c2-standard-8"` | no |
-| <a name="input_gke_version"></a> [gke\_version](#input\_gke\_version) | gke Kubernetes version | `string` | `"1.19.12-gke.2100"` | no |
+| <a name="input_gke_version"></a> [gke\_version](#input\_gke\_version) | gke Kubernetes version | `string` | `"1.21.5-gke.1802"` | no |
 | <a name="input_gke_zones"></a> [gke\_zones](#input\_gke\_zones) | The zones for gke control plane | `list` | `[]` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to host all resources in | `any` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to host all resources in | `string` | `"us-east1"` | no |
