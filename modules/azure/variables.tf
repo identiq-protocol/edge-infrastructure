@@ -58,7 +58,7 @@ variable "aks_cluster_name" {
 variable "aks_kubernetes_version" {
   description = "Version of Kubernetes specified when creating the AKS managed cluster."
   type        = string
-  default     = "1.19.11"
+  default     = "1.21.2"
 }
 
 variable "aks_enable_role_based_access_control" {
