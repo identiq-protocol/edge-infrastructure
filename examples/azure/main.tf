@@ -3,11 +3,11 @@ provider "azurerm" {
 }
 
 #terraform {
-#  backend "s3" {
-#    region   = "us-east-1"
-#    bucket   = "terraform-state"
-#    key      = "production/aws/edge"
-#    encrypt  = "true"
+#  backend "azurerm" {
+#    resource_group_name  = "StorageAccount-ResourceGroup"
+#    storage_account_name = "identiq"
+#    container_name       = "terraform-state"
+#    key                  = "prod.terraform.tfstate"
 #  }
 #}
 
