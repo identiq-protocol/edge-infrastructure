@@ -45,7 +45,7 @@ module "redis" {
   snapshot_retention_limit             = var.ec_snapshot_retention_limit
 }
 module "redis-new" {
-  count              = var.external_redis  && var.external_redis_migration ? 1 : 0
+  count              = var.external_redis_migration ? 1 : 0
   source             = "git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git?ref=0.40.0"
   availability_zones = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
   name               = "${var.external_redis_name}-redis"
