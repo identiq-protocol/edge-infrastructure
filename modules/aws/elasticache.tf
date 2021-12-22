@@ -44,6 +44,52 @@ module "redis" {
   snapshot_window                      = var.ec_snapshot_window
   snapshot_retention_limit             = var.ec_snapshot_retention_limit
 }
+module "redis-new" {
+  count              = var.external_redis  && var.external_redis_migration ? 1 : 0
+  source             = "git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git?ref=0.40.0"
+  availability_zones = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
+  name               = "${var.external_redis_name}-redis"
+  zone_id            = ""
+  vpc_id             = local.ec_vpc_id
+  security_group_rules = [
+    {
+      type                     = "egress"
+      from_port                = 0
+      to_port                  = 65535
+      protocol                 = "-1"
+      cidr_blocks              = ["0.0.0.0/0"]
+      source_security_group_id = null
+      description              = "Allow all outbound traffic"
+    },
+    {
+      type                     = "ingress"
+      from_port                = 0
+      to_port                  = 65535
+      protocol                 = "-1"
+      cidr_blocks              = []
+      source_security_group_id = module.eks.worker_security_group_id
+      description              = "Allow all inbound traffic from trusted Security Groups"
+    },
+  ]
+  subnets                              = local.ec_private_subnets
+  cluster_mode_enabled                 = var.ec_cluster_mode_enabled
+  cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups_migration
+  cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group
+  cluster_size                         = var.ec_cluster_size
+  security_group_description           = "Managed by Terraform"
+  instance_type                        = var.ec_instance_type_migration
+  apply_immediately                    = var.ec_apply_immediately
+  automatic_failover_enabled           = var.ec_automatic_failover_enabled
+  engine_version                       = var.ec_engine_version
+  family                               = var.ec_family
+  at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
+  transit_encryption_enabled           = var.ec_transit_encryption_enabled
+  parameter                            = var.ec_parameter
+  tags                                 = merge(var.tags, var.default_tags)
+  snapshot_name                        = var.ec_snapshot_name_migration
+  snapshot_window                      = var.ec_snapshot_window
+  snapshot_retention_limit             = var.ec_snapshot_retention_limit
+}
 
 resource "kubernetes_secret" "edge_redis_secret" {
   count = var.external_redis ? 1 : 0
@@ -70,11 +116,11 @@ resource "kubernetes_service" "edge_redis_service" {
   }
   spec {
     type          = "ExternalName"
-    external_name = module.redis[0].endpoint
+    external_name = var.external_redis_migration_apply ? module.redis-new[0].endpoint : module.redis[0].endpoint
   }
   depends_on = [
     module.eks,
-    module.redis[0]
+    var.external_redis_migration_apply ? module.redis-new[0] : module.redis[0]
   ]
 }
 

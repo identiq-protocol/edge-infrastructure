@@ -222,6 +222,16 @@ variable "external_redis" {
   type        = bool
   default     = false
 }
+variable "external_redis_migration" {
+  description = "New Redis will be installed outside of EKS cluster (Elasticache)"
+  type        = bool
+  default     = false
+}
+variable "external_redis_migration_apply" {
+  description = "Migration Redis will be applied to k8s service (Elasticache)"
+  type        = bool
+  default     = false
+}
 
 variable "external_redis_name" {
   description = "External redis name (if enabled)"
@@ -242,6 +252,11 @@ variable "ec_instance_type" {
   type        = string
   default     = "cache.r5.2xlarge"
 }
+variable "ec_instance_type_migration" {
+  description = "Migration Elastic cache instance type"
+  type        = string
+  default     = "cache.r5.2xlarge"
+}
 
 variable "ec_cluster_mode_enabled" {
   description = "Elastic cache flag to enable/disable creation of a native redis cluster. `automatic_failover_enabled` must be set to `true`. Only 1 `cluster_mode` block is allowed"
@@ -256,6 +271,11 @@ variable "ec_cluster_mode_creation_fix_enabled" {
 
 variable "ec_cluster_mode_num_node_groups" {
   description = "Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications"
+  type        = number
+  default     = 0
+}
+variable "ec_cluster_mode_num_node_groups_migration" {
+  description = " migration Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications"
   type        = number
   default     = 0
 }
@@ -319,6 +339,10 @@ variable "ec_parameter" {
 
 variable "ec_snapshot_name" {
   description = "The name of a snapshot from which to restore data into the new node group. Changing the snapshot_name forces a new resource."
+  default     = null
+}
+variable "ec_snapshot_name_migration" {
+  description = " migration The name of a snapshot from which to restore data into the new node group. Changing the snapshot_name forces a new resource."
   default     = null
 }
 
