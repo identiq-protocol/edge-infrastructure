@@ -120,7 +120,7 @@ resource "kubernetes_service" "edge_redis_service" {
   }
   depends_on = [
     module.eks,
-    var.external_redis_migration_apply ? module.redis-new[0] : module.redis[0]
+    module.redis[0]
   ]
 }
 
