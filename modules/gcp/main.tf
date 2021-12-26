@@ -5,15 +5,16 @@ data "google_compute_zones" "available" {
 }
 
 module "vpc" {
-  source     = "./modules/vpc"
-  region     = var.region
-  project_id = var.project_id
-  vpc_name   = var.vpc_name
+  source                   = "./modules/vpc"
+  region                   = var.region
+  project_id               = var.project_id
+  vpc_name                 = var.vpc_name
+  enable_ssh_firewall_rule = var.vpc_enable_ssh_firewall_rule
 }
 
 module "gke" {
   source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                           = "16.0.1"
+  version                           = "17.3.0"
   project_id                        = var.project_id
   name                              = var.cluster_name
   region                            = var.region
@@ -96,7 +97,7 @@ module "gke" {
 module "private-service-access" {
   count       = var.external_db || var.external_redis ? 1 : 0
   source      = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version     = "6.0.0"
+  version     = "8.0.0"
   project_id  = var.project_id
   vpc_network = module.vpc.network_name
   depends_on  = [module.vpc]
@@ -105,7 +106,7 @@ module "private-service-access" {
 module "postgresql-db" {
   count                = var.external_db ? 1 : 0
   source               = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
-  version              = "6.0.0"
+  version              = "8.0.0"
   name                 = var.cluster_name
   random_instance_name = true
   user_name            = var.external_db_user_name
@@ -128,16 +129,9 @@ module "postgresql-db" {
   depends_on = [module.private-service-access]
 }
 data "google_client_config" "provider" {}
-data "google_container_cluster" "gke_cluster" {
-  name     = var.cluster_name
-  location = var.region
-  project  = var.project_id
-}
 provider "kubernetes" {
-  host = "https://${data.google_container_cluster.gke_cluster.endpoint}"
-  cluster_ca_certificate = base64decode(
-    data.google_container_cluster.gke_cluster.master_auth[0].cluster_ca_certificate,
-  )
+  host = "https://${module.gke.endpoint}"
+  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
   token = data.google_client_config.provider.access_token
 }
 resource "kubernetes_secret" "edge_db_secret" {

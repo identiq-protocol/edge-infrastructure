@@ -16,3 +16,7 @@ variable "auto_create_subnetworks" {
   description = "vpc will auto create subnetworks for each region"
   default = false
 }
+variable "enable_ssh_firewall_rule" {
+  description = "create firewall rule to enable ssh access"
+  default = false
+}

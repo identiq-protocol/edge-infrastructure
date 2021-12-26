@@ -2,6 +2,10 @@ variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
   default     = "identiq-vpc"
 }
+variable "vpc_enable_ssh_firewall_rule" {
+  description = "create firewall rule to enable ssh access"
+  default = true
+}
 variable "region" {
   description = "The region to host all resources in"
   default     = "us-east1"

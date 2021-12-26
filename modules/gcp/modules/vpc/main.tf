@@ -10,6 +10,18 @@ resource "google_compute_subnetwork" "private-subnetwork" {
   network = google_compute_network.vpc_network.name
 
 }
+resource "google_compute_firewall" "default" {
+  count = var.enable_ssh_firewall_rule ? 1 : 0
+  name    = "allow-ssh"
+  network = google_compute_network.vpc_network.name
+
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_address" "external_nat_address" {
   name         = "nat-ip"
   address_type = "EXTERNAL"
@@ -24,7 +36,7 @@ resource "google_compute_router" "router" {
 
 module "cloud-nat" {
   source                             = "terraform-google-modules/cloud-nat/google"
-  version                            = "~> 2.0.0"
+  version                            = "~> 2.1.0"
   project_id                         = var.project_id
   region                             = var.region
   router                             = google_compute_router.router.name
