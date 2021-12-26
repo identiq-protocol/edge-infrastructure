@@ -3,25 +3,28 @@
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_google"></a> [google](#requirement\_google) | 3.90.1 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | n/a |
+| <a name="provider_google"></a> [google](#provider\_google) | 3.90.1 |
 | <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | n/a |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | n/a |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gke"></a> [gke](#module\_gke) | terraform-google-modules/kubernetes-engine/google//modules/private-cluster | 16.0.1 |
+| <a name="module_gke"></a> [gke](#module\_gke) | terraform-google-modules/kubernetes-engine/google//modules/private-cluster | 17.3.0 |
 | <a name="module_memorystore-redis"></a> [memorystore-redis](#module\_memorystore-redis) | terraform-google-modules/memorystore/google | 4.0.0 |
-| <a name="module_postgresql-db"></a> [postgresql-db](#module\_postgresql-db) | GoogleCloudPlatform/sql-db/google//modules/postgresql | 6.0.0 |
-| <a name="module_private-service-access"></a> [private-service-access](#module\_private-service-access) | GoogleCloudPlatform/sql-db/google//modules/private_service_access | 6.0.0 |
+| <a name="module_postgresql-db"></a> [postgresql-db](#module\_postgresql-db) | GoogleCloudPlatform/sql-db/google//modules/postgresql | 8.0.0 |
+| <a name="module_private-service-access"></a> [private-service-access](#module\_private-service-access) | GoogleCloudPlatform/sql-db/google//modules/private_service_access | 8.0.0 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ./modules/vpc | n/a |
 
 ## Resources
@@ -35,8 +38,7 @@ No requirements.
 | [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/storage_class) | resource |
 | [null_resource.patch-standard-sc](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [google-beta_google_compute_zones.available](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/data-sources/google_compute_zones) | data source |
-| [google_client_config.provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config) | data source |
-| [google_container_cluster.gke_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/container_cluster) | data source |
+| [google_client_config.provider](https://registry.terraform.io/providers/hashicorp/google/3.90.1/docs/data-sources/client_config) | data source |
 
 ## Inputs
 
@@ -78,6 +80,7 @@ No requirements.
 | <a name="input_region"></a> [region](#input\_region) | The region to host all resources in | `string` | `"us-east1"` | no |
 | <a name="input_regional"></a> [regional](#input\_regional) | Whether is a regional cluster (zonal cluster if set false. WARNING: changing this after cluster creation is destructive!) | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources | `map(string)` | n/a | yes |
+| <a name="input_vpc_enable_ssh_firewall_rule"></a> [vpc\_enable\_ssh\_firewall\_rule](#input\_vpc\_enable\_ssh\_firewall\_rule) | create firewall rule to enable ssh access | `bool` | `true` | no |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name to be used on all the resources as identifier | `string` | `"identiq-vpc"` | no |
 | <a name="input_zones"></a> [zones](#input\_zones) | The zone to host the cluster in (required if is a zonal cluster) | `list(string)` | `[]` | no |
 
