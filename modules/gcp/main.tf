@@ -108,7 +108,7 @@ module "postgresql-db" {
   source               = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
   version              = "8.0.0"
   name                 = var.cluster_name
-  db_flags             = var.external_db_database_flags
+  database_flags       = var.external_db_database_flags
   random_instance_name = true
   user_name            = var.external_db_user_name
   database_version     = var.external_db_postgres_version
@@ -131,9 +131,9 @@ module "postgresql-db" {
 }
 data "google_client_config" "provider" {}
 provider "kubernetes" {
-  host = "https://${module.gke.endpoint}"
+  host                   = "https://${module.gke.endpoint}"
   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-  token = data.google_client_config.provider.access_token
+  token                  = data.google_client_config.provider.access_token
 }
 resource "kubernetes_secret" "edge_db_secret" {
   count = var.external_db ? 1 : 0

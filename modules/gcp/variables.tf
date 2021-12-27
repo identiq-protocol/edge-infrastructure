@@ -192,39 +192,28 @@ variable "external_db_database_flags" {
     value = string
   }))
   default = [{
-    apply_method = "pending-reboot",
     name         = "maintenance_work_mem"
     value        = "4194304"
   },
     {
-      apply_method = "pending-reboot",
       name         = "checkpoint_timeout"
       value        = "1800"
     },
     {
-      apply_method = "pending-reboot",
       name         = "max_wal_size"
       value        = "4096"
     },
     {
-      apply_method = "pending-reboot",
-      name         = "synchronous_commit"
+      name         = "pglogical.synchronous_commit"
       value        = "off"
     },
     {
-      apply_method = "pending-reboot",
       name         = "wal_buffers"
       value        = "8192"
     },
     {
-      apply_method = "pending-reboot",
       name         = "enable_hashagg"
-      value        = "1"
-    },
-    {
-      apply_method = "pending-reboot",
-      name         = "hash_mem_multiplier"
-      value        = "2.0"
+      value        = "on"
     }]
 }
 
