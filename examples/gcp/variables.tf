@@ -185,6 +185,37 @@ variable "external_db_postgres_backup_configuration" {
     retention_unit                 = null
   }
 }
+variable "external_db_database_flags" {
+  description = "The database flags for the master instance. See [more details](https://cloud.google.com/sql/docs/postgres/flags)"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = [{
+    name         = "maintenance_work_mem"
+    value        = "4194304"
+  },
+    {
+      name         = "checkpoint_timeout"
+      value        = "1800"
+    },
+    {
+      name         = "max_wal_size"
+      value        = "4096"
+    },
+    {
+      name         = "pglogical.synchronous_commit"
+      value        = "off"
+    },
+    {
+      name         = "wal_buffers"
+      value        = "8192"
+    },
+    {
+      name         = "enable_hashagg"
+      value        = "on"
+    }]
+}
 
 variable "external_redis" {
   description = "Whenever to create and use external cloud managed redis instance"
