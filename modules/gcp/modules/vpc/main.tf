@@ -12,7 +12,7 @@ resource "google_compute_subnetwork" "private-subnetwork" {
 }
 resource "google_compute_firewall" "default" {
   count = var.enable_ssh_firewall_rule ? 1 : 0
-  name    = "allow-ssh"
+  name    = "allow-ssh-${google_compute_network.vpc_network.name}"
   network = google_compute_network.vpc_network.name
 
   allow {
