@@ -108,6 +108,7 @@ module "postgresql-db" {
   source               = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
   version              = "8.0.0"
   name                 = var.cluster_name
+  db_flags             = var.external_db_database_flags
   random_instance_name = true
   user_name            = var.external_db_user_name
   database_version     = var.external_db_postgres_version
