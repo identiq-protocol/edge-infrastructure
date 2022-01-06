@@ -41,18 +41,23 @@ module "eks" {
       tags = [
         {
           key                 = "k8s.io/cluster-autoscaler/enabled"
-          propagate_at_launch = "false"
+          propagate_at_launch = "true"
           value               = var.eks_dynamic_asg_autoscaling
         },
         {
           key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"
-          propagate_at_launch = "false"
+          propagate_at_launch = "true"
           value               = "owned"
         },
         {
           key                 = "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role"
-          propagate_at_launch = "false"
+          propagate_at_launch = "true"
           value               = "dynamic"
+        },
+        {
+          key                 = "k8s.io/cluster-autoscaler/node-template/taint/dynamic"
+          propagate_at_launch = "true"
+          value               = "true:NoSchedule"
         },
       ]
       override_instance_types = [var.eks_dynamic_instance_type]
@@ -62,7 +67,7 @@ module "eks" {
       asg_max_size            = var.eks_dynamic_instance_count
       asg_desired_capacity    = var.eks_dynamic_instance_count
       subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic"
+      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic --register-with-taints=dynamic:NoSchedule"
       public_ip               = false
       root_encrypted          = var.eks_dynamic_root_encrypted
     },
