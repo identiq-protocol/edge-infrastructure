@@ -14,6 +14,14 @@ variable "instance_type" {
   default = "m5.4xlarge"
 }
 
+variable "vpc_id" {
+  default = ""
+}
+
+variable "private_subnet_id" {
+  default = ""
+}
+
 data "http" "myip" {
   url = "http://ipv4.icanhazip.com"
 }

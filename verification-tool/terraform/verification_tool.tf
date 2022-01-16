@@ -30,6 +30,7 @@ resource "aws_key_pair" "generated_key" {
 
 resource "aws_security_group" "server-sg" {
   name_prefix = "verification-tool"
+  vpc_id = var.vpc_id
   ingress {
     from_port = 22
     to_port   = 22
@@ -43,37 +44,39 @@ resource "aws_security_group" "server-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 resource "aws_eip" "ip" {
 }
-resource "aws_instance" "verification-tool" {
-  ami = data.aws_ami.amazon-linux-2.id
-  instance_type = var.instance_type
-  key_name = aws_key_pair.generated_key.key_name
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "3.4.0"
 
-  root_block_device {
+  name = "Identiq Data Verification Tool"
+  root_block_device =  [{
     volume_size = var.verification_tool_disk_size
     volume_type = "gp2"
     encrypted = true
     delete_on_termination = true
-  }
-  volume_tags = {
-    Name = "Identiq Data Verification Tool"
-  }
-  tags = {
-    Name = "Identiq Data Verification Tool"
-  }
-  depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, aws_security_group.server-sg]
-  security_groups = [aws_security_group.server-sg.name]
-  user_data = file("${path.cwd}/init-verification-tool.sh")
-}
+  }]
+  ami                    =  data.aws_ami.amazon-linux-2.id
+  instance_type          = var.instance_type
+  key_name               =  aws_key_pair.generated_key.key_name
+  vpc_security_group_ids = [aws_security_group.server-sg.id]
+  subnet_id              = var.private_subnet_id
+  associate_public_ip_address = false
 
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
+  user_data = file("${path.cwd}/init-verification-tool.sh")
+  depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, aws_security_group.server-sg]
+}
 resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.verification-tool.id
+  instance_id   = module.ec2_instance.id
   allocation_id = aws_eip.ip.id
-  depends_on = [aws_instance.verification-tool,aws_eip.ip]
+  depends_on = [module.ec2_instance ,aws_eip.ip]
 }
 
 output verification_tool {
-  value = "ssh -i \"${var.key_pair_name}.pem\" ec2-user@${aws_eip.ip.public_dns}"
+  value = "ssh -i ${var.key_pair_name}.pem ec2-user@${aws_eip.ip.public_dns}"
 }
