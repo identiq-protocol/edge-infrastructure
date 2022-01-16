@@ -1,7 +1,7 @@
 module "redis" {
   count              = var.external_redis ? 1 : 0
   source  = "cloudposse/elasticache-redis/aws"
-  version = "0.41.6"
+  version = "0.40.3"
   availability_zones = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
   name               = var.external_redis_name
   zone_id            = ""
