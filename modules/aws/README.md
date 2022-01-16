@@ -9,7 +9,10 @@ The infstructarue consists of the following components:
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | =3.72.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.7.1 |
 
 ## Providers
 
@@ -17,18 +20,18 @@ No requirements.
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 | <a name="provider_http"></a> [http](#provider\_http) | n/a |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.7.1 |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | 17.1.0 |
+| <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | 17.24.0 |
 | <a name="module_rds"></a> [rds](#module\_rds) | terraform-aws-modules/rds/aws | 2.35.0 |
-| <a name="module_rds_sg"></a> [rds\_sg](#module\_rds\_sg) | terraform-aws-modules/security-group/aws | 4.3.0 |
-| <a name="module_redis"></a> [redis](#module\_redis) | git::https://github.com/cloudposse/terraform-aws-elasticache-redis.git | 0.40.0 |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | 3.2.0 |
+| <a name="module_rds_sg"></a> [rds\_sg](#module\_rds\_sg) | terraform-aws-modules/security-group/aws | 4.8.0 |
+| <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 0.40.3 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | 3.11.3 |
 
 ## Resources
 
@@ -37,10 +40,10 @@ No requirements.
 | [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
-| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service) | resource |
-| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service) | resource |
+| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
+| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
+| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/service) | resource |
+| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/service) | resource |
 | [random_password.rds_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_eks_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
