@@ -38,7 +38,7 @@ module "rds_sg" {
 module "rds" {
   count                                 = var.external_db ? 1 : 0
   source                                = "terraform-aws-modules/rds/aws"
-  version                               = "3.5.0"
+  version                               = "2.35.0"
   identifier                            = var.external_db_name
   name                                  = var.rds_db_name
   monitoring_role_name                  = "${var.eks_cluster_name}-monitoring"
