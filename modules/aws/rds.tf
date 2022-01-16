@@ -19,7 +19,7 @@ locals {
 module "rds_sg" {
   create      = var.external_db ? true : false
   source      = "terraform-aws-modules/security-group/aws"
-  version     = "4.3.0"
+  version     = "4.8.0"
   name        = "${var.external_db_name}-db-sg"
   description = "Security group for edge rds"
   vpc_id      = local.rds_vpc_id
@@ -38,7 +38,7 @@ module "rds_sg" {
 module "rds" {
   count                                 = var.external_db ? 1 : 0
   source                                = "terraform-aws-modules/rds/aws"
-  version                               = "2.35.0"
+  version                               = "3.50.0"
   identifier                            = var.external_db_name
   name                                  = var.rds_db_name
   monitoring_role_name                  = "${var.eks_cluster_name}-monitoring"
