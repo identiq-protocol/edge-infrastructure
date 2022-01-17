@@ -3,10 +3,16 @@ provider "aws" {
 }
 data "aws_ami" "amazon-linux-2" {
   most_recent = true
-  owners = ["amazon"]
+  owners      = ["amazon"]
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm*"]
+  }
+}
+data "http" "my_public_ip" {
+  url = "https://ifconfig.co/json"
+  request_headers = {
+    Accept = "application/json"
   }
 }
 
@@ -16,9 +22,9 @@ resource "tls_private_key" "key" {
 }
 
 resource "local_file" "cloud_pem" {
-  filename = "${path.cwd}/${var.key_pair_name}.pem"
-  content = tls_private_key.key.private_key_pem
-  depends_on = [tls_private_key.key]
+  filename        = "${path.cwd}/${var.key_pair_name}.pem"
+  content         = tls_private_key.key.private_key_pem
+  depends_on      = [tls_private_key.key]
   file_permission = "0400"
 }
 
@@ -28,55 +34,48 @@ resource "aws_key_pair" "generated_key" {
   depends_on = [local_file.cloud_pem]
 }
 
-resource "aws_security_group" "server-sg" {
-  name_prefix = "verification-tool"
-  vpc_id = var.vpc_id
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+module "ssh-security-group" {
+  source              = "terraform-aws-modules/security-group/aws//modules/ssh"
+  version             = "4.8.0"
+  name                = "verification-tool"
+  vpc_id              = var.vpc_id
+  ingress_cidr_blocks = concat(var.sg_ingress_my_ip ? ["${jsondecode(data.http.my_public_ip.body).ip}/32"] : [], var.sg_ingress_cidr_blocks)
 }
+
 resource "aws_eip" "ip" {
+  count = var.private_only ? 0 : 1
 }
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "3.4.0"
 
   name = "Identiq Data Verification Tool"
-  root_block_device =  [{
-    volume_size = var.verification_tool_disk_size
-    volume_type = "gp2"
-    encrypted = true
+  root_block_device = [{
+    volume_size           = var.verification_tool_disk_size
+    volume_type           = "gp2"
+    encrypted             = true
     delete_on_termination = true
   }]
-  ami                    =  data.aws_ami.amazon-linux-2.id
-  instance_type          = var.instance_type
-  key_name               =  aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [aws_security_group.server-sg.id]
-  subnet_id              = var.private_subnet_id
+  ami                         = data.aws_ami.amazon-linux-2.id
+  instance_type               = var.instance_type
+  key_name                    = aws_key_pair.generated_key.key_name
+  vpc_security_group_ids      = [module.ssh-security-group.security_group_id]
+  subnet_id                   = var.private_subnet_id
   associate_public_ip_address = false
-
   tags = {
-    Terraform   = "true"
-    Environment = "dev"
+    Name = "Identiq Data Verification Tool"
   }
-  user_data = file("${path.cwd}/init-verification-tool.sh")
-  depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, aws_security_group.server-sg]
+
+  user_data  = file("${path.cwd}/init-verification-tool.sh")
+  depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, module.ssh-security-group]
 }
 resource "aws_eip_association" "eip_assoc" {
+  count         = var.private_only ? 0 : 1
   instance_id   = module.ec2_instance.id
-  allocation_id = aws_eip.ip.id
-  depends_on = [module.ec2_instance ,aws_eip.ip]
+  allocation_id = aws_eip.ip[0].id
+  depends_on    = [module.ec2_instance, aws_eip.ip[0]]
 }
 
-output verification_tool {
-  value = "ssh -i ${var.key_pair_name}.pem ec2-user@${aws_eip.ip.public_dns}"
+output "verification_tool" {
+  value = "ssh -i ${var.key_pair_name}.pem ec2-user@${var.private_only ? module.ec2_instance.private_dns : aws_eip.ip[0].public_dns}"
 }

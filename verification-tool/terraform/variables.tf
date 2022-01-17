@@ -22,7 +22,15 @@ variable "private_subnet_id" {
   default = ""
 }
 
-data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
+variable "private_only" {
+  default = false
 }
+variable "sg_ingress_cidr_blocks" {
+  default = []
+}
+variable "sg_ingress_my_ip" {
+  default = true
+}
+
+
 
