@@ -5,3 +5,4 @@
 #vpc_id = 	""
 #private_only = true
 #sg_ingress_cidr_blocks = [""]
+#iam_role_name = ""
