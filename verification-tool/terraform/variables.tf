@@ -17,7 +17,9 @@ variable "instance_type" {
 variable "vpc_id" {
   default = ""
 }
-
+variable "iam_role_name" {
+  default = ""
+}
 variable "private_subnet_id" {
   default = ""
 }

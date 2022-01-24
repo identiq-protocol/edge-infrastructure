@@ -45,6 +45,11 @@ module "ssh-security-group" {
 resource "aws_eip" "ip" {
   count = var.private_only ? 0 : 1
 }
+
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name_prefix = "identiq_data_verification_tool_profile"
+  role = var.iam_role_name
+}
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "3.4.0"
@@ -61,12 +66,13 @@ module "ec2_instance" {
   key_name                    = aws_key_pair.generated_key.key_name
   vpc_security_group_ids      = [module.ssh-security-group.security_group_id]
   subnet_id                   = var.private_subnet_id
-  associate_public_ip_address = false
+  associate_public_ip_address = var.private_only ? false : true
   tags = {
     Name = "Identiq Data Verification Tool"
   }
 
   user_data  = file("${path.cwd}/init-verification-tool.sh")
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
   depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, module.ssh-security-group]
 }
 resource "aws_eip_association" "eip_assoc" {
