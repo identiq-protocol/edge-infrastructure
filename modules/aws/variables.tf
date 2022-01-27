@@ -123,6 +123,18 @@ variable "eks_db_root_encrypted" {
   default     = true
 }
 
+variable "eks_db_root_volume_size" {
+  description = "The size of the volume in gigabytes"
+  type        = number
+  default     = 100
+}
+
+variable "eks_db_root_volume_type" {
+  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+  type        = string
+  default     = "gp3"
+}
+
 variable "eks_cache_instance_type" {
   description = "EKS cache worker group instance type"
   type        = string
@@ -145,6 +157,18 @@ variable "eks_cache_root_encrypted" {
   description = "Whether EKS cache worker group instance root volume should be encrypted or not"
   type        = bool
   default     = true
+}
+
+variable "eks_cache_root_volume_size" {
+  description = "The size of the volume in gigabytes"
+  type        = number
+  default     = 100
+}
+
+variable "eks_cache_root_volume_type" {
+  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+  type        = string
+  default     = "gp3"
 }
 
 variable "eks_dynamic_instance_type" {
@@ -176,6 +200,18 @@ variable "eks_dynamic_root_encrypted" {
   default     = true
 }
 
+variable "eks_dynamic_root_volume_size" {
+  description = "The size of the volume in gigabytes"
+  type        = number
+  default     = 100
+}
+
+variable "eks_dynamic_root_volume_type" {
+  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+  type        = string
+  default     = "gp3"
+}
+
 variable "eks_base_instance_type" {
   description = "EKS base worker group instance type"
   type        = string
@@ -198,6 +234,18 @@ variable "eks_base_root_encrypted" {
   description = "Whether EKS base worker group instance root volume should be encrypted or not"
   type        = bool
   default     = true
+}
+
+variable "eks_base_root_volume_size" {
+  description = "The size of the volume in gigabytes"
+  type        = number
+  default     = 100
+}
+
+variable "eks_base_root_volume_type" {
+  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+  type        = string
+  default     = "gp3"
 }
 
 variable "eks_cluster_enabled_log_types" {

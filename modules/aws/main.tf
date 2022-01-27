@@ -21,6 +21,8 @@ module "eks" {
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
       public_ip               = false
       root_encrypted          = var.eks_db_root_encrypted
+      root_volume_size        = var.eks_db_root_volume_size
+      root_volume_type        = var.eks_db_root_volume_type
     },
     {
       name                    = "cache"
@@ -35,6 +37,8 @@ module "eks" {
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
       public_ip               = false
       root_encrypted          = var.eks_cache_root_encrypted
+      root_volume_size        = var.eks_cache_root_volume_size
+      root_volume_type        = var.eks_cache_root_volume_type
     },
     {
       name = "dynamic"
@@ -70,6 +74,8 @@ module "eks" {
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic --register-with-taints=dynamic:NoSchedule"
       public_ip               = false
       root_encrypted          = var.eks_dynamic_root_encrypted
+      root_volume_size        = var.eks_dynamic_root_volume_size
+      root_volume_type        = var.eks_dynamic_root_volume_type
     },
     {
       name                    = "base"
@@ -83,6 +89,8 @@ module "eks" {
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=base"
       public_ip               = false
       root_encrypted          = var.eks_base_root_encrypted
+      root_volume_size        = var.eks_base_root_volume_size
+      root_volume_type        = var.eks_base_root_volume_type
     }
   ]
   worker_ami_name_filter      = var.eks_worker_ami_name_filter
