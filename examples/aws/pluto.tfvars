@@ -1,9 +1,9 @@
-eks_cluster_name                = "edge-cluster"
-region                          = "us-east-1"
-eks_dynamic_instance_count      = 1
-eks_dynamic_instance_type       = "c5.2xlarge"
-eks_cache_instance_type         = "r5.large"
-ec_instance_type                = "cache.r5g.large"
+eks_cluster_name           = "edge-cluster"
+region                     = "us-east-1"
+eks_dynamic_instance_count = 1
+eks_dynamic_instance_type  = "c5.2xlarge"
+eks_cache_instance_type    = "r5.large"
+ec_instance_type           = "cache.r6g.large"
 #external_redis                  = false
 #external_db                     = true
 #rds_apply_immediately           = false
