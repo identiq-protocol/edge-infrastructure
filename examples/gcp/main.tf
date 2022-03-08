@@ -1,16 +1,9 @@
-//provider "aws" {
-//  region = var.region
-//}
-
 #terraform {
-#  backend "s3" {
-#    region   = "us-east-1"
-#    bucket   = "terraform-state"
-#    key      = "production/aws/edge"
-#    encrypt  = "true"
+#  backend "gcs" {
+#    bucket   = ""
+#    prefix      = ""
 #  }
 #}
-
 module "edge-gcp" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/gcp/?ref=0.0.34"
 
