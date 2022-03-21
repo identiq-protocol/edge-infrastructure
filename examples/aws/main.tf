@@ -151,6 +151,6 @@ output "endpoint_address" {
   value = var.vpc_endpoint_service_name != "" ? module.edge-aws.endpoint_address : ""
 }
 
-output "pinki_ingress_id" {
-  value = module.edge-aws.pinki_ingress_id
+output "pinky_ingress_id" {
+  value = module.edge-aws.pinky_ingress_id
 }
