@@ -12,7 +12,8 @@ provider "aws" {
 #}
 
 module "edge-aws" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.35"
+  # source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.35"
+  source = "../../modules/aws/" #remove before PR and update to latest version
 
   # vpc
   external_vpc             = var.external_vpc
@@ -29,42 +30,46 @@ module "edge-aws" {
   vpc_endpoint_service_name = var.vpc_endpoint_service_name
 
   # eks
-  eks_vpc_id                    = var.eks_vpc_id
-  eks_private_subnets           = var.eks_private_subnets
-  eks_public_subnets            = var.eks_public_subnets
-  eks_cluster_name              = var.eks_cluster_name
-  eks_cluster_version           = var.eks_cluster_version
-  eks_map_roles                 = var.eks_map_roles
-  eks_map_users                 = var.eks_map_users
-  eks_additional_policies       = var.eks_additional_policies
-  eks_wait_for_cluster_timeout  = var.eks_wait_for_cluster_timeout
-  eks_db_instance_type          = var.eks_db_instance_type
-  eks_db_instance_count         = var.eks_db_instance_count
-  eks_db_asg_min_size           = var.eks_db_asg_min_size
-  eks_db_root_encrypted         = var.eks_db_root_encrypted
-  eks_db_root_volume_size       = var.eks_db_root_volume_size
-  eks_db_root_volume_type       = var.eks_db_root_volume_type
-  eks_cache_instance_type       = var.eks_cache_instance_type
-  eks_cache_instance_count      = var.eks_cache_instance_count
-  eks_cache_asg_min_size        = var.eks_cache_asg_min_size
-  eks_cache_root_encrypted      = var.eks_cache_root_encrypted
-  eks_cache_root_volume_size    = var.eks_cache_root_volume_size
-  eks_cache_root_volume_type    = var.eks_cache_root_volume_type
-  eks_dynamic_instance_count    = var.eks_dynamic_instance_count
-  eks_dynamic_instance_type     = var.eks_dynamic_instance_type
-  eks_dynamic_asg_min_size      = var.eks_dynamic_asg_min_size
-  eks_dynamic_root_encrypted    = var.eks_dynamic_root_encrypted
-  eks_dynamic_root_volume_size  = var.eks_dynamic_root_volume_size
-  eks_dynamic_root_volume_type  = var.eks_dynamic_root_volume_type
-  eks_base_instance_type        = var.eks_base_instance_type
-  eks_base_instance_count       = var.eks_base_instance_count
-  eks_base_asg_min_size         = var.eks_base_asg_min_size
-  eks_base_root_encrypted       = var.eks_base_root_encrypted
-  eks_base_root_volume_size     = var.eks_base_root_volume_size
-  eks_base_root_volume_type     = var.eks_base_root_volume_type
-  eks_cluster_enabled_log_types = var.eks_cluster_enabled_log_types
-  eks_worker_ami_name_filter    = var.eks_worker_ami_name_filter
-  eks_worker_ami_owner_id       = var.eks_worker_ami_owner_id
+  eks_vpc_id                                     = var.eks_vpc_id
+  eks_private_subnets                            = var.eks_private_subnets
+  eks_public_subnets                             = var.eks_public_subnets
+  eks_cluster_name                               = var.eks_cluster_name
+  eks_cluster_version                            = var.eks_cluster_version
+  eks_map_roles                                  = var.eks_map_roles
+  eks_map_users                                  = var.eks_map_users
+  eks_additional_policies                        = var.eks_additional_policies
+  eks_wait_for_cluster_timeout                   = var.eks_wait_for_cluster_timeout
+  eks_db_instance_type                           = var.eks_db_instance_type
+  eks_db_instance_count                          = var.eks_db_instance_count
+  eks_db_asg_min_size                            = var.eks_db_asg_min_size
+  eks_db_root_encrypted                          = var.eks_db_root_encrypted
+  eks_db_root_volume_size                        = var.eks_db_root_volume_size
+  eks_db_root_volume_type                        = var.eks_db_root_volume_type
+  eks_cache_instance_type                        = var.eks_cache_instance_type
+  eks_cache_instance_count                       = var.eks_cache_instance_count
+  eks_cache_asg_min_size                         = var.eks_cache_asg_min_size
+  eks_cache_root_encrypted                       = var.eks_cache_root_encrypted
+  eks_cache_root_volume_size                     = var.eks_cache_root_volume_size
+  eks_cache_root_volume_type                     = var.eks_cache_root_volume_type
+  eks_dynamic_instance_count                     = var.eks_dynamic_instance_count
+  eks_dynamic_instance_type                      = var.eks_dynamic_instance_type
+  eks_dynamic_asg_min_size                       = var.eks_dynamic_asg_min_size
+  eks_dynamic_root_encrypted                     = var.eks_dynamic_root_encrypted
+  eks_dynamic_root_volume_size                   = var.eks_dynamic_root_volume_size
+  eks_dynamic_root_volume_type                   = var.eks_dynamic_root_volume_type
+  eks_base_instance_type                         = var.eks_base_instance_type
+  eks_base_instance_count                        = var.eks_base_instance_count
+  eks_base_asg_min_size                          = var.eks_base_asg_min_size
+  eks_base_root_encrypted                        = var.eks_base_root_encrypted
+  eks_base_root_volume_size                      = var.eks_base_root_volume_size
+  eks_base_root_volume_type                      = var.eks_base_root_volume_type
+  eks_cluster_enabled_log_types                  = var.eks_cluster_enabled_log_types
+  eks_worker_ami_name_filter                     = var.eks_worker_ami_name_filter
+  eks_worker_ami_owner_id                        = var.eks_worker_ami_owner_id
+  cluster_endpoint_private_access                = var.cluster_endpoint_private_access
+  cluster_endpoint_public_access                 = var.cluster_endpoint_public_access
+  cluster_endpoint_public_access_cidrs           = var.cluster_endpoint_public_access_cidrs
+  cluster_create_endpoint_private_access_sg_rule = var.cluster_create_endpoint_private_access_sg_rule
 
   # rds
   external_db                                  = var.external_db
@@ -144,4 +149,8 @@ output "vpc_id" {
 
 output "endpoint_address" {
   value = var.vpc_endpoint_service_name != "" ? module.edge-aws.endpoint_address : ""
+}
+
+output "pinki_ingress_id" {
+  value = module.edge-aws.pinki_ingress_id
 }

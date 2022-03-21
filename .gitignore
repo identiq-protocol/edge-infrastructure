@@ -12,3 +12,4 @@ terraform.*
 *pem
 *srl
 .DS_Store
+examples/aws/.WhereIsMyCluster.md
