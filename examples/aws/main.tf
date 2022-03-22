@@ -12,8 +12,7 @@ provider "aws" {
 #}
 
 module "edge-aws" {
-  # source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.35"
-  source = "../../modules/aws/" #remove before PR and update to latest version
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=DOP-1148"  # this needs to be updated with the correct branch when merged.
 
   # vpc
   external_vpc             = var.external_vpc
