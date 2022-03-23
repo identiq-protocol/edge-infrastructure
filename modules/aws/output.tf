@@ -13,3 +13,7 @@ output "vpc_id" {
 output "endpoint_address" {
   value = var.vpc_endpoint_service_name != "" ? aws_vpc_endpoint.ep[0].dns_entry[0]["dns_name"] : ""
 }
+
+output "pinky_ingress_id" {
+  value = aws_security_group.pinky_ingress.id
+}

@@ -8,6 +8,7 @@ module "eks" {
   map_roles                = var.eks_map_roles
   map_users                = var.eks_map_users
   wait_for_cluster_timeout = var.eks_wait_for_cluster_timeout
+
   worker_groups_launch_template = [
     {
       name                    = "db"
@@ -93,12 +94,17 @@ module "eks" {
       root_volume_type        = var.eks_base_root_volume_type
     }
   ]
-  worker_ami_name_filter      = var.eks_worker_ami_name_filter
-  worker_ami_owner_id         = var.eks_worker_ami_owner_id
-  cluster_enabled_log_types   = var.eks_cluster_enabled_log_types
-  workers_additional_policies = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
-  depends_on                  = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
-  tags                        = merge(var.tags, var.default_tags)
+  worker_ami_name_filter                         = var.eks_worker_ami_name_filter
+  worker_ami_owner_id                            = var.eks_worker_ami_owner_id
+  cluster_enabled_log_types                      = var.eks_cluster_enabled_log_types
+  workers_additional_policies                    = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
+  depends_on                                     = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
+  tags                                           = merge(var.tags, var.default_tags)
+  cluster_endpoint_private_access                = var.eks_cluster_endpoint_private_access
+  cluster_endpoint_public_access                 = var.eks_cluster_endpoint_public_access
+  cluster_endpoint_public_access_cidrs           = var.eks_cluster_endpoint_public_access_cidrs
+  cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
+
 }
 
 data "aws_eks_cluster" "cluster" {
