@@ -12,4 +12,3 @@ terraform.*
 *pem
 *srl
 .DS_Store
-**/.WhereIsMyCluster.md
