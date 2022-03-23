@@ -100,10 +100,10 @@ module "eks" {
   workers_additional_policies                    = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], var.eks_additional_policies)
   depends_on                                     = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
   tags                                           = merge(var.tags, var.default_tags)
-  cluster_endpoint_private_access                = var.cluster_endpoint_private_access
-  cluster_endpoint_public_access                 = var.cluster_endpoint_public_access
-  cluster_endpoint_public_access_cidrs           = var.cluster_endpoint_public_access_cidrs
-  cluster_create_endpoint_private_access_sg_rule = var.cluster_create_endpoint_private_access_sg_rule
+  cluster_endpoint_private_access                = var.eks_cluster_endpoint_private_access
+  cluster_endpoint_public_access                 = var.eks_cluster_endpoint_public_access
+  cluster_endpoint_public_access_cidrs           = var.eks_cluster_endpoint_public_access_cidrs
+  cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
 
 }
 
