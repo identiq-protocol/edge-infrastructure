@@ -1,3 +1,19 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+variable "external_vpc" {
+  description = "Sepcifies whether we want to use an externally created VPC"
+  default     = false
+}
+
+variable "eks_vpc_id" {
+  description = "Specifies VPC ID in case of external VPC"
+  type        = string
+  default     = ""
+}
+
+
 variable "eks_cluster_endpoint_private_access" {
   description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
   type        = bool
@@ -5,7 +21,7 @@ variable "eks_cluster_endpoint_private_access" {
 }
 
 variable "eks_cluster_create_endpoint_private_access_sg_rule" {
-  description = "Whether to create security group rules for the access to the Amazon EKS private API server endpoint. When is `true`, `eks_cluster_endpoint_private_access_cidrs` must be setted."
+  description = "Whether to create security group rules for the access to the Amazon EKS private API server endpoint. When is `true`, `cluster_endpoint_private_access_cidrs` must be setted."
   type        = bool
   default     = false
 }
@@ -20,21 +36,6 @@ variable "eks_cluster_endpoint_public_access_cidrs" {
   description = "List of CIDR blocks which can access the Amazon EKS public API server endpoint"
   type        = list(string)
   default     = ["0.0.0.0/0"]
-}
-
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
-variable "external_vpc" {
-  description = "Sepcifies whether we want to use an externally created VPC"
-  default     = false
-}
-
-variable "eks_vpc_id" {
-  description = "Specifies VPC ID in case of external VPC"
-  type        = string
-  default     = ""
 }
 
 variable "eks_private_subnets" {

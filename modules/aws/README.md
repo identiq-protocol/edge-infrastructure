@@ -39,6 +39,7 @@ The infstructarue consists of the following components:
 |------|------|
 | [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
 | [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
@@ -87,7 +88,11 @@ The infstructarue consists of the following components:
 | <a name="input_eks_cache_root_encrypted"></a> [eks\_cache\_root\_encrypted](#input\_eks\_cache\_root\_encrypted) | Whether EKS cache worker group instance root volume should be encrypted or not | `bool` | `true` | no |
 | <a name="input_eks_cache_root_volume_size"></a> [eks\_cache\_root\_volume\_size](#input\_eks\_cache\_root\_volume\_size) | The size of the volume in gigabytes | `number` | `100` | no |
 | <a name="input_eks_cache_root_volume_type"></a> [eks\_cache\_root\_volume\_type](#input\_eks\_cache\_root\_volume\_type) | The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1 | `string` | `"gp3"` | no |
+| <a name="input_eks_cluster_create_endpoint_private_access_sg_rule"></a> [eks\_cluster\_create\_endpoint\_private\_access\_sg\_rule](#input\_eks\_cluster\_create\_endpoint\_private\_access\_sg\_rule) | Whether to create security group rules for the access to the Amazon EKS private API server endpoint. When is `true`, `cluster_endpoint_private_access_cidrs` must be setted. | `bool` | `false` | no |
 | <a name="input_eks_cluster_enabled_log_types"></a> [eks\_cluster\_enabled\_log\_types](#input\_eks\_cluster\_enabled\_log\_types) | A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | `list(string)` | `[]` | no |
+| <a name="input_eks_cluster_endpoint_private_access"></a> [eks\_cluster\_endpoint\_private\_access](#input\_eks\_cluster\_endpoint\_private\_access) | Indicates whether or not the Amazon EKS private API server endpoint is enabled | `bool` | `true` | no |
+| <a name="input_eks_cluster_endpoint_public_access"></a> [eks\_cluster\_endpoint\_public\_access](#input\_eks\_cluster\_endpoint\_public\_access) | Indicates whether or not the Amazon EKS public API server endpoint is enabled | `bool` | `true` | no |
+| <a name="input_eks_cluster_endpoint_public_access_cidrs"></a> [eks\_cluster\_endpoint\_public\_access\_cidrs](#input\_eks\_cluster\_endpoint\_public\_access\_cidrs) | List of CIDR blocks which can access the Amazon EKS public API server endpoint | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
 | <a name="input_eks_cluster_name"></a> [eks\_cluster\_name](#input\_eks\_cluster\_name) | Name of EKS cluster | `any` | n/a | yes |
 | <a name="input_eks_cluster_version"></a> [eks\_cluster\_version](#input\_eks\_cluster\_version) | Kubernetes version to use for the EKS cluster | `string` | `"1.21"` | no |
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
@@ -167,5 +172,6 @@ The infstructarue consists of the following components:
 | <a name="output_connect"></a> [connect](#output\_connect) | n/a |
 | <a name="output_endpoint_address"></a> [endpoint\_address](#output\_endpoint\_address) | n/a |
 | <a name="output_nat_ips"></a> [nat\_ips](#output\_nat\_ips) | n/a |
+| <a name="output_pinky_ingress_id"></a> [pinky\_ingress\_id](#output\_pinky\_ingress\_id) | n/a |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | n/a |
 <!-- END_TF_DOCS -->
