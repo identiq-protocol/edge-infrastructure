@@ -66,9 +66,11 @@ module "edge-aws" {
   eks_worker_ami_name_filter                         = var.eks_worker_ami_name_filter
   eks_worker_ami_owner_id                            = var.eks_worker_ami_owner_id
   eks_cluster_endpoint_private_access                = var.eks_cluster_endpoint_private_access
+  eks_cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
+  eks_cluster_endpoint_private_access_cidrs          = var.eks_cluster_endpoint_private_access_cidrs
+  eks_cluster_endpoint_private_access_sg             = var.eks_cluster_endpoint_private_access_sg
   eks_cluster_endpoint_public_access                 = var.eks_cluster_endpoint_public_access
   eks_cluster_endpoint_public_access_cidrs           = var.eks_cluster_endpoint_public_access_cidrs
-  eks_cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
 
   # rds
   external_db                                  = var.external_db
