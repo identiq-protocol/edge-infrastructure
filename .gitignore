@@ -4,8 +4,8 @@ terraform.*
 .terraform
 .terraform.lock.hcl
 # .tfstate files
-*.tfstate
-*.tfstate.*
+#*.tfstate
+#*.tfstate.*
 
 .idea
 **/*kubeconfig*
