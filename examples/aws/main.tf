@@ -29,6 +29,7 @@ module "edge-aws" {
   vpc_endpoint_service_name = var.vpc_endpoint_service_name
 
   # eks
+  eks_dynamic_max_instance_count                     = var.eks_dynamic_max_instance_count
   eks_vpc_id                                         = var.eks_vpc_id
   eks_private_subnets                                = var.eks_private_subnets
   eks_public_subnets                                 = var.eks_public_subnets
