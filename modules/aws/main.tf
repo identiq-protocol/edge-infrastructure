@@ -69,7 +69,7 @@ module "eks" {
       spot_instance_pools     = var.eks_dynamic_instance_count
       on_demand_base_capacity = var.eks_dynamic_instance_count
       asg_min_size            = var.eks_dynamic_asg_min_size
-      asg_max_size            = var.eks_dynamic_instance_count
+      asg_max_size            = var.eks_dynamic_max_instance_count
       asg_desired_capacity    = var.eks_dynamic_instance_count
       subnets                 = [local.eks_private_subnets[0]]
       kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic --register-with-taints=dynamic:NoSchedule"
