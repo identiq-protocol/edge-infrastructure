@@ -12,7 +12,7 @@ provider "aws" {
 #}
 
 module "edge-aws" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.40"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.41"
 
   # vpc
   external_vpc             = var.external_vpc
