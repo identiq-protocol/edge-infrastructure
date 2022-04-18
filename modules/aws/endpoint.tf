@@ -14,5 +14,6 @@ locals {
   vpc_endpoint_service_name = {
     "us-east-1" : "com.amazonaws.vpce.us-east-1.vpce-svc-0964eccd96e1f130c"
     "us-west-2" : "com.amazonaws.vpce.us-west-2.vpce-svc-00bca346ea4e4a49a"
+    "ap-southeast-1" : "com.amazonaws.vpce.ap-southeast-1.vpce-svc-0c51fc0cfb82ba390"
   }
 }
