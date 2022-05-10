@@ -23,7 +23,7 @@ steps:
          noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip ci") == false'
          masterBranch: '"${{CF_BRANCH}}" == "master"'
   get_latest_tag:
-    title: Get latest tag 
+    title: Get latest tag
     stage: "Get latest tag"
     image: alpine/git:latest
     working_directory: /codefresh/volume/${{CF_REPO_NAME}}
@@ -131,6 +131,7 @@ steps:
        commands:
          - sed -i '/module \"edge-aws\"/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
+         - echo $SEMVERSIONER_RESULT > version
      azure_example:
        title: azure
        image: alpine
@@ -138,6 +139,7 @@ steps:
        commands:
          - sed -i '/module \"edge-azure\"/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/azure\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
+         - echo $SEMVERSIONER_RESULT > version
      gcp_example:
        title: gcp
        image: alpine
@@ -145,6 +147,7 @@ steps:
        commands:
          - sed -i '/module \"edge-gcp\"/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/gcp\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
+         - echo $SEMVERSIONER_RESULT > version
   check_diff:
     title: Check if variable and doc files have changed
     when:
@@ -160,7 +163,7 @@ steps:
       - git --no-pager diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md
       - cf_export DIFF_STATUS=`git diff examples/aws/variables.tf examples/azure/variables.tf examples/gcp/variables.tf examples/aws/main.tf examples/azure/main.tf examples/gcp/main.tf modules/aws/README.md modules/azure/README.md modules/gcp/README.md | wc -l`
   commit_and_push:
-    title: Commit changes and push auto genereted files 
+    title: Commit changes and push auto genereted files
     stage: "Commit and push"
     type: git-commit
     when:
@@ -178,6 +181,9 @@ steps:
       git_user_email: codefresh@identiq.com
       allow_empty: false
       add:
+        - examples/aws/version
+        - examples/azure/version
+        - examples/gcp/version
         - examples/aws/variables.tf
         - examples/azure/variables.tf
         - examples/gcp/variables.tf

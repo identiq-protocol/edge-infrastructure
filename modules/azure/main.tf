@@ -9,7 +9,7 @@ module "network" {
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = var.address_space
   subnet_prefixes     = local.subnet_prefixes
-  subnet_names        = ["subnet1", "subnet2", "subnet3"]
+  subnet_names        = ["subnet1", "subnet2", "subnet3", "subnet4"]
   subnet_enforce_private_link_endpoint_network_policies = {
     "subnet2" = true,
     "subnet3" = true
@@ -44,7 +44,7 @@ resource "azurerm_nat_gateway_public_ip_prefix_association" "example" {
 
 resource "azurerm_subnet_nat_gateway_association" "nat_gw_a" {
   nat_gateway_id = azurerm_nat_gateway.nat_gw.id
-  subnet_id      = module.network.vnet_subnets[0]
+  subnet_id      = module.network.vnet_subnets[3]
 }
 
 module "aks" {
@@ -96,7 +96,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "db" {
   node_count            = var.aks_db_agents_node_count
   max_pods              = var.aks_db_agents_max_pods
   orchestrator_version  = var.aks_kubernetes_version
-  vnet_subnet_id        = module.network.vnet_subnets[0]
+  vnet_subnet_id        = module.network.vnet_subnets[3]
   node_labels = {
     "edge.identiq.com/role" = "db"
   }
@@ -118,7 +118,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "cache" {
   node_count            = var.aks_cache_agents_node_count
   max_pods              = var.aks_cache_agents_max_pods
   orchestrator_version  = var.aks_kubernetes_version
-  vnet_subnet_id        = module.network.vnet_subnets[0]
+  vnet_subnet_id        = module.network.vnet_subnets[3]
   node_labels = {
     "edge.identiq.com/role" = "cache"
   }
@@ -139,7 +139,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "dynamic" {
   node_count            = var.aks_dynamic_agents_node_count
   max_pods              = var.aks_dynamic_agents_max_pods
   orchestrator_version  = var.aks_kubernetes_version
-  vnet_subnet_id        = module.network.vnet_subnets[0]
+  vnet_subnet_id        = module.network.vnet_subnets[3]
   node_labels = {
     "edge.identiq.com/role" = "dynamic"
   }
@@ -160,7 +160,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "base" {
   node_count            = var.aks_base_agents_node_count
   max_pods              = var.aks_base_agents_max_pods
   orchestrator_version  = var.aks_kubernetes_version
-  vnet_subnet_id        = module.network.vnet_subnets[0]
+  vnet_subnet_id        = module.network.vnet_subnets[3]
   node_labels = {
     "edge.identiq.com/role" = "base"
   }

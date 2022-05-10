@@ -13,6 +13,7 @@ module "redis" {
   subnet_id                 = module.network.vnet_subnets[1]
   private_static_ip_address = cidrhost(local.subnet_prefixes[1], 4)
   authorized_cidrs          = var.redis_authorized_cidrs
+  logs_destinations_ids     = var.redis_logs_destinations_ids
   depends_on                = [module.network, azuread_application.app]
 }
 

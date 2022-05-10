@@ -4,7 +4,7 @@ variable "vpc_name" {
 }
 variable "vpc_enable_ssh_firewall_rule" {
   description = "create firewall rule to enable ssh access"
-  default = true
+  default     = true
 }
 variable "region" {
   description = "The region to host all resources in"
@@ -30,7 +30,7 @@ variable "gke_zones" {
 }
 variable "gke_version" {
   description = "gke Kubernetes version"
-  default     = "1.21.5-gke.1802"
+  default     = "1.21.11-gke.1900"
 }
 variable "gke_enable_private_nodes" {
   type        = bool
@@ -192,29 +192,29 @@ variable "external_db_database_flags" {
     value = string
   }))
   default = [{
-    name         = "maintenance_work_mem"
-    value        = "4194304"
-  },
-    {
-      name         = "checkpoint_timeout"
-      value        = "1800"
+    name  = "maintenance_work_mem"
+    value = "4194304"
     },
     {
-      name         = "max_wal_size"
-      value        = "4096"
+      name  = "checkpoint_timeout"
+      value = "1800"
     },
     {
-      name         = "pglogical.synchronous_commit"
-      value        = "off"
+      name  = "max_wal_size"
+      value = "4096"
     },
     {
-      name         = "wal_buffers"
-      value        = "8192"
+      name  = "pglogical.synchronous_commit"
+      value = "off"
     },
     {
-      name         = "enable_hashagg"
-      value        = "on"
-    }]
+      name  = "wal_buffers"
+      value = "8192"
+    },
+    {
+      name  = "enable_hashagg"
+      value = "on"
+  }]
 }
 
 variable "external_redis" {

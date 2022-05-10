@@ -7,11 +7,11 @@ output "nat_ips" {
 }
 
 output "vpc_id" {
-  value = var.external_vpc ? var.eks_vpc_id : module.vpc[0].vpc_id
+  value = local.identiqVersion["vpcId"]
 }
 
 output "endpoint_address" {
-  value = var.vpc_endpoint_service_name != "" ? aws_vpc_endpoint.ep[0].dns_entry[0]["dns_name"] : ""
+  value = local.identiqVersion["vpcEndpointAddress"]
 }
 
 output "pinky_ingress_id" {
