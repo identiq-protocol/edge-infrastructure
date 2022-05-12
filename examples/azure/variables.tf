@@ -1,5 +1,5 @@
 locals {
-  subnet_prefixes = [cidrsubnet(var.address_space, 4, 1), cidrsubnet(var.address_space, 4, 2), cidrsubnet(var.address_space, 4, 3)]
+  subnet_prefixes = [cidrsubnet(var.address_space, 4, 1), cidrsubnet(var.address_space, 4, 2), cidrsubnet(var.address_space, 4, 3), cidrsubnet(var.address_space, 4, 4)]
 }
 
 variable "ad_application_dispaly_name" {
@@ -449,6 +449,12 @@ variable "redis_environment" {
   description = "Name of the Redis environnement"
   type        = string
   default     = "production"
+}
+
+variable "redis_logs_destinations_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of logs destinations IDs"
 }
 
 variable "redis_allow_non_ssl_connections" {

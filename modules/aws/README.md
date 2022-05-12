@@ -41,6 +41,7 @@ The infstructarue consists of the following components:
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
+| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/config_map) | resource |
 | [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
 | [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
 | [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/service) | resource |

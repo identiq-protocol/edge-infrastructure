@@ -56,6 +56,7 @@ The infstructarue consists of the following components:
 | [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/resource_group) | resource |
 | [azurerm_role_assignment.assignment](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/role_assignment) | resource |
 | [azurerm_subnet_nat_gateway_association.nat_gw_a](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/subnet_nat_gateway_association) | resource |
+| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/config_map) | resource |
 | [kubernetes_endpoints.external-db-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/endpoints) | resource |
 | [kubernetes_endpoints.external-redis-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/endpoints) | resource |
 | [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/secret) | resource |
@@ -105,7 +106,7 @@ The infstructarue consists of the following components:
 | <a name="input_aks_dynamic_enable_auto_scaling"></a> [aks\_dynamic\_enable\_auto\_scaling](#input\_aks\_dynamic\_enable\_auto\_scaling) | AKS 'dynamic' node pool - enable node pool autoscaling | `bool` | `false` | no |
 | <a name="input_aks_enable_log_analytics_workspace"></a> [aks\_enable\_log\_analytics\_workspace](#input\_aks\_enable\_log\_analytics\_workspace) | AKS enable the creation of azurerm\_log\_analytics\_workspace and azurerm\_log\_analytics\_solution or not | `bool` | `false` | no |
 | <a name="input_aks_enable_role_based_access_control"></a> [aks\_enable\_role\_based\_access\_control](#input\_aks\_enable\_role\_based\_access\_control) | AKS Enable Role Based Access Control | `bool` | `true` | no |
-| <a name="input_aks_kubernetes_version"></a> [aks\_kubernetes\_version](#input\_aks\_kubernetes\_version) | Version of Kubernetes specified when creating the AKS managed cluster. | `string` | `"1.21.2"` | no |
+| <a name="input_aks_kubernetes_version"></a> [aks\_kubernetes\_version](#input\_aks\_kubernetes\_version) | Version of Kubernetes specified when creating the AKS managed cluster. | `string` | `"1.21.9"` | no |
 | <a name="input_aks_net_profile_dns_service_ip"></a> [aks\_net\_profile\_dns\_service\_ip](#input\_aks\_net\_profile\_dns\_service\_ip) | IP address within the Kubernetes service address range that will be used by cluster service discovery (kube-dns). Changing this forces a new resource to be created | `string` | `"10.30.0.10"` | no |
 | <a name="input_aks_net_profile_docker_bridge_cidr"></a> [aks\_net\_profile\_docker\_bridge\_cidr](#input\_aks\_net\_profile\_docker\_bridge\_cidr) | IP address (in CIDR notation) used as the Docker bridge IP address on nodes. Changing this forces a new resource to be created | `string` | `"170.10.0.1/16"` | no |
 | <a name="input_aks_net_profile_service_cidr"></a> [aks\_net\_profile\_service\_cidr](#input\_aks\_net\_profile\_service\_cidr) | The Network Range used by the Kubernetes service. Changing this forces a new resource to be created | `string` | `"10.30.0.0/24"` | no |
@@ -146,6 +147,7 @@ The infstructarue consists of the following components:
 | <a name="input_redis_authorized_cidrs"></a> [redis\_authorized\_cidrs](#input\_redis\_authorized\_cidrs) | Redis map of authorized cidrs | `map(string)` | <pre>{<br>  "ip1": "10.0.0.0/16"<br>}</pre> | no |
 | <a name="input_redis_capacity"></a> [redis\_capacity](#input\_redis\_capacity) | Redis size: (Basic/Standard: 1,2,3,4,5,6) (Premium: 1,2,3,4)  https://docs.microsoft.com/fr-fr/azure/redis-cache/cache-how-to-premium-clustering | `number` | `2` | no |
 | <a name="input_redis_environment"></a> [redis\_environment](#input\_redis\_environment) | Name of the Redis environnement | `string` | `"production"` | no |
+| <a name="input_redis_logs_destinations_ids"></a> [redis\_logs\_destinations\_ids](#input\_redis\_logs\_destinations\_ids) | List of logs destinations IDs | `list(string)` | `[]` | no |
 | <a name="input_redis_sku_name"></a> [redis\_sku\_name](#input\_redis\_sku\_name) | Redis Cache Sku name. Can be Basic, Standard or Premium | `string` | `"Premium"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The Azure Region where the Resource Group (and the edge) should exist. Changing this forces a new Resource Group to be created | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The Name which should be used for this Resource Group. Changing this forces a new Resource Group to be created | `string` | `"identiq-edge"` | no |
