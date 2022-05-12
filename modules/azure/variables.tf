@@ -493,3 +493,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "support_slb_feature" {
+  default     = true
+  description = "Uses to indicate if to support slb in the cluster which is now mandatory but allows old edges to be existed"
+}
