@@ -131,7 +131,7 @@ steps:
        commands:
          - sed -i '/module \"edge-aws\"/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/aws\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
-         - echo $SEMVERSIONER_RESULT > version
+         - echo $SEMVERSIONER_RESULT > /codefresh/volume/${{CF_REPO_NAME}}/modules/aws/version
      azure_example:
        title: azure
        image: alpine
@@ -139,7 +139,7 @@ steps:
        commands:
          - sed -i '/module \"edge-azure\"/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/azure\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
-         - echo $SEMVERSIONER_RESULT > version
+         - echo $SEMVERSIONER_RESULT > /codefresh/volume/${{CF_REPO_NAME}}/modules/azure/version
      gcp_example:
        title: gcp
        image: alpine
@@ -147,7 +147,7 @@ steps:
        commands:
          - sed -i '/module \"edge-gcp\"/!b;n;c\  source = \"git@github.com:identiq-protocol\/edge-infrastructure.git\/\/modules\/gcp\/?ref=TAG_PLACE_HOLDER\"' main.tf
          - sed -i "s/TAG_PLACE_HOLDER/$SEMVERSIONER_RESULT/g" main.tf
-         - echo $SEMVERSIONER_RESULT > version
+         - echo $SEMVERSIONER_RESULT > /codefresh/volume/${{CF_REPO_NAME}}/modules/gcp/version
   check_diff:
     title: Check if variable and doc files have changed
     when:
@@ -181,9 +181,9 @@ steps:
       git_user_email: codefresh@identiq.com
       allow_empty: false
       add:
-        - examples/aws/version
-        - examples/azure/version
-        - examples/gcp/version
+        - modules/aws/version
+        - modules/azure/version
+        - modules/gcp/version
         - examples/aws/variables.tf
         - examples/azure/variables.tf
         - examples/gcp/variables.tf
