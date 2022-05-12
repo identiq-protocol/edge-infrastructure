@@ -151,6 +151,7 @@ The infstructarue consists of the following components:
 | <a name="input_redis_sku_name"></a> [redis\_sku\_name](#input\_redis\_sku\_name) | Redis Cache Sku name. Can be Basic, Standard or Premium | `string` | `"Premium"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The Azure Region where the Resource Group (and the edge) should exist. Changing this forces a new Resource Group to be created | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The Name which should be used for this Resource Group. Changing this forces a new Resource Group to be created | `string` | `"identiq-edge"` | no |
+| <a name="input_support_slb_feature"></a> [support\_slb\_feature](#input\_support\_slb\_feature) | Uses to indicate if to support slb in the cluster which is now mandatory but allows old edges to be existed | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources of the edge | `map(string)` | `{}` | no |
 
 ## Outputs
