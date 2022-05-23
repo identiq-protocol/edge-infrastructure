@@ -57,7 +57,7 @@ variable "vpc_name" {
 
 variable "vpc_cidrsubnet" {
   description = "The CIDR block for the VPC"
-  default     = "10.0.0.0/21"
+  default     = "10.0.0.0/16"
 }
 
 variable "vpc_enable_nat_gateway" {
@@ -679,6 +679,6 @@ variable "vpc_custom_service_name" {
 }
 
 variable "vpc_specific_subnet_newbits" {
-  default     = 3
+  default     = 4
   description = "Specifies the edge subnet newbits for calculating the CIDR block"
 }
