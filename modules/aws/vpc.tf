@@ -5,8 +5,8 @@ module "vpc" {
   cidr                 = var.vpc_cidrsubnet
   count                = var.external_vpc ? 0 : 1
   azs                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
-  private_subnets      = [cidrsubnet(var.vpc_cidrsubnet, 4, 1), cidrsubnet(var.vpc_cidrsubnet, 4, 2), cidrsubnet(var.vpc_cidrsubnet, 4, 3)]
-  public_subnets       = [cidrsubnet(var.vpc_cidrsubnet, 4, 4), cidrsubnet(var.vpc_cidrsubnet, 4, 5), cidrsubnet(var.vpc_cidrsubnet, 4, 6)]
+  private_subnets      = [cidrsubnet(var.vpc_cidrsubnet, var.vpc_specific_subnet_newbits, 1), cidrsubnet(var.vpc_cidrsubnet, var.vpc_specific_subnet_newbits, 2), cidrsubnet(var.vpc_cidrsubnet, var.vpc_specific_subnet_newbits, 3)]
+  public_subnets       = [cidrsubnet(var.vpc_cidrsubnet, var.vpc_specific_subnet_newbits, 4), cidrsubnet(var.vpc_cidrsubnet, var.vpc_specific_subnet_newbits, 5), cidrsubnet(var.vpc_cidrsubnet, var.vpc_specific_subnet_newbits, 6)]
   enable_nat_gateway   = var.vpc_enable_nat_gateway
   enable_vpn_gateway   = var.vpc_enable_vpn_gateway
   enable_dns_hostnames = var.vpc_enable_dns_hostnames
