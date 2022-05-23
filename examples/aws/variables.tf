@@ -221,7 +221,7 @@ variable "eks_dynamic_asg_min_size" {
 variable "eks_dynamic_max_instance_count" {
   description = "EKS dynamic worker group maximum number of instances (asg_max_size)"
   type        = number
-  default = 20
+  default     = 20
 }
 
 variable "eks_dynamic_root_encrypted" {
@@ -671,4 +671,9 @@ variable "tags" {
   description = "Any tags the user wishes to add to all resources of the edge"
   type        = map(string)
   default     = {}
+}
+
+variable "vpc_custom_service_name" {
+  description = "Override default prod service names"
+  default     = ""
 }
