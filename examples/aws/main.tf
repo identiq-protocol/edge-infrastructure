@@ -15,15 +15,16 @@ module "edge-aws" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=0.0.47"
 
   # vpc
-  external_vpc             = var.external_vpc
-  vpc_name                 = var.vpc_name
-  vpc_cidrsubnet           = var.vpc_cidrsubnet
-  vpc_enable_nat_gateway   = var.vpc_enable_nat_gateway
-  vpc_enable_vpn_gateway   = var.vpc_enable_vpn_gateway
-  vpc_enable_dns_hostnames = var.vpc_enable_dns_hostnames
-  vpc_enable_dns_support   = var.vpc_enable_dns_support
-  vpc_custom_service_name  = var.vpc_custom_service_name
-  region                   = var.region
+  external_vpc                = var.external_vpc
+  vpc_name                    = var.vpc_name
+  vpc_cidrsubnet              = var.vpc_cidrsubnet
+  vpc_enable_nat_gateway      = var.vpc_enable_nat_gateway
+  vpc_enable_vpn_gateway      = var.vpc_enable_vpn_gateway
+  vpc_enable_dns_hostnames    = var.vpc_enable_dns_hostnames
+  vpc_enable_dns_support      = var.vpc_enable_dns_support
+  vpc_custom_service_name     = var.vpc_custom_service_name
+  vpc_specific_subnet_newbits = var.vpc_specific_subnet_newbits
+  region                      = var.region
 
   # vpc endpoint
   vpc_endpoint_type         = var.vpc_endpoint_type
