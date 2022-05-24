@@ -677,3 +677,8 @@ variable "vpc_custom_service_name" {
   description = "Override default prod service names"
   default     = ""
 }
+
+variable "vpc_specific_subnet_newbits" {
+  default     = 4
+  description = "Specifies the edge subnet newbits for calculating the CIDR block"
+}
