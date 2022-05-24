@@ -167,6 +167,7 @@ The infstructarue consists of the following components:
 | <a name="input_vpc_endpoint_service_name"></a> [vpc\_endpoint\_service\_name](#input\_vpc\_endpoint\_service\_name) | Endpoint service name to configure with Identiq endpoint service | `string` | `""` | no |
 | <a name="input_vpc_endpoint_type"></a> [vpc\_endpoint\_type](#input\_vpc\_endpoint\_type) | Endpoint service type to create, default unless otherwise is Interface | `string` | `"Interface"` | no |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name to be used on all the resources as identifier | `string` | `"identiq-vpc"` | no |
+| <a name="input_vpc_specific_subnet_newbits"></a> [vpc\_specific\_subnet\_newbits](#input\_vpc\_specific\_subnet\_newbits) | Specifies the edge subnet newbits for calculating the CIDR block | `number` | `4` | no |
 
 ## Outputs
 
