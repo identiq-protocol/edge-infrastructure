@@ -37,6 +37,7 @@ locals {
     ecAmountOfInstances    = var.ec_cluster_mode_num_node_groups
     ecInstanceType         = var.ec_instance_type
     externalDB             = var.external_db
+    externalDBName         = var.external_db_name
     rdsDBVersion           = var.rds_engine_version
     rdsInstanceType        = var.rds_instance_class
     rdsDiskIOPS            = var.rds_iops
