@@ -30,7 +30,6 @@ module "eks" {
       override_instance_types = [var.eks_cache_instance_type]
       spot_instance_pools     = var.eks_cache_instance_count
       on_demand_base_capacity = var.external_redis ? 0 : var.eks_cache_instance_count
-      on_demand_base_capacity = var.external_redis ? 0 : var.eks_cache_instance_count
       asg_min_size            = var.external_redis ? 0 : var.eks_cache_asg_min_size
       asg_max_size            = var.external_redis ? 0 : var.eks_cache_instance_count
       asg_desired_capacity    = var.external_redis ? 0 : var.eks_cache_instance_count
@@ -67,7 +66,7 @@ module "eks" {
       ]
       override_instance_types = [var.eks_dynamic_instance_type]
       spot_instance_pools     = var.eks_dynamic_instance_count
-      on_demand_base_capacity = var.eks_dynamic_instance_count
+      on_demand_base_capacity = var.eks_dynamic_max_instance_count
       asg_min_size            = var.eks_dynamic_asg_min_size
       asg_max_size            = var.eks_dynamic_max_instance_count
       asg_desired_capacity    = var.eks_dynamic_instance_count
@@ -81,7 +80,6 @@ module "eks" {
     {
       name                    = "base"
       override_instance_types = [var.eks_base_instance_type]
-      spot_instance_pools     = var.eks_base_instance_count
       on_demand_base_capacity = var.eks_base_instance_count
       asg_min_size            = var.eks_base_asg_min_size
       asg_max_size            = var.eks_base_instance_count
