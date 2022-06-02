@@ -229,12 +229,15 @@ resource "kubernetes_storage_class" "ssd" {
   }
   depends_on = [module.gke]
 }
-resource "null_resource" "patch-standard-sc" {
-  provisioner "local-exec" {
-    command = <<EOT
-gcloud container clusters get-credentials ${var.cluster_name} --region ${var.region} --project ${var.project_id}
-kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-EOT
+resource "kubernetes_annotations" "standard" {
+  api_version = "storage.k8s.io/v1"
+  kind        = "StorageClass"
+  force       = true
+  metadata {
+    name = "standard"
+  }
+  annotations = {
+    "storageclass.kubernetes.io/is-default-class" = "false"
   }
   depends_on = [module.gke]
 }

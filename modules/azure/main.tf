@@ -176,3 +176,39 @@ provider "kubernetes" {
   client_certificate     = base64decode(module.aks.admin_client_certificate)
   client_key             = base64decode(module.aks.admin_client_key)
 }
+resource "kubernetes_annotations" "default" {
+  api_version = "storage.k8s.io/v1"
+  kind        = "StorageClass"
+  force       = true
+  metadata {
+    name = "default"
+  }
+  annotations = {
+    "storageclass.kubernetes.io/is-default-class" = "false"
+  }
+  depends_on = [
+    module.aks
+  ]
+}
+resource "kubernetes_storage_class" "ssd" {
+  metadata {
+    name = "ssd"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" = "true"
+    }
+    labels = {
+      "kubernetes.io/cluster-service" = "true"
+    }
+  }
+  storage_provisioner    = "kubernetes.io/azure-disk"
+  allow_volume_expansion = "true"
+  volume_binding_mode    = "WaitForFirstConsumer"
+  parameters = {
+    "cachingmode"        = "ReadOnly"
+    "kind"               = "Managed"
+    "storageaccounttype" = "Premium_LRS"
+  }
+  depends_on = [
+    module.aks,
+  ]
+}
