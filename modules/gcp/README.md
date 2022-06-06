@@ -6,7 +6,7 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_google"></a> [google](#requirement\_google) | 3.90.1 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.11.0 |
 
 ## Providers
 
@@ -14,8 +14,7 @@
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | 3.90.1 |
 | <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | n/a |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2.0 |
-| <a name="provider_null"></a> [null](#provider\_null) | n/a |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.11.0 |
 
 ## Modules
 
@@ -31,13 +30,13 @@
 
 | Name | Type |
 |------|------|
-| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/config_map) | resource |
-| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service) | resource |
-| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service) | resource |
-| [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/storage_class) | resource |
-| [null_resource.patch-standard-sc](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [kubernetes_annotations.standard](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/annotations) | resource |
+| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/config_map) | resource |
+| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
+| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
+| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
+| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
+| [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/storage_class) | resource |
 | [google-beta_google_compute_zones.available](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/data-sources/google_compute_zones) | data source |
 | [google_client_config.provider](https://registry.terraform.io/providers/hashicorp/google/3.90.1/docs/data-sources/client_config) | data source |
 

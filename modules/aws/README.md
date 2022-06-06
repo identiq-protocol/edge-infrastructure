@@ -12,7 +12,7 @@ The infstructarue consists of the following components:
 | Name | Version |
 |------|---------|
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | =3.72.0 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.7.1 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.11.0 |
 
 ## Providers
 
@@ -20,7 +20,7 @@ The infstructarue consists of the following components:
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 | <a name="provider_http"></a> [http](#provider\_http) | n/a |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.7.1 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.11.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
@@ -41,11 +41,13 @@ The infstructarue consists of the following components:
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
-| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/config_map) | resource |
-| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
-| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/secret) | resource |
-| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/service) | resource |
-| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.7.1/docs/resources/service) | resource |
+| [kubernetes_annotations.gp2](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/annotations) | resource |
+| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/config_map) | resource |
+| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
+| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
+| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
+| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
+| [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/storage_class) | resource |
 | [random_password.rds_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_eks_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |

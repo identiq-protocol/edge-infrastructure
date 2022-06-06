@@ -13,7 +13,7 @@ The infstructarue consists of the following components:
 |------|---------|
 | <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | =1.6.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | =2.74.0 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.4.1 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.11.0 |
 | <a name="requirement_local"></a> [local](#requirement\_local) | =2.1.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | =3.1.0 |
 | <a name="requirement_template"></a> [template](#requirement\_template) | =2.2.0 |
@@ -24,7 +24,7 @@ The infstructarue consists of the following components:
 |------|---------|
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | =1.6.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | =2.74.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.4.1 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.11.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | =2.1.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | =3.1.0 |
 | <a name="provider_template"></a> [template](#provider\_template) | =2.2.0 |
@@ -56,13 +56,15 @@ The infstructarue consists of the following components:
 | [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/resource_group) | resource |
 | [azurerm_role_assignment.assignment](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/role_assignment) | resource |
 | [azurerm_subnet_nat_gateway_association.nat_gw_a](https://registry.terraform.io/providers/hashicorp/azurerm/2.74.0/docs/resources/subnet_nat_gateway_association) | resource |
-| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/config_map) | resource |
-| [kubernetes_endpoints.external-db-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/endpoints) | resource |
-| [kubernetes_endpoints.external-redis-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/endpoints) | resource |
-| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/secret) | resource |
-| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/secret) | resource |
-| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/service) | resource |
-| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.4.1/docs/resources/service) | resource |
+| [kubernetes_annotations.default](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/annotations) | resource |
+| [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/config_map) | resource |
+| [kubernetes_endpoints.external-db-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/endpoints) | resource |
+| [kubernetes_endpoints.external-redis-endpoint](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/endpoints) | resource |
+| [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
+| [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
+| [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
+| [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
+| [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/storage_class) | resource |
 | [local_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/local/2.1.0/docs/resources/file) | resource |
 | [random_password.db_password](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/password) | resource |
 | [template_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/template/2.2.0/docs/data-sources/file) | data source |
