@@ -116,7 +116,6 @@ data "aws_eks_cluster_auth" "cluster" {
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  #  token                  = data.aws_eks_cluster_auth.cluster.token
   exec {
     api_version = "client.authentication.k8s.io/v1alpha1"
     command     = "aws"
@@ -124,35 +123,39 @@ provider "kubernetes" {
   }
 }
 
-#resource "null_resource" "storge_patch" {
-#  provisioner "local-exec" {
-#    command = "kubectl patch storageclass gp2 -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"false\"}}}'"
-#  }
-#  depends_on = [
-#    module.eks,
-#  ]
-#}
-#
-#resource "kubernetes_storage_class" "ssd" {
-#  metadata {
-#    name = "ssd"
-#    annotations = {
-#      "storageclass.kubernetes.io/is-default-class" = "true"
-#    }
-#  }
-#  storage_provisioner    = "kubernetes.io/aws-ebs"
-#  allow_volume_expansion = "true"
-#  volume_binding_mode    = "WaitForFirstConsumer"
-#  parameters = {
-#    fsType      = "ext4"
-#    "type"      = "gp2"
-#    "encrypted" = "true"
-#  }
-#  depends_on = [
-#    module.eks,
-#  ]
-#}
-
+resource "kubernetes_annotations" "gp2" {
+  api_version = "storage.k8s.io/v1"
+  kind        = "StorageClass"
+  force       = true
+  metadata {
+    name = "gp2"
+  }
+  annotations = {
+    "storageclass.kubernetes.io/is-default-class" = "false"
+  }
+  depends_on = [
+    module.eks
+  ]
+}
+resource "kubernetes_storage_class" "ssd" {
+  metadata {
+    name = "ssd"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" = "true"
+    }
+  }
+  storage_provisioner    = "kubernetes.io/aws-ebs"
+  allow_volume_expansion = "true"
+  volume_binding_mode    = "WaitForFirstConsumer"
+  parameters = {
+    fsType      = "ext4"
+    "type"      = "gp2"
+    "encrypted" = "true"
+  }
+  depends_on = [
+    module.eks,
+  ]
+}
 locals {
   eks_subnets         = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
   eks_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
