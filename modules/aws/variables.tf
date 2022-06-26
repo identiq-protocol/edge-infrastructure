@@ -682,3 +682,53 @@ variable "vpc_specific_subnet_newbits" {
   default     = 4
   description = "Specifies the edge subnet newbits for calculating the CIDR block"
 }
+
+
+variable "ec_appautoscaling_predefined_metric_type" {
+  type        = string
+  description = "The metric type."
+  default     = "ElastiCacheDatabaseMemoryUsageCountedForEvictPercentage"
+}
+variable "ec_appautoscasling_target_value" {
+  type        = number
+  description = "The target value for the metric."
+  default     = 80
+}
+variable "ec_appautoscaling_policy_type" {
+  type        = string
+  description = "The policy type. Valid values are StepScaling and TargetTrackingScaling. Defaults to StepScaling. Certain services only support only one policy type."
+  default     = "TargetTrackingScaling"
+}
+variable "ec_appautoscaling_target_min_capacity" {
+  type        = number
+  description = "The min capacity of the scalable target."
+  default     = 3
+}
+
+variable "ec_appautoscaling_target_max_capacity" {
+  type        = number
+  description = "The max capacity of the scalable target."
+  default     = 100
+}
+variable "ec_appautoscaling_scalabel_dimesion" {
+  type        = string
+  description = "The scalable dimension of the scalable target."
+  default     = "elasticache:replication-group:NodeGroups"
+}
+
+variable "ec_appautoscaling_service_namespace" {
+  type        = string
+  description = "The AWS service namespace of the scalable target."
+  default     = "elasticache"
+}
+
+variable "ec_appautoscaling_scale_in_cooldown" {
+  type        = number
+  description = "The amount of time, in seconds, after a scale in activity completes before another scale in activity can start."
+  default     = 300
+}
+variable "ec_appautoscaling_scale_out_cooldown" {
+  type        = number
+  description = "The amount of time, in seconds, after a scale out activity completes before another scale out activity can start."
+  default     = 300
+}
