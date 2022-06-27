@@ -73,9 +73,9 @@ resource "aws_appautoscaling_policy" "autoscaling_policy" {
   count              = var.ec_cluster_mode_enabled && var.external_redis ? 1 : 0
   policy_type        = var.ec_appautoscaling_policy_type
   name               = var.external_redis_name
-  resource_id        = aws_appautoscaling_target.autoscaling_target.resource_id
-  scalable_dimension = aws_appautoscaling_target.autoscaling_target.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.autoscaling_target.service_namespace
+  resource_id        = aws_appautoscaling_target.autoscaling_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.autoscaling_target[0].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.autoscaling_target[0].service_namespace
   target_tracking_scaling_policy_configuration {
     target_value       = var.ec_appautoscasling_target_value
     scale_in_cooldown  = 300
