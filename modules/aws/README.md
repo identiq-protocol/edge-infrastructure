@@ -37,6 +37,8 @@ The infstructarue consists of the following components:
 
 | Name | Type |
 |------|------|
+| [aws_appautoscaling_policy.autoscaling_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_policy) | resource |
+| [aws_appautoscaling_target.autoscaling_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target) | resource |
 | [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
@@ -60,6 +62,15 @@ The infstructarue consists of the following components:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable | `map` | <pre>{<br>  "Terraform": "true"<br>}</pre> | no |
+| <a name="input_ec_appautoscaling_policy_type"></a> [ec\_appautoscaling\_policy\_type](#input\_ec\_appautoscaling\_policy\_type) | The policy type. Valid values are StepScaling and TargetTrackingScaling. Defaults to StepScaling. Certain services only support only one policy type. | `string` | `"TargetTrackingScaling"` | no |
+| <a name="input_ec_appautoscaling_predefined_metric_type"></a> [ec\_appautoscaling\_predefined\_metric\_type](#input\_ec\_appautoscaling\_predefined\_metric\_type) | The metric type. | `string` | `"ElastiCacheDatabaseMemoryUsageCountedForEvictPercentage"` | no |
+| <a name="input_ec_appautoscaling_scalable_dimesion"></a> [ec\_appautoscaling\_scalable\_dimesion](#input\_ec\_appautoscaling\_scalable\_dimesion) | The scalable dimension of the scalable target. | `string` | `"elasticache:replication-group:NodeGroups"` | no |
+| <a name="input_ec_appautoscaling_scale_in_cooldown"></a> [ec\_appautoscaling\_scale\_in\_cooldown](#input\_ec\_appautoscaling\_scale\_in\_cooldown) | The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. | `number` | `300` | no |
+| <a name="input_ec_appautoscaling_scale_out_cooldown"></a> [ec\_appautoscaling\_scale\_out\_cooldown](#input\_ec\_appautoscaling\_scale\_out\_cooldown) | The amount of time, in seconds, after a scale out activity completes before another scale out activity can start. | `number` | `300` | no |
+| <a name="input_ec_appautoscaling_service_namespace"></a> [ec\_appautoscaling\_service\_namespace](#input\_ec\_appautoscaling\_service\_namespace) | The AWS service namespace of the scalable target. | `string` | `"elasticache"` | no |
+| <a name="input_ec_appautoscaling_target_max_capacity"></a> [ec\_appautoscaling\_target\_max\_capacity](#input\_ec\_appautoscaling\_target\_max\_capacity) | The max capacity of the scalable target. | `number` | `100` | no |
+| <a name="input_ec_appautoscaling_target_min_capacity"></a> [ec\_appautoscaling\_target\_min\_capacity](#input\_ec\_appautoscaling\_target\_min\_capacity) | The min capacity of the scalable target. | `number` | `3` | no |
+| <a name="input_ec_appautoscasling_target_value"></a> [ec\_appautoscasling\_target\_value](#input\_ec\_appautoscasling\_target\_value) | The target value for the metric. | `number` | `80` | no |
 | <a name="input_ec_apply_immediately"></a> [ec\_apply\_immediately](#input\_ec\_apply\_immediately) | Elastic cache apply changes immediately | `bool` | `true` | no |
 | <a name="input_ec_at_rest_encryption_enabled"></a> [ec\_at\_rest\_encryption\_enabled](#input\_ec\_at\_rest\_encryption\_enabled) | Elastic cache enable encryption at rest | `bool` | `true` | no |
 | <a name="input_ec_automatic_failover_enabled"></a> [ec\_automatic\_failover\_enabled](#input\_ec\_automatic\_failover\_enabled) | Elastic cache automatic failover (Not available for T1/T2 instances) | `bool` | `false` | no |
