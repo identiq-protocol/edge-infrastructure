@@ -59,6 +59,33 @@ resource "kubernetes_secret" "edge_redis_secret" {
     module.redis[0]
   ]
 }
+
+resource "aws_appautoscaling_target" "autoscaling_target" {
+  count              = var.ec_cluster_mode_enabled && var.external_redis ? 1 : 0
+  max_capacity       = var.ec_appautoscaling_target_max_capacity
+  min_capacity       = var.ec_appautoscaling_target_min_capacity
+  resource_id        = "replication-group/${var.external_redis_name}"
+  scalable_dimension = var.ec_appautoscaling_scalable_dimesion
+  service_namespace  = var.ec_appautoscaling_service_namespace
+}
+
+resource "aws_appautoscaling_policy" "autoscaling_policy" {
+  count              = var.ec_cluster_mode_enabled && var.external_redis ? 1 : 0
+  policy_type        = var.ec_appautoscaling_policy_type
+  name               = var.external_redis_name
+  resource_id        = aws_appautoscaling_target.autoscaling_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.autoscaling_target[0].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.autoscaling_target[0].service_namespace
+  target_tracking_scaling_policy_configuration {
+    target_value       = var.ec_appautoscasling_target_value
+    scale_in_cooldown  = var.ec_appautoscaling_scale_in_cooldown
+    scale_out_cooldown = var.ec_appautoscaling_scale_out_cooldown
+    predefined_metric_specification {
+      predefined_metric_type = var.ec_appautoscaling_predefined_metric_type
+    }
+  }
+}
+
 resource "kubernetes_service" "edge_redis_service" {
   count = var.external_redis ? 1 : 0
   metadata {
