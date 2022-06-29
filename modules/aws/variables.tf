@@ -710,7 +710,8 @@ variable "ec_appautoscaling_target_max_capacity" {
   description = "The max capacity of the scalable target."
   default     = 100
 }
-variable "ec_appautoscaling_scalabel_dimesion" {
+
+variable "ec_appautoscaling_scalable_dimesion" {
   type        = string
   description = "The scalable dimension of the scalable target."
   default     = "elasticache:replication-group:NodeGroups"
