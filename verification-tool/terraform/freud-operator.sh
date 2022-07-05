@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ ! -f ~/config ];
+CONFIG_PATH=~/freud-config.txt
+if [ ! -f $CONFIG_PATH ];
 then
-	echo -e $(date)' > config file not found' 
-	exit 1
+        echo -e $(date)' > config file not found at: '$CONFIG_PATH
+        exit 1
 fi
-
-source ~/config
+source $CONFIG_PATH
 
 main() {
 
