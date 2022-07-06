@@ -19,8 +19,8 @@ function install_docker() {
     curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
     ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    runuser -l ec2-user -c  'curl -s https://static.identiq.com/get-freud.sh | sh'
 }
-
 # Use the ephemeral storage for docker so we don't run out of space
 function setup_docker_ephemeral() {
   ephemeral_count=$(nvme list | grep -c "Amazon EC2 NVMe Instance Storage")
@@ -62,6 +62,7 @@ function setup_ephemeral_raid() {
 
 # Add your custom initialization code below
 install_docker
+install_freud
 setup_ephemeral_raid
 setup_docker_ephemeral
 
