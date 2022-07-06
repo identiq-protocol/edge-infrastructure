@@ -178,7 +178,7 @@ list_freud_containers() {
 }
 
 add_to_cron() {
-	echo "*/5 * * * * ~/freud-operator.sh auto > /tmp/freud-operator.log 2>&1" | crontab -
+	echo "*/5 * * * * ~/.freud-operator.sh auto > /tmp/freud-operator.log 2>&1" | crontab -
 }
 
 remove_from_cron() {
