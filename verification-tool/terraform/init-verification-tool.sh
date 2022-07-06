@@ -62,7 +62,6 @@ function setup_ephemeral_raid() {
 
 # Add your custom initialization code below
 install_docker
-install_freud
 setup_ephemeral_raid
 setup_docker_ephemeral
 
