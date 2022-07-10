@@ -134,8 +134,6 @@ login_to_artifactory() {
 pull_latest_image_from_artifcatory() {
 	echo -e $(date)' > pulling latest image from repository'
 	local pullText=$(docker pull $FREUD_ARTIFACT 2>&1)
-	## TODO DELETE THIS LOG
-	##echo $pullText
 	if [[ $pullText != *"Status: Image is up to date"* ]];
 	then
 		echo -e $(date)' > there is a new freud image'
