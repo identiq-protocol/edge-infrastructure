@@ -12,7 +12,7 @@ provider "azurerm" {
 #}
 
 module "edge-azure" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.57"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/azure/?ref=0.0.58"
 
   # Azure ad
   ad_application_dispaly_name = var.ad_application_dispaly_name
