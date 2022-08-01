@@ -58,8 +58,8 @@ help() {
 		freud kill		-> kills current freud execution
 		freud auto 		-> runs freud in auto mode - NOTICE this will only run if ALL the following conditions are met
 						   - auto mode is enabled
-						   - there is a new freud version 
 						   - no other freud execution is currently running
+						   - there is a new freud version 
 		freud enable 		-> enable auto mode
 		freud disable 		-> disable auto mode
 		freud cron 		-> add auto mode to cron (auto scheduled)
