@@ -65,7 +65,7 @@ resource "aws_appautoscaling_target" "autoscaling_target" {
   max_capacity       = var.ec_appautoscaling_target_max_capacity
   min_capacity       = var.ec_appautoscaling_target_min_capacity
   resource_id        = "replication-group/${var.external_redis_name}"
-  scalable_dimension = var.ec_appautoscaling_scalable_dimesion
+  scalable_dimension = var.ec_appautoscaling_scalable_dimension
   service_namespace  = var.ec_appautoscaling_service_namespace
 }
 
@@ -77,7 +77,7 @@ resource "aws_appautoscaling_policy" "autoscaling_policy" {
   scalable_dimension = aws_appautoscaling_target.autoscaling_target[0].scalable_dimension
   service_namespace  = aws_appautoscaling_target.autoscaling_target[0].service_namespace
   target_tracking_scaling_policy_configuration {
-    target_value       = var.ec_appautoscasling_target_value
+    target_value       = var.ec_appautoscaling_target_value
     scale_in_cooldown  = var.ec_appautoscaling_scale_in_cooldown
     scale_out_cooldown = var.ec_appautoscaling_scale_out_cooldown
     predefined_metric_specification {

@@ -111,26 +111,35 @@ module "edge-aws" {
   rds_allow_major_version_upgrade              = var.rds_allow_major_version_upgrade
 
   # Elastic cache
-  external_redis                          = var.external_redis
-  external_redis_name                     = var.external_redis_name
-  ec_vpc_id                               = var.ec_vpc_id
-  ec_private_subnets                      = var.ec_private_subnets
-  ec_instance_type                        = var.ec_instance_type
-  ec_cluster_mode_enabled                 = var.ec_cluster_mode_enabled
-  ec_cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
-  ec_cluster_mode_creation_fix_enabled    = var.ec_cluster_mode_creation_fix_enabled
-  ec_cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group
-  ec_cluster_size                         = var.ec_cluster_size
-  ec_apply_immediately                    = var.ec_apply_immediately
-  ec_automatic_failover_enabled           = var.ec_automatic_failover_enabled
-  ec_engine_version                       = var.ec_engine_version
-  ec_family                               = var.ec_family
-  ec_at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
-  ec_transit_encryption_enabled           = var.ec_transit_encryption_enabled
-  ec_parameter                            = var.ec_parameter
-  ec_snapshot_name                        = var.ec_snapshot_name
-  ec_snapshot_retention_limit             = var.ec_snapshot_retention_limit
-  ec_snapshot_window                      = var.ec_snapshot_window
+  external_redis                           = var.external_redis
+  external_redis_name                      = var.external_redis_name
+  ec_vpc_id                                = var.ec_vpc_id
+  ec_private_subnets                       = var.ec_private_subnets
+  ec_instance_type                         = var.ec_instance_type
+  ec_cluster_mode_enabled                  = var.ec_cluster_mode_enabled
+  ec_cluster_mode_num_node_groups          = var.ec_cluster_mode_num_node_groups
+  ec_cluster_mode_creation_fix_enabled     = var.ec_cluster_mode_creation_fix_enabled
+  ec_cluster_mode_replicas_per_node_group  = var.ec_cluster_mode_replicas_per_node_group
+  ec_cluster_size                          = var.ec_cluster_size
+  ec_apply_immediately                     = var.ec_apply_immediately
+  ec_automatic_failover_enabled            = var.ec_automatic_failover_enabled
+  ec_engine_version                        = var.ec_engine_version
+  ec_family                                = var.ec_family
+  ec_at_rest_encryption_enabled            = var.ec_at_rest_encryption_enabled
+  ec_transit_encryption_enabled            = var.ec_transit_encryption_enabled
+  ec_parameter                             = var.ec_parameter
+  ec_snapshot_name                         = var.ec_snapshot_name
+  ec_snapshot_retention_limit              = var.ec_snapshot_retention_limit
+  ec_snapshot_window                       = var.ec_snapshot_window
+  ec_appautoscaling_predefined_metric_type = var.ec_appautoscaling_predefined_metric_type
+  ec_appautoscaling_target_value           = var.ec_appautoscaling_target_value
+  ec_appautoscaling_policy_type            = var.ec_appautoscaling_policy_type
+  ec_appautoscaling_target_min_capacity    = var.ec_appautoscaling_target_min_capacity
+  ec_appautoscaling_target_max_capacity    = var.ec_appautoscaling_target_max_capacity
+  ec_appautoscaling_scalable_dimension     = var.ec_appautoscaling_scalable_dimension
+  ec_appautoscaling_service_namespace      = var.ec_appautoscaling_service_namespace
+  ec_appautoscaling_scale_in_cooldown      = var.ec_appautoscaling_scale_in_cooldown
+  ec_appautoscaling_scale_out_cooldown     = var.ec_appautoscaling_scale_out_cooldown
 
   # General
   default_tags = var.default_tags
