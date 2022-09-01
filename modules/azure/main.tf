@@ -174,12 +174,12 @@ resource "azurerm_kubernetes_cluster_node_pool" "base" {
 provider "kubernetes" {
   config_path    = "~/.kube/config"
   config_context = "twentyeight-admin"
-  #  host                   = module.aks.host
-  #  username               = module.aks.username
-  #  password               = module.aks.password
-  #  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
-  #  client_certificate     = base64decode(module.aks.client_certificate)
-  #  client_key             = base64decode(module.aks.client_key)
+  host           = module.aks.host
+  #    username               = module.aks.username
+  #    password               = module.aks.password
+  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+  client_certificate     = base64decode(module.aks.client_certificate)
+  client_key             = base64decode(module.aks.client_key)
 }
 resource "kubernetes_annotations" "default" {
   api_version = "storage.k8s.io/v1"
