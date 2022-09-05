@@ -24,8 +24,7 @@ resource "azurerm_public_ip_prefix" "nat_ip" {
   resource_group_name = azurerm_resource_group.rg.name
   prefix_length       = var.public_ip_prefix_prefix_length
   zones               = ["1"]
-  #  availability_zone   = 1
-  tags = merge(var.tags, var.default_tags)
+  tags                = merge(var.tags, var.default_tags)
 }
 
 resource "azurerm_nat_gateway" "nat_gw" {
@@ -49,7 +48,7 @@ resource "azurerm_subnet_nat_gateway_association" "nat_gw_a" {
 }
 
 module "aks" {
-  source                            = "azure/aks/azurerm"
+  source                            = "Azure/aks/azurerm"
   resource_group_name               = azurerm_resource_group.rg.name
   kubernetes_version                = var.aks_kubernetes_version
   orchestrator_version              = var.aks_kubernetes_version
@@ -63,11 +62,10 @@ module "aks" {
   role_based_access_control_enabled = var.aks_enable_role_based_access_control
   rbac_aad_managed                  = var.aks_rbac_aad_managed
   private_cluster_enabled           = var.aks_private_cluster_enabled
-  #  enable_log_analytics_workspace   = var.aks_enable_log_analytics_workspace
-  network_policy                 = var.aks_network_policy
-  net_profile_dns_service_ip     = var.aks_net_profile_dns_service_ip
-  net_profile_docker_bridge_cidr = var.aks_net_profile_docker_bridge_cidr
-  net_profile_service_cidr       = var.aks_net_profile_service_cidr
+  network_policy                    = var.aks_network_policy
+  net_profile_dns_service_ip        = var.aks_net_profile_dns_service_ip
+  net_profile_docker_bridge_cidr    = var.aks_net_profile_docker_bridge_cidr
+  net_profile_service_cidr          = var.aks_net_profile_service_cidr
   # "default" node pool
   agents_pool_name          = "default"
   os_disk_size_gb           = var.aks_default_agents_os_disk_size_gb
@@ -172,10 +170,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "base" {
 }
 
 provider "kubernetes" {
-  host                   = module.aks.host
-  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
-  client_certificate     = base64decode(module.aks.client_certificate)
-  client_key             = base64decode(module.aks.client_key)
+  host                   = module.aks.admin_host
+  cluster_ca_certificate = base64decode(module.aks.admin_cluster_ca_certificate)
+  client_certificate     = base64decode(module.aks.admin_client_certificate)
+  client_key             = base64decode(module.aks.admin_client_key)
 }
 resource "kubernetes_annotations" "default" {
   api_version = "storage.k8s.io/v1"
