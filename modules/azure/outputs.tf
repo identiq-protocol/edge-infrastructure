@@ -7,12 +7,12 @@ data "template_file" "kubeconfig" {
 
   vars = {
     cluster_name    = var.aks_cluster_name
-    endpoint        = module.aks.host
-    cluster_ca      = module.aks.cluster_ca_certificate
-    client_cert     = module.aks.client_certificate
-    client_cert_key = module.aks.client_key
-    user_name       = module.aks.username
-    user_password   = module.aks.password
+    endpoint        = module.aks.admin_host
+    cluster_ca      = module.aks.admin_cluster_ca_certificate
+    client_cert     = module.aks.admin_client_certificate
+    client_cert_key = module.aks.admin_client_key
+    user_name       = module.aks.admin_username
+    user_password   = module.aks.admin_password
   }
 }
 
