@@ -1,6 +1,6 @@
 module "redis" {
   count                     = var.external_redis ? 1 : 0
-  source                    = "registry.terraform.io/claranet/redis/azurerm"
+  source                    = "claranet/redis/azurerm"
   client_name               = var.aks_cluster_name
   environment               = var.redis_environment
   location                  = var.region

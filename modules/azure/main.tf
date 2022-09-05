@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "network" {
-  source              = "registry.terraform.io/Azure/network/azurerm"
+  source              = "Azure/network/azurerm"
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = var.address_space
   subnet_prefixes     = local.subnet_prefixes
@@ -49,7 +49,7 @@ resource "azurerm_subnet_nat_gateway_association" "nat_gw_a" {
 }
 
 module "aks" {
-  source                            = "registry.terraform.io/azure/aks/azurerm"
+  source                            = "azure/aks/azurerm"
   resource_group_name               = azurerm_resource_group.rg.name
   kubernetes_version                = var.aks_kubernetes_version
   orchestrator_version              = var.aks_kubernetes_version
