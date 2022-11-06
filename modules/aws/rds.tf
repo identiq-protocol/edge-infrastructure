@@ -60,6 +60,7 @@ module "rds" {
   enabled_cloudwatch_logs_exports       = [var.rds_engine == "mariadb" ? "general" : "postgresql"]
   backup_retention_period               = var.rds_backup_retention_period
   skip_final_snapshot                   = var.rds_skip_final_snapshot
+  snapshot_identifier                   = var.rds_snapshot_identifier
   deletion_protection                   = var.rds_deletion_protection
   performance_insights_enabled          = var.rds_performance_insights_enabled
   performance_insights_retention_period = var.rds_performance_insights_retention_period
