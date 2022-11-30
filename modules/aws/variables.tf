@@ -344,6 +344,12 @@ variable "ec_cluster_mode_replicas_per_node_group" {
   default     = 0
 }
 
+variable "single_az_override" {
+  description = "Use a specific availability zone. Empty = all subnets, 0 = a, 1 = b, 2 = c"
+  type        = string
+  default     = ""
+}
+
 variable "ec_cluster_size" {
   description = "Elastic cache number of nodes in cluster. *Ignored when `cluster_mode_enabled` == `true`*"
   type        = number

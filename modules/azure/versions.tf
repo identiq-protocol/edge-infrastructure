@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=2.74.0"
+      version = "=3.3"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -10,7 +10,7 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "=2.11.0"
+      version = "=2.13.0"
     }
     local = {
       source  = "hashicorp/local"
@@ -26,6 +26,7 @@ terraform {
     }
   }
 }
+
 
 resource "kubernetes_config_map" "version" {
   metadata {

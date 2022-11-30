@@ -26,7 +26,7 @@ module "redis" {
       description              = "Allow all inbound traffic from trusted Security Groups"
     },
   ]
-  subnets                              = local.ec_private_subnets
+  subnets                              = local.ec_subnets
   cluster_mode_enabled                 = var.ec_cluster_mode_enabled
   cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
   cluster_mode_replicas_per_node_group = var.ec_cluster_mode_replicas_per_node_group
@@ -109,4 +109,5 @@ resource "kubernetes_service" "edge_redis_service" {
 locals {
   ec_private_subnets = var.external_vpc ? var.ec_private_subnets : module.vpc[0].private_subnets
   ec_vpc_id          = var.external_vpc ? var.ec_vpc_id : module.vpc[0].vpc_id
+  ec_subnets         = var.single_az_override == "" ? local.ec_private_subnets : [local.ec_private_subnets[var.single_az_override]]
 }
