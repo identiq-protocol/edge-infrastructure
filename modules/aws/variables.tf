@@ -122,7 +122,6 @@ variable "eks_map_users" {
   }))
   default     = []
 }
-}
 
 variable "eks_additional_policies" {
   description = "EKS additional policies to be added to workers"
