@@ -105,16 +105,27 @@ variable "eks_cluster_version" {
 
 variable "eks_map_roles" {
   description = "EKS additional IAM roles to add to the aws-auth configmap"
-  default     = []
+  type = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+  default = []
 }
 
 variable "eks_map_users" {
   description = "EKS additional IAM users to add to the aws-auth configmap"
+  type = list(object({
+    userarn  = string
+    username = string
+    groups   = list(string)
+  }))
   default     = []
 }
 
 variable "eks_additional_policies" {
   description = "EKS additional policies to be added to workers"
+  type        = list(string)
   default     = []
 }
 
