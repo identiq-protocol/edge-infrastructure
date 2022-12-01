@@ -89,7 +89,7 @@ The infstructarue consists of the following components:
 | <a name="input_ec_snapshot_window"></a> [ec\_snapshot\_window](#input\_ec\_snapshot\_window) | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. | `string` | `"06:30-07:30"` | no |
 | <a name="input_ec_transit_encryption_enabled"></a> [ec\_transit\_encryption\_enabled](#input\_ec\_transit\_encryption\_enabled) | Whether to enable Elastic cache encryption in transit. If this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis | `bool` | `false` | no |
 | <a name="input_ec_vpc_id"></a> [ec\_vpc\_id](#input\_ec\_vpc\_id) | VPC ID in case we external VPC is provided | `string` | `""` | no |
-| <a name="input_eks_additional_policies"></a> [eks\_additional\_policies](#input\_eks\_additional\_policies) | EKS additional policies to be added to workers | `list` | `[]` | no |
+| <a name="input_eks_additional_policies"></a> [eks\_additional\_policies](#input\_eks\_additional\_policies) | EKS additional policies to be added to workers | `list(string)` | `[]` | no |
 | <a name="input_eks_base_asg_min_size"></a> [eks\_base\_asg\_min\_size](#input\_eks\_base\_asg\_min\_size) | EKS base worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
 | <a name="input_eks_base_instance_count"></a> [eks\_base\_instance\_count](#input\_eks\_base\_instance\_count) | EKS base worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_base_instance_type"></a> [eks\_base\_instance\_type](#input\_eks\_base\_instance\_type) | EKS base worker group instance type | `string` | `"c5.2xlarge"` | no |
@@ -123,8 +123,8 @@ The infstructarue consists of the following components:
 | <a name="input_eks_dynamic_root_encrypted"></a> [eks\_dynamic\_root\_encrypted](#input\_eks\_dynamic\_root\_encrypted) | Whether EKS dynamic worker group instance root volume should be encrypted or not | `bool` | `true` | no |
 | <a name="input_eks_dynamic_root_volume_size"></a> [eks\_dynamic\_root\_volume\_size](#input\_eks\_dynamic\_root\_volume\_size) | The size of the volume in gigabytes | `number` | `100` | no |
 | <a name="input_eks_dynamic_root_volume_type"></a> [eks\_dynamic\_root\_volume\_type](#input\_eks\_dynamic\_root\_volume\_type) | The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1 | `string` | `"gp3"` | no |
-| <a name="input_eks_map_roles"></a> [eks\_map\_roles](#input\_eks\_map\_roles) | EKS additional IAM roles to add to the aws-auth configmap | `list` | `[]` | no |
-| <a name="input_eks_map_users"></a> [eks\_map\_users](#input\_eks\_map\_users) | EKS additional IAM users to add to the aws-auth configmap | `list` | `[]` | no |
+| <a name="input_eks_map_roles"></a> [eks\_map\_roles](#input\_eks\_map\_roles) | EKS additional IAM roles to add to the aws-auth configmap | <pre>list(object({<br>    rolearn  = string<br>    username = string<br>    groups   = list(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_eks_map_users"></a> [eks\_map\_users](#input\_eks\_map\_users) | EKS additional IAM users to add to the aws-auth configmap | <pre>list(object({<br>    userarn  = string<br>    username = string<br>    groups   = list(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_eks_private_subnets"></a> [eks\_private\_subnets](#input\_eks\_private\_subnets) | Specifies private subnet IDs in case of external VPC | `list(string)` | `[]` | no |
 | <a name="input_eks_public_subnets"></a> [eks\_public\_subnets](#input\_eks\_public\_subnets) | Specifies public subnet IDs in case of external VPC | `list(string)` | `[]` | no |
 | <a name="input_eks_vpc_id"></a> [eks\_vpc\_id](#input\_eks\_vpc\_id) | Specifies VPC ID in case of external VPC | `string` | `""` | no |
