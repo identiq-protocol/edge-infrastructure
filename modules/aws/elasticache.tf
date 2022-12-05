@@ -1,7 +1,7 @@
 module "redis" {
   count              = var.external_redis ? 1 : 0
   source             = "cloudposse/elasticache-redis/aws"
-  version            = "0.40.3"
+  version            = "0.48.0"
   availability_zones = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
   name               = var.external_redis_name
   zone_id            = ""
@@ -107,6 +107,6 @@ resource "kubernetes_service" "edge_redis_service" {
 }
 
 locals {
-  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : module.vpc[0].private_subnets
+  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : var.ec_subnet_single_az ? module.vpc[0].private_subnets[0] :  module.vpc[0].private_subnets
   ec_vpc_id          = var.external_vpc ? var.ec_vpc_id : module.vpc[0].vpc_id
 }
