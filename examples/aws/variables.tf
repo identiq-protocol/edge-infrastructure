@@ -427,6 +427,11 @@ variable "ec_transit_encryption_enabled" {
   type        = bool
   default     = false
 }
+variable "ec_subnet_single_az" {
+  description = "Whether to Elastic cache subnet group with single subnet"
+  type        = bool
+  default     = false
+}
 
 variable "external_db" {
   description = "Database will be installed outside of EKS cluster (RDS)"
