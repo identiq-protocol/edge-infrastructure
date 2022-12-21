@@ -92,12 +92,14 @@ The infstructarue consists of the following components:
 | <a name="input_ec_vpc_id"></a> [ec\_vpc\_id](#input\_ec\_vpc\_id) | VPC ID in case we external VPC is provided | `string` | `""` | no |
 | <a name="input_eks_additional_policies"></a> [eks\_additional\_policies](#input\_eks\_additional\_policies) | EKS additional policies to be added to workers | `list(string)` | `[]` | no |
 | <a name="input_eks_base_asg_min_size"></a> [eks\_base\_asg\_min\_size](#input\_eks\_base\_asg\_min\_size) | EKS base worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
+| <a name="input_eks_base_enable_monitoring"></a> [eks\_base\_enable\_monitoring](#input\_eks\_base\_enable\_monitoring) | Enable detailed cloudwatch monitoring on instances | `bool` | `false` | no |
 | <a name="input_eks_base_instance_count"></a> [eks\_base\_instance\_count](#input\_eks\_base\_instance\_count) | EKS base worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_base_instance_type"></a> [eks\_base\_instance\_type](#input\_eks\_base\_instance\_type) | EKS base worker group instance type | `string` | `"c5.2xlarge"` | no |
 | <a name="input_eks_base_root_encrypted"></a> [eks\_base\_root\_encrypted](#input\_eks\_base\_root\_encrypted) | Whether EKS base worker group instance root volume should be encrypted or not | `bool` | `true` | no |
 | <a name="input_eks_base_root_volume_size"></a> [eks\_base\_root\_volume\_size](#input\_eks\_base\_root\_volume\_size) | The size of the volume in gigabytes | `number` | `100` | no |
 | <a name="input_eks_base_root_volume_type"></a> [eks\_base\_root\_volume\_type](#input\_eks\_base\_root\_volume\_type) | The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1 | `string` | `"gp3"` | no |
 | <a name="input_eks_cache_asg_min_size"></a> [eks\_cache\_asg\_min\_size](#input\_eks\_cache\_asg\_min\_size) | EKS cache worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
+| <a name="input_eks_cache_enable_monitoring"></a> [eks\_cache\_enable\_monitoring](#input\_eks\_cache\_enable\_monitoring) | Enable detailed cloudwatch monitoring on instances | `bool` | `false` | no |
 | <a name="input_eks_cache_instance_count"></a> [eks\_cache\_instance\_count](#input\_eks\_cache\_instance\_count) | EKS cache worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_cache_instance_type"></a> [eks\_cache\_instance\_type](#input\_eks\_cache\_instance\_type) | EKS cache worker group instance type | `string` | `"r5.2xlarge"` | no |
 | <a name="input_eks_cache_root_encrypted"></a> [eks\_cache\_root\_encrypted](#input\_eks\_cache\_root\_encrypted) | Whether EKS cache worker group instance root volume should be encrypted or not | `bool` | `true` | no |
@@ -111,6 +113,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_cluster_name"></a> [eks\_cluster\_name](#input\_eks\_cluster\_name) | Name of EKS cluster | `any` | n/a | yes |
 | <a name="input_eks_cluster_version"></a> [eks\_cluster\_version](#input\_eks\_cluster\_version) | Kubernetes version to use for the EKS cluster | `string` | `"1.22"` | no |
 | <a name="input_eks_db_asg_min_size"></a> [eks\_db\_asg\_min\_size](#input\_eks\_db\_asg\_min\_size) | EKS database worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
+| <a name="input_eks_db_enable_monitoring"></a> [eks\_db\_enable\_monitoring](#input\_eks\_db\_enable\_monitoring) | Enable detailed cloudwatch monitoring on instances | `bool` | `false` | no |
 | <a name="input_eks_db_instance_count"></a> [eks\_db\_instance\_count](#input\_eks\_db\_instance\_count) | EKS database worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `1` | no |
 | <a name="input_eks_db_instance_type"></a> [eks\_db\_instance\_type](#input\_eks\_db\_instance\_type) | EKS database worker group instance type | `string` | `"m5.large"` | no |
 | <a name="input_eks_db_root_encrypted"></a> [eks\_db\_root\_encrypted](#input\_eks\_db\_root\_encrypted) | Whether EKS db worker group instance root volume should be encrypted or not | `bool` | `true` | no |
@@ -118,6 +121,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_db_root_volume_type"></a> [eks\_db\_root\_volume\_type](#input\_eks\_db\_root\_volume\_type) | The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1 | `string` | `"gp3"` | no |
 | <a name="input_eks_dynamic_asg_autoscaling"></a> [eks\_dynamic\_asg\_autoscaling](#input\_eks\_dynamic\_asg\_autoscaling) | EKS dynamic worker group enable autoscaling | `bool` | `true` | no |
 | <a name="input_eks_dynamic_asg_min_size"></a> [eks\_dynamic\_asg\_min\_size](#input\_eks\_dynamic\_asg\_min\_size) | EKS dynamic worker group minimimum number of instances (asg\_min\_size) | `number` | `0` | no |
+| <a name="input_eks_dynamic_enable_monitoring"></a> [eks\_dynamic\_enable\_monitoring](#input\_eks\_dynamic\_enable\_monitoring) | Enable detailed cloudwatch monitoring on instances | `bool` | `false` | no |
 | <a name="input_eks_dynamic_instance_count"></a> [eks\_dynamic\_instance\_count](#input\_eks\_dynamic\_instance\_count) | EKS dynamic worker group instance count which sets on\_demand\_base\_capacity, asg\_min\_size, asg\_desired\_capacity | `number` | `4` | no |
 | <a name="input_eks_dynamic_instance_type"></a> [eks\_dynamic\_instance\_type](#input\_eks\_dynamic\_instance\_type) | EKS dynamic worker group instance type | `string` | `"c5.2xlarge"` | no |
 | <a name="input_eks_dynamic_max_instance_count"></a> [eks\_dynamic\_max\_instance\_count](#input\_eks\_dynamic\_max\_instance\_count) | EKS dynamic worker group maximum number of instances (asg\_max\_size) | `number` | `20` | no |
