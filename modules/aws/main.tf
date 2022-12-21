@@ -24,6 +24,7 @@ module "eks" {
       root_encrypted          = var.eks_db_root_encrypted
       root_volume_size        = var.eks_db_root_volume_size
       root_volume_type        = var.eks_db_root_volume_type
+      enable_monitoring       = var.eks_db_enable_monitoring
     },
     {
       name                    = "cache"
@@ -39,6 +40,7 @@ module "eks" {
       root_encrypted          = var.eks_cache_root_encrypted
       root_volume_size        = var.eks_cache_root_volume_size
       root_volume_type        = var.eks_cache_root_volume_type
+      enable_monitoring       = var.eks_cache_enable_monitoring
     },
     {
       name = "dynamic"
@@ -76,6 +78,7 @@ module "eks" {
       root_encrypted          = var.eks_dynamic_root_encrypted
       root_volume_size        = var.eks_dynamic_root_volume_size
       root_volume_type        = var.eks_dynamic_root_volume_type
+      enable_monitoring       = var.eks_dynamic_enable_monitoring
     },
     {
       name                    = "base"
@@ -90,6 +93,7 @@ module "eks" {
       root_encrypted          = var.eks_base_root_encrypted
       root_volume_size        = var.eks_base_root_volume_size
       root_volume_type        = var.eks_base_root_volume_type
+      enable_monitoring       = var.eks_base_enable_monitoring
     }
   ]
   worker_ami_name_filter                         = var.eks_worker_ami_name_filter
