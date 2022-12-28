@@ -120,7 +120,7 @@ variable "eks_map_users" {
     username = string
     groups   = list(string)
   }))
-  default     = []
+  default = []
 }
 
 variable "eks_additional_policies" {
@@ -170,6 +170,11 @@ variable "eks_db_root_volume_type" {
   type        = string
   default     = "gp3"
 }
+variable "eks_db_enable_monitoring" {
+  description = "Enable detailed cloudwatch monitoring on instances "
+  type        = bool
+  default     = false
+}
 
 variable "eks_cache_instance_type" {
   description = "EKS cache worker group instance type"
@@ -205,6 +210,11 @@ variable "eks_cache_root_volume_type" {
   description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
   type        = string
   default     = "gp3"
+}
+variable "eks_cache_enable_monitoring" {
+  description = "Enable detailed cloudwatch monitoring on instances "
+  type        = bool
+  default     = false
 }
 
 variable "eks_dynamic_instance_type" {
@@ -253,6 +263,12 @@ variable "eks_dynamic_root_volume_type" {
   default     = "gp3"
 }
 
+variable "eks_dynamic_enable_monitoring" {
+  description = "Enable detailed cloudwatch monitoring on instances "
+  type        = bool
+  default     = false
+}
+
 variable "eks_base_instance_type" {
   description = "EKS base worker group instance type"
   type        = string
@@ -287,6 +303,12 @@ variable "eks_base_root_volume_type" {
   description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
   type        = string
   default     = "gp3"
+}
+
+variable "eks_base_enable_monitoring" {
+  description = "Enable detailed cloudwatch monitoring on instances "
+  type        = bool
+  default     = false
 }
 
 variable "eks_cluster_enabled_log_types" {
