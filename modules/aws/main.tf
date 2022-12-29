@@ -19,7 +19,7 @@ module "eks" {
       asg_max_size            = var.external_db ? 0 : var.eks_db_instance_count
       asg_desired_capacity    = var.external_db ? 0 : var.eks_db_instance_count
       subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db"
+      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db --register-with-taints=db:NoSchedule"
       public_ip               = false
       root_encrypted          = var.eks_db_root_encrypted
       root_volume_size        = var.eks_db_root_volume_size
@@ -35,7 +35,7 @@ module "eks" {
       asg_max_size            = var.external_redis ? 0 : var.eks_cache_instance_count
       asg_desired_capacity    = var.external_redis ? 0 : var.eks_cache_instance_count
       subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache"
+      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache --register-with-taints=cache:NoSchedule"
       public_ip               = false
       root_encrypted          = var.eks_cache_root_encrypted
       root_volume_size        = var.eks_cache_root_volume_size
