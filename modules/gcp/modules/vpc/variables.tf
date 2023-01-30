@@ -8,6 +8,10 @@ variable "vpc_name" {
   description = "The name of the vpc"
   default = "identiq-vpc"
 }
+variable "vpc_nat_router_name" {
+  description = "The name of the vpc nat router name"
+  default = "nat-router"
+}
 variable "subnetwork_cidr_range" {
   description = "The ip range for the subnetwork"
   default = "10.2.0.0/16"

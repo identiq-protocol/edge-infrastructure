@@ -11,3 +11,7 @@ output "network_name" {
 output "nat_ip" {
   value = module.vpc.nat_ip
 }
+
+output "cloud_sql_service_accounts" {
+  value = values(module.cloud-sql-workload-identity).*.gcp_service_account_email
+}

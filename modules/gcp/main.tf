@@ -4,17 +4,19 @@ data "google_compute_zones" "available" {
   region   = var.region
 }
 
+### VPC ###
 module "vpc" {
   source                   = "./modules/vpc"
   region                   = var.region
   project_id               = var.project_id
   vpc_name                 = var.vpc_name
+  vpc_nat_router_name      = var.vpc_nat_router_name
   enable_ssh_firewall_rule = var.vpc_enable_ssh_firewall_rule
 }
-
+### GKE ###
 module "gke" {
   source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                           = "17.3.0"
+  version                           = "24.1.0"
   project_id                        = var.project_id
   name                              = var.cluster_name
   region                            = var.region
@@ -32,6 +34,7 @@ module "gke" {
   firewall_inbound_ports            = ["1-65535"]
   kubernetes_version                = var.gke_version
   cluster_resource_labels           = merge(var.default_tags, var.tags)
+  node_metadata                     = "GKE_METADATA"
 
   node_pools = [
     {
@@ -74,8 +77,7 @@ module "gke" {
 
   node_pools_metadata = {
     all = {
-      shutdown-script = file("${path.module}/data/shutdown-script.sh")
-    }
+    shutdown-script = "kubectl --kubeconfig=/var/lib/kubelet/kubeconfig drain --force=true --ignore-daemonsets=true --delete-local-data \"$HOSTNAME\"" }
   }
 
   node_pools_labels = {
@@ -94,128 +96,27 @@ module "gke" {
   }
 }
 
+### peering between edge's VPC network and a VPC managed by Google for MemoryStore and or CloudSQL with private ip ###
 module "private-service-access" {
   count       = var.external_db || var.external_redis ? 1 : 0
   source      = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version     = "8.0.0"
+  version     = "13.0.1"
   project_id  = var.project_id
   vpc_network = module.vpc.network_name
   depends_on  = [module.vpc]
 }
 
-module "postgresql-db" {
-  count                = var.external_db ? 1 : 0
-  source               = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
-  version              = "8.0.0"
-  name                 = var.cluster_name
-  database_flags       = var.external_db_database_flags
-  random_instance_name = true
-  user_name            = var.external_db_user_name
-  database_version     = var.external_db_postgres_version
-  project_id           = var.project_id
-  zone                 = data.google_compute_zones.available.names[0]
-  region               = var.region
-  tier                 = var.external_db_postgres_machine_type
-  disk_size            = var.external_db_postgres_disk_size
-  disk_autoresize      = var.external_db_postgres_disk_autoresize
-  user_labels          = merge(var.default_tags, var.tags)
-  deletion_protection  = var.external_db_deletion_protection
-  backup_configuration = var.external_db_postgres_backup_configuration
-  ip_configuration = {
-    ipv4_enabled        = true
-    private_network     = module.vpc.network_id
-    require_ssl         = false
-    authorized_networks = var.external_db_authorized_networks
-  }
-  depends_on = [module.private-service-access]
-}
+### Kubernetes provider ###
 data "google_client_config" "provider" {}
 provider "kubernetes" {
   host                   = "https://${module.gke.endpoint}"
   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
   token                  = data.google_client_config.provider.access_token
 }
-resource "kubernetes_secret" "edge_db_secret" {
-  count = var.external_db ? 1 : 0
-  metadata {
-    name = "edge-postgresql"
-  }
-  data = {
-    "postgresql-password"      = module.postgresql-db[0].generated_user_password
-    "postgresql-root-password" = module.postgresql-db[0].generated_user_password
-  }
 
-  depends_on = [
-    module.gke,
-    module.postgresql-db[0]
-  ]
-}
-
-resource "kubernetes_service" "edge_db_service" {
-  count = var.external_db ? 1 : 0
-  metadata {
-    name = "edge-postgresql"
-    annotations = {
-      "ad.datadoghq.com/service.check_names"  = "[\"postgres\"]"
-      "ad.datadoghq.com/service.init_configs" = "[{}]"
-      "ad.datadoghq.com/service.instances"    = "[{\"host\":\"edge-postgresql\",\"username\":\"edge\",\"password\":\"%%env_PGSQL_PASS%%\",\"ignore_databases\":[],\"collect_activity_metrics\":\"true\",\"collect_default_database\":\"true\",\"dbm\":\"true\",\"query_metrics\":{\"enabled\":\"true\"}}]"
-    }
-  }
-
-  spec {
-    type          = "ExternalName"
-    external_name = module.postgresql-db[0].private_ip_address
-  }
-
-  depends_on = [
-    module.gke,
-    module.postgresql-db[0]
-  ]
-}
-
-module "memorystore-redis" {
-  count                   = var.external_redis ? 1 : 0
-  source                  = "terraform-google-modules/memorystore/google"
-  version                 = "4.0.0"
-  name                    = var.cluster_name
-  project                 = var.project_id
-  memory_size_gb          = var.external_redis_memory_size_gb
-  region                  = var.region
-  labels                  = merge(var.default_tags, var.tags)
-  redis_version           = var.external_redis_version
-  location_id             = data.google_compute_zones.available.names[0]
-  redis_configs           = var.external_redis_configs
-  tier                    = var.external_redis_tier
-  transit_encryption_mode = "DISABLED"
-  authorized_network      = module.vpc.network_name
-}
-resource "kubernetes_secret" "edge_redis_secret" {
-  count = var.external_redis ? 1 : 0
-  metadata {
-    name = "edge-identities-redis"
-  }
-  data = {
-    redis-password = ""
-  }
-  depends_on = [
-    module.gke,
-    module.memorystore-redis[0]
-  ]
-}
-resource "kubernetes_service" "edge_redis_service" {
-  count = var.external_redis ? 1 : 0
-  metadata {
-    name = "edge-identities-redis-master"
-  }
-  spec {
-    type          = "ExternalName"
-    external_name = module.memorystore-redis[0].host
-  }
-  depends_on = [
-    module.gke,
-    module.memorystore-redis[0]
-  ]
-}
+### Storage Class patching ###
+# Unset standard SC as default SC
+# Add new SC named SSD and set it as default
 resource "kubernetes_storage_class" "ssd" {
   metadata {
     name = "ssd"

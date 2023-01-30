@@ -23,20 +23,20 @@ resource "google_compute_firewall" "default" {
 }
 
 resource "google_compute_address" "external_nat_address" {
-  name         = "nat-ip"
+  name         = "${var.vpc_name}-nat-ip"
   address_type = "EXTERNAL"
   region       =  var.region
 }
 resource "google_compute_router" "router" {
   project = var.project_id
-  name    = "nat-router"
+  name    = var.vpc_nat_router_name
   network = google_compute_network.vpc_network.name
   region  = var.region
 }
 
 module "cloud-nat" {
   source                             = "terraform-google-modules/cloud-nat/google"
-  version                            = "~> 2.1.0"
+  version                            = "2.2.2"
   project_id                         = var.project_id
   region                             = var.region
   router                             = google_compute_router.router.name
