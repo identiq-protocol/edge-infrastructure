@@ -785,3 +785,8 @@ variable "ec_appautoscaling_scale_out_cooldown" {
   description = "The amount of time, in seconds, after a scale out activity completes before another scale out activity can start."
   default     = 300
 }
+
+variable "ec_enable_app_autoscaling" {
+  default = true
+  description = "Enable app autoscaling for elasticache"
+}
