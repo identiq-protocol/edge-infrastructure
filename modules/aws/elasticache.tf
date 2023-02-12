@@ -61,7 +61,7 @@ resource "kubernetes_secret" "edge_redis_secret" {
 }
 
 resource "aws_appautoscaling_target" "autoscaling_target" {
-  count              = var.ec_cluster_mode_enabled && var.external_redis ? 1 : 0
+  count              = var.ec_cluster_mode_enabled && var.external_redis && var.ec_enable_app_autoscaling ? 1 : 0
   max_capacity       = var.ec_appautoscaling_target_max_capacity
   min_capacity       = var.ec_appautoscaling_target_min_capacity
   resource_id        = "replication-group/${var.external_redis_name}"
@@ -70,7 +70,7 @@ resource "aws_appautoscaling_target" "autoscaling_target" {
 }
 
 resource "aws_appautoscaling_policy" "autoscaling_policy" {
-  count              = var.ec_cluster_mode_enabled && var.external_redis ? 1 : 0
+  count              = var.ec_cluster_mode_enabled && var.external_redis && var.ec_enable_app_autoscaling ? 1 : 0
   policy_type        = var.ec_appautoscaling_policy_type
   name               = var.external_redis_name
   resource_id        = aws_appautoscaling_target.autoscaling_target[0].resource_id
