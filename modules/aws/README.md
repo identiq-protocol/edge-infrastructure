@@ -79,6 +79,7 @@ The infstructarue consists of the following components:
 | <a name="input_ec_cluster_mode_num_node_groups"></a> [ec\_cluster\_mode\_num\_node\_groups](#input\_ec\_cluster\_mode\_num\_node\_groups) | Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications | `number` | `0` | no |
 | <a name="input_ec_cluster_mode_replicas_per_node_group"></a> [ec\_cluster\_mode\_replicas\_per\_node\_group](#input\_ec\_cluster\_mode\_replicas\_per\_node\_group) | Elastic cache number of replica nodes in each node group. Valid values are 0 to 5. Changing this number will force a new resource | `number` | `0` | no |
 | <a name="input_ec_cluster_size"></a> [ec\_cluster\_size](#input\_ec\_cluster\_size) | Elastic cache number of nodes in cluster. *Ignored when `cluster_mode_enabled` == `true`* | `number` | `1` | no |
+| <a name="input_ec_enable_app_autoscaling"></a> [ec\_enable\_app\_autoscaling](#input\_ec\_enable\_app\_autoscaling) | Enable app autoscaling for elasticache | `bool` | `true` | no |
 | <a name="input_ec_engine_version"></a> [ec\_engine\_version](#input\_ec\_engine\_version) | Elastic cache Redis engine version | `string` | `"6.x"` | no |
 | <a name="input_ec_family"></a> [ec\_family](#input\_ec\_family) | Elastic cache Redis family | `string` | `"redis6.x"` | no |
 | <a name="input_ec_instance_type"></a> [ec\_instance\_type](#input\_ec\_instance\_type) | Elastic cache instance type | `string` | `"cache.r5.2xlarge"` | no |
