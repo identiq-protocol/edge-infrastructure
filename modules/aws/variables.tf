@@ -640,6 +640,11 @@ variable "rds_monitoring_interval" {
   default     = 60
 }
 
+variable "rds_max_allocated_storage" {
+  description = "Max allocated storage"
+  default = 0
+}
+
 variable "rds_iops" {
   description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'"
   type        = number
