@@ -642,7 +642,7 @@ variable "rds_monitoring_interval" {
 
 variable "rds_max_allocated_storage" {
   description = "Max allocated storage"
-  default = 0
+  default     = 0
 }
 
 variable "rds_iops" {
@@ -787,6 +787,22 @@ variable "ec_appautoscaling_scale_out_cooldown" {
 }
 
 variable "ec_enable_app_autoscaling" {
-  default = true
+  default     = true
   description = "Enable app autoscaling for elasticache"
+}
+
+variable "ec_allow_all_egress" {
+  type        = bool
+  default     = true
+  description = <<-EOT
+    If `true`, the created security group for Elasticache will allow egress on all ports and protocols to all IP address.
+    If this is false and no egress rules are otherwise specified, then no egress will be allowed.
+    Defaults to `true` unless the deprecated `egress_cidr_blocks` is provided and is not `["0.0.0.0/0"]`, in which case defaults to `false`.
+    EOT
+}
+
+variable "ec_data_tiering_enabled" {
+  type        = bool
+  default     = false
+  description = "Enables Elasticache data tiering. Data tiering is only supported for replication groups using the r6gd node type."
 }
