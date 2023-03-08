@@ -1,31 +1,14 @@
 module "redis" {
-  count              = var.external_redis ? 1 : 0
-  source             = "cloudposse/elasticache-redis/aws"
-  version            = "0.40.3"
-  availability_zones = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
-  name               = var.external_redis_name
-  zone_id            = ""
-  vpc_id             = local.ec_vpc_id
-  security_group_rules = [
-    {
-      type                     = "egress"
-      from_port                = 0
-      to_port                  = 65535
-      protocol                 = "-1"
-      cidr_blocks              = ["0.0.0.0/0"]
-      source_security_group_id = null
-      description              = "Allow all outbound traffic"
-    },
-    {
-      type                     = "ingress"
-      from_port                = 0
-      to_port                  = 65535
-      protocol                 = "-1"
-      cidr_blocks              = []
-      source_security_group_id = module.eks.worker_security_group_id
-      description              = "Allow all inbound traffic from trusted Security Groups"
-    },
-  ]
+  count                                = var.external_redis ? 1 : 0
+  source                               = "cloudposse/elasticache-redis/aws"
+  version                              = "0.49.0"
+  availability_zones                   = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
+  name                                 = var.external_redis_name
+  zone_id                              = ""
+  vpc_id                               = local.ec_vpc_id
+  allow_all_egress                     = var.ec_allow_all_egress
+  allowed_security_group_ids           = [module.eks.worker_security_group_id]
+  data_tiering_enabled                 = var.ec_data_tiering_enabled
   subnets                              = local.ec_private_subnets
   cluster_mode_enabled                 = var.ec_cluster_mode_enabled
   cluster_mode_num_node_groups         = var.ec_cluster_mode_num_node_groups
@@ -107,6 +90,6 @@ resource "kubernetes_service" "edge_redis_service" {
 }
 
 locals {
-  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : (var.ec_subnet_single_az ? [module.vpc[0].private_subnets[0]] :  module.vpc[0].private_subnets)
+  ec_private_subnets = var.external_vpc ? var.ec_private_subnets : (var.ec_subnet_single_az ? [module.vpc[0].private_subnets[0]] : module.vpc[0].private_subnets)
   ec_vpc_id          = var.external_vpc ? var.ec_vpc_id : module.vpc[0].vpc_id
 }
