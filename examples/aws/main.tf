@@ -131,6 +131,7 @@ module "edge-aws" {
   ec_snapshot_name                         = var.ec_snapshot_name
   ec_snapshot_retention_limit              = var.ec_snapshot_retention_limit
   ec_snapshot_window                       = var.ec_snapshot_window
+  ec_enable_app_autoscaling                = var.ec_enable_app_autoscaling
   ec_appautoscaling_predefined_metric_type = var.ec_appautoscaling_predefined_metric_type
   ec_appautoscaling_target_value           = var.ec_appautoscaling_target_value
   ec_appautoscaling_policy_type            = var.ec_appautoscaling_policy_type
@@ -140,7 +141,7 @@ module "edge-aws" {
   ec_appautoscaling_service_namespace      = var.ec_appautoscaling_service_namespace
   ec_appautoscaling_scale_in_cooldown      = var.ec_appautoscaling_scale_in_cooldown
   ec_appautoscaling_scale_out_cooldown     = var.ec_appautoscaling_scale_out_cooldown
-
+  ec_data_tiering_enabled                  = var.ec_data_tiering_enabled
   # General
   default_tags = var.default_tags
   tags         = var.tags
