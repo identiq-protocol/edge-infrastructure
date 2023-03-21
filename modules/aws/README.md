@@ -11,14 +11,14 @@ The infstructarue consists of the following components:
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | =3.72.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.57.1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.11.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | =3.72.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.57.1 |
 | <a name="provider_http"></a> [http](#provider\_http) | n/a |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.11.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
@@ -30,19 +30,19 @@ The infstructarue consists of the following components:
 | <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | 17.24.0 |
 | <a name="module_rds"></a> [rds](#module\_rds) | terraform-aws-modules/rds/aws | 2.35.0 |
 | <a name="module_rds_sg"></a> [rds\_sg](#module\_rds\_sg) | terraform-aws-modules/security-group/aws | 4.8.0 |
-| <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 0.40.3 |
+| <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 0.49.0 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | 3.11.3 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aws_appautoscaling_policy.autoscaling_policy](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/resources/appautoscaling_policy) | resource |
-| [aws_appautoscaling_target.autoscaling_target](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/resources/appautoscaling_target) | resource |
-| [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/resources/iam_policy) | resource |
-| [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/resources/security_group) | resource |
-| [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/resources/vpc_endpoint) | resource |
+| [aws_appautoscaling_policy.autoscaling_policy](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/resources/appautoscaling_policy) | resource |
+| [aws_appautoscaling_target.autoscaling_target](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/resources/appautoscaling_target) | resource |
+| [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/resources/iam_policy) | resource |
+| [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/resources/security_group) | resource |
+| [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/resources/vpc_endpoint) | resource |
 | [kubernetes_annotations.gp2](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/annotations) | resource |
 | [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/config_map) | resource |
 | [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/secret) | resource |
@@ -51,10 +51,10 @@ The infstructarue consists of the following components:
 | [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
 | [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/storage_class) | resource |
 | [random_password.rds_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
-| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/data-sources/availability_zones) | data source |
-| [aws_eks_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/data-sources/eks_cluster) | data source |
-| [aws_eks_cluster_auth.cluster](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/data-sources/eks_cluster_auth) | data source |
-| [aws_iam_policy_document.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/3.72.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/data-sources/availability_zones) | data source |
+| [aws_eks_cluster.cluster](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/data-sources/eks_cluster) | data source |
+| [aws_eks_cluster_auth.cluster](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/data-sources/eks_cluster_auth) | data source |
+| [aws_iam_policy_document.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/4.57.1/docs/data-sources/iam_policy_document) | data source |
 | [http_http.iam_policy](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
 
 ## Inputs
@@ -62,6 +62,7 @@ The infstructarue consists of the following components:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable | `map` | <pre>{<br>  "Terraform": "true"<br>}</pre> | no |
+| <a name="input_ec_allow_all_egress"></a> [ec\_allow\_all\_egress](#input\_ec\_allow\_all\_egress) | If `true`, the created security group for Elasticache will allow egress on all ports and protocols to all IP address.<br>If this is false and no egress rules are otherwise specified, then no egress will be allowed.<br>Defaults to `true` unless the deprecated `egress_cidr_blocks` is provided and is not `["0.0.0.0/0"]`, in which case defaults to `false`. | `bool` | `true` | no |
 | <a name="input_ec_appautoscaling_policy_type"></a> [ec\_appautoscaling\_policy\_type](#input\_ec\_appautoscaling\_policy\_type) | The policy type. Valid values are StepScaling and TargetTrackingScaling. Defaults to StepScaling. Certain services only support only one policy type. | `string` | `"TargetTrackingScaling"` | no |
 | <a name="input_ec_appautoscaling_predefined_metric_type"></a> [ec\_appautoscaling\_predefined\_metric\_type](#input\_ec\_appautoscaling\_predefined\_metric\_type) | The metric type. | `string` | `"ElastiCacheDatabaseMemoryUsageCountedForEvictPercentage"` | no |
 | <a name="input_ec_appautoscaling_scalable_dimension"></a> [ec\_appautoscaling\_scalable\_dimension](#input\_ec\_appautoscaling\_scalable\_dimension) | The scalable dimension of the scalable target. | `string` | `"elasticache:replication-group:NodeGroups"` | no |
@@ -79,6 +80,8 @@ The infstructarue consists of the following components:
 | <a name="input_ec_cluster_mode_num_node_groups"></a> [ec\_cluster\_mode\_num\_node\_groups](#input\_ec\_cluster\_mode\_num\_node\_groups) | Number of node groups (shards) for this Redis replication group. Changing this number will trigger an online resizing operation before other settings modifications | `number` | `0` | no |
 | <a name="input_ec_cluster_mode_replicas_per_node_group"></a> [ec\_cluster\_mode\_replicas\_per\_node\_group](#input\_ec\_cluster\_mode\_replicas\_per\_node\_group) | Elastic cache number of replica nodes in each node group. Valid values are 0 to 5. Changing this number will force a new resource | `number` | `0` | no |
 | <a name="input_ec_cluster_size"></a> [ec\_cluster\_size](#input\_ec\_cluster\_size) | Elastic cache number of nodes in cluster. *Ignored when `cluster_mode_enabled` == `true`* | `number` | `1` | no |
+| <a name="input_ec_data_tiering_enabled"></a> [ec\_data\_tiering\_enabled](#input\_ec\_data\_tiering\_enabled) | Enables Elasticache data tiering. Data tiering is only supported for replication groups using the r6gd node type. | `bool` | `false` | no |
+| <a name="input_ec_enable_app_autoscaling"></a> [ec\_enable\_app\_autoscaling](#input\_ec\_enable\_app\_autoscaling) | Enable app autoscaling for elasticache | `bool` | `true` | no |
 | <a name="input_ec_engine_version"></a> [ec\_engine\_version](#input\_ec\_engine\_version) | Elastic cache Redis engine version | `string` | `"6.x"` | no |
 | <a name="input_ec_family"></a> [ec\_family](#input\_ec\_family) | Elastic cache Redis family | `string` | `"redis6.x"` | no |
 | <a name="input_ec_instance_type"></a> [ec\_instance\_type](#input\_ec\_instance\_type) | Elastic cache instance type | `string` | `"cache.r5.2xlarge"` | no |
@@ -154,6 +157,7 @@ The infstructarue consists of the following components:
 | <a name="input_rds_instance_class"></a> [rds\_instance\_class](#input\_rds\_instance\_class) | The instance type of the RDS instance | `string` | `"db.m5.large"` | no |
 | <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `null` | no |
 | <a name="input_rds_maintenance_window"></a> [rds\_maintenance\_window](#input\_rds\_maintenance\_window) | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | `"Sun:00:00-Sun:03:00"` | no |
+| <a name="input_rds_max_allocated_storage"></a> [rds\_max\_allocated\_storage](#input\_rds\_max\_allocated\_storage) | Max allocated storage | `number` | `0` | no |
 | <a name="input_rds_monitoring_interval"></a> [rds\_monitoring\_interval](#input\_rds\_monitoring\_interval) | The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60 | `number` | `60` | no |
 | <a name="input_rds_multi_az"></a> [rds\_multi\_az](#input\_rds\_multi\_az) | Specifies if the RDS instance is multi-AZ | `bool` | `true` | no |
 | <a name="input_rds_parameter_group_family"></a> [rds\_parameter\_group\_family](#input\_rds\_parameter\_group\_family) | The engine version to use | `string` | `"postgres13"` | no |
