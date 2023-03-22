@@ -138,14 +138,6 @@ variable "external_db" {
   description = "Whether to create and use external cloud managed db instance"
   default     = true
 }
-variable "external_db_require_ssl" {
-  description = "Enforce ssl encryption when connecting to the instance, will need to use cloudsql-auth-proxy"
-  default     = true
-}
-variable "external_db_iam_auth" {
-  description = "Authenticate with cloudsql with iam using workload identity tied to service account, will need to use cloudsql-auth-proxy"
-  default     = true
-}
 variable "external_db_postgres_version" {
   description = "External database(cloud SQL) postgres version"
   default     = "POSTGRES_13"
