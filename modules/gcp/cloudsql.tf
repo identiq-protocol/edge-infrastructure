@@ -1,13 +1,4 @@
 ### CloudSQL - postgres ###
-locals {
-  iam_auth = var.external_db && var.external_db_iam_auth
-  database_flags = local.iam_auth ? concat(var.external_db_database_flags, [{
-    name  = "cloudsql.iam_authentication"
-    value = "on"
-  }]) : var.external_db_database_flags
-  service_accounts =  local.iam_auth ? ["edge-freakazoid","edge-tweety", "edge-pinky-winnie"] : []
-}
-
 module "postgresql-db" {
   count   = var.external_db ? 1 : 0
   source  = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
@@ -16,7 +7,6 @@ module "postgresql-db" {
   database_flags = local.database_flags
   random_instance_name = true
   user_name            = var.external_db_user_name
-  iam_user_emails      = ["edge-freakazoid@running-benchmark.iam.gserviceaccount.com"]
   database_version     = var.external_db_postgres_version
   project_id           = var.project_id
   zone                 = data.google_compute_zones.available.names[0]
@@ -76,13 +66,3 @@ resource "kubernetes_service" "edge_db_service" {
   ]
 }
 
-module "cloud-sql-workload-identity" {
-  for_each = toset(local.service_accounts)
-  source              = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
-  version             = "24.1.0"
-  name                = each.value
-  use_existing_k8s_sa = true
-  annotate_k8s_sa     = false
-  roles               = ["roles/cloudsql.client", "roles/cloudsql.instanceUser"]
-  project_id          = var.project_id
-}

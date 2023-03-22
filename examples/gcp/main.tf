@@ -17,6 +17,7 @@ module "edge-gcp" {
 
   # vpc
   vpc_name = var.vpc_name
+  vpc_nat_router_name = var.vpc_nat_router_name
 
   # gke
   gke_version = var.gke_version
