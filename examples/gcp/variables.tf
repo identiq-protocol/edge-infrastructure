@@ -4,9 +4,9 @@ variable "vpc_name" {
   default     = "identiq-vpc"
 }
 
-variable "vpc_nat_router_name" {
-  description = "The name of the vpc nat router name"
-  default = "nat-router"
+variable "vpc_external_nat_address_name" {
+  description = "The name of the vpc external nat address"
+  default = ""
 }
 
 variable "vpc_nat_router_name" {
