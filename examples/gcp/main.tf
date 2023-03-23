@@ -16,8 +16,9 @@ module "edge-gcp" {
   gke_enable_private_nodes = var.gke_enable_private_nodes
 
   # vpc
-  vpc_name = var.vpc_name
-  vpc_nat_router_name = var.vpc_nat_router_name
+  vpc_name                      = var.vpc_name
+  vpc_external_nat_address_name = var.vpc_external_nat_address_name
+  vpc_nat_router_name           = var.vpc_nat_router_name
 
   # gke
   gke_version = var.gke_version

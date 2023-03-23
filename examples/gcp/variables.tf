@@ -3,21 +3,31 @@ variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
   default     = "identiq-vpc"
 }
+
 variable "vpc_nat_router_name" {
   description = "The name of the vpc nat router name"
   default = "nat-router"
 }
+
+variable "vpc_nat_router_name" {
+  description = "The name of the vpc nat router name"
+  default = "nat-router"
+}
+
 variable "vpc_enable_ssh_firewall_rule" {
   description = "create firewall rule to enable ssh access"
   default     = true
 }
+
 variable "region" {
   description = "The region to host all resources in"
   default     = "us-east1"
 }
+
 variable "project_id" {
   description = "The project ID to host all resources in"
 }
+
 variable "default_tags" {
   description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
   default = {
