@@ -33,6 +33,7 @@ module "gke" {
   add_master_webhook_firewall_rules = true
   firewall_inbound_ports            = ["1-65535"]
   kubernetes_version                = var.gke_version
+  release_channel                   = var.gke_release_channel
   cluster_resource_labels           = merge(var.default_tags, var.tags)
   node_metadata                     = "GKE_METADATA"
 
