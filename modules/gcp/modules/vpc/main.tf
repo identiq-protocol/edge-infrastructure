@@ -23,7 +23,7 @@ resource "google_compute_firewall" "default" {
 }
 
 resource "google_compute_address" "external_nat_address" {
-  name         = "${var.vpc_name}-nat-ip"
+  name         = var.vpc_external_nat_address_name != "" ? var.vpc_external_nat_address_name : "${var.vpc_name}-nat-ip"
   address_type = "EXTERNAL"
   region       =  var.region
 }
