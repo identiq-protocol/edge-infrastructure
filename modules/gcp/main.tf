@@ -6,12 +6,13 @@ data "google_compute_zones" "available" {
 
 ### VPC ###
 module "vpc" {
-  source                   = "./modules/vpc"
-  region                   = var.region
-  project_id               = var.project_id
-  vpc_name                 = var.vpc_name
-  vpc_nat_router_name      = var.vpc_nat_router_name
-  enable_ssh_firewall_rule = var.vpc_enable_ssh_firewall_rule
+  source                        = "./modules/vpc"
+  region                        = var.region
+  project_id                    = var.project_id
+  vpc_name                      = var.vpc_name
+  vpc_external_nat_address_name = var.vpc_external_nat_address_name
+  vpc_nat_router_name           = var.vpc_nat_router_name
+  enable_ssh_firewall_rule      = var.vpc_enable_ssh_firewall_rule
 }
 ### GKE ###
 module "gke" {
