@@ -20,7 +20,7 @@ module "postgresql-db" {
   ip_configuration = {
     ipv4_enabled        = true
     private_network     = module.vpc.network_id
-    require_ssl         = var.external_db_require_ssl
+    require_ssl         = false
     authorized_networks = var.external_db_authorized_networks
     allocated_ip_range  = null
   }
@@ -33,8 +33,8 @@ resource "kubernetes_secret" "edge_db_secret" {
     name = "edge-postgresql"
   }
   data = {
-    "postgresql-password"      = var.external_db_iam_auth ? "" : module.postgresql-db[0].generated_user_password
-    "postgresql-root-password" = var.external_db_iam_auth ? "" : module.postgresql-db[0].generated_user_password
+    "postgresql-password"      = module.postgresql-db[0].generated_user_password
+    "postgresql-root-password" = module.postgresql-db[0].generated_user_password
     "connection-name"          = module.postgresql-db[0].instance_connection_name
   }
 
