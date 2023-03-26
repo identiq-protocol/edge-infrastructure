@@ -5,14 +5,13 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_google"></a> [google](#requirement\_google) | 3.90.1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | =2.11.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 3.90.1 |
+| <a name="provider_google"></a> [google](#provider\_google) | n/a |
 | <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | n/a |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | =2.11.0 |
 
@@ -20,10 +19,10 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gke"></a> [gke](#module\_gke) | terraform-google-modules/kubernetes-engine/google//modules/private-cluster | 17.3.0 |
-| <a name="module_memorystore-redis"></a> [memorystore-redis](#module\_memorystore-redis) | terraform-google-modules/memorystore/google | 4.0.0 |
-| <a name="module_postgresql-db"></a> [postgresql-db](#module\_postgresql-db) | GoogleCloudPlatform/sql-db/google//modules/postgresql | 8.0.0 |
-| <a name="module_private-service-access"></a> [private-service-access](#module\_private-service-access) | GoogleCloudPlatform/sql-db/google//modules/private_service_access | 8.0.0 |
+| <a name="module_gke"></a> [gke](#module\_gke) | terraform-google-modules/kubernetes-engine/google//modules/private-cluster | 24.1.0 |
+| <a name="module_memorystore-redis"></a> [memorystore-redis](#module\_memorystore-redis) | terraform-google-modules/memorystore/google | 7.0.0 |
+| <a name="module_postgresql-db"></a> [postgresql-db](#module\_postgresql-db) | GoogleCloudPlatform/sql-db/google//modules/postgresql | 13.0.1 |
+| <a name="module_private-service-access"></a> [private-service-access](#module\_private-service-access) | GoogleCloudPlatform/sql-db/google//modules/private_service_access | 13.0.1 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ./modules/vpc | n/a |
 
 ## Resources
@@ -38,7 +37,7 @@
 | [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/service) | resource |
 | [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/2.11.0/docs/resources/storage_class) | resource |
 | [google-beta_google_compute_zones.available](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/data-sources/google_compute_zones) | data source |
-| [google_client_config.provider](https://registry.terraform.io/providers/hashicorp/google/3.90.1/docs/data-sources/client_config) | data source |
+| [google_client_config.provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config) | data source |
 
 ## Inputs
 
@@ -62,7 +61,7 @@
 | <a name="input_external_redis_memory_size_gb"></a> [external\_redis\_memory\_size\_gb](#input\_external\_redis\_memory\_size\_gb) | external redis(memorystore) memory size in GB per node | `number` | `64` | no |
 | <a name="input_external_redis_tier"></a> [external\_redis\_tier](#input\_external\_redis\_tier) | external redis(memorystore) service tier of the instance. | `string` | `"BASIC"` | no |
 | <a name="input_external_redis_transit_encryption_mode"></a> [external\_redis\_transit\_encryption\_mode](#input\_external\_redis\_transit\_encryption\_mode) | The TLS mode of the Redis instance, If not provided, TLS is disabled for the instance. | `string` | `"DISABLED"` | no |
-| <a name="input_external_redis_version"></a> [external\_redis\_version](#input\_external\_redis\_version) | external redis(memorystore) version | `string` | `"REDIS_5_0"` | no |
+| <a name="input_external_redis_version"></a> [external\_redis\_version](#input\_external\_redis\_version) | external redis(memorystore) version | `string` | `"REDIS_6_X"` | no |
 | <a name="input_gke_cluster_autoscaling"></a> [gke\_cluster\_autoscaling](#input\_gke\_cluster\_autoscaling) | Cluster autoscaling configuration. See [more details](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters#clusterautoscaling) | <pre>object({<br>    enabled             = bool<br>    autoscaling_profile = string<br>    min_cpu_cores       = number<br>    max_cpu_cores       = number<br>    min_memory_gb       = number<br>    max_memory_gb       = number<br>    gpu_resources = list(object({<br>      resource_type = string<br>      minimum       = number<br>      maximum       = number<br>    }))<br>  })</pre> | <pre>{<br>  "autoscaling_profile": "BALANCED",<br>  "enabled": false,<br>  "gpu_resources": [],<br>  "max_cpu_cores": 0,<br>  "max_memory_gb": 0,<br>  "min_cpu_cores": 0,<br>  "min_memory_gb": 0<br>}</pre> | no |
 | <a name="input_gke_enable_private_nodes"></a> [gke\_enable\_private\_nodes](#input\_gke\_enable\_private\_nodes) | (Beta) Whether nodes have internal IP addresses only | `bool` | `true` | no |
 | <a name="input_gke_ip_range_pods"></a> [gke\_ip\_range\_pods](#input\_gke\_ip\_range\_pods) | The _name_ of the secondary subnet ip range to use for pods | `string` | `""` | no |
@@ -75,14 +74,17 @@
 | <a name="input_gke_nodegroup_db_machinetype"></a> [gke\_nodegroup\_db\_machinetype](#input\_gke\_nodegroup\_db\_machinetype) | gke db nodegroup machine type | `string` | `"c2-standard-8"` | no |
 | <a name="input_gke_nodegroup_dynamic_machine_count"></a> [gke\_nodegroup\_dynamic\_machine\_count](#input\_gke\_nodegroup\_dynamic\_machine\_count) | gke dynamic nodegroup max count of machines | `string` | `"1"` | no |
 | <a name="input_gke_nodegroup_dynamic_machinetype"></a> [gke\_nodegroup\_dynamic\_machinetype](#input\_gke\_nodegroup\_dynamic\_machinetype) | gke dynamic nodegroup machine type | `string` | `"c2-standard-8"` | no |
-| <a name="input_gke_version"></a> [gke\_version](#input\_gke\_version) | gke Kubernetes version | `string` | `"1.22.8-gke.201"` | no |
+| <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | The release channel of this cluster. Accepted values are `UNSPECIFIED`, `RAPID`, `REGULAR` and `STABLE`. Defaults to `UNSPECIFIED`. | `string` | `null` | no |
+| <a name="input_gke_version"></a> [gke\_version](#input\_gke\_version) | gke Kubernetes version | `string` | `"1.23.14-gke.1800"` | no |
 | <a name="input_gke_zones"></a> [gke\_zones](#input\_gke\_zones) | The zones for gke control plane | `list` | `[]` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to host all resources in | `any` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to host all resources in | `string` | `"us-east1"` | no |
 | <a name="input_regional"></a> [regional](#input\_regional) | Whether is a regional cluster (zonal cluster if set false. WARNING: changing this after cluster creation is destructive!) | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources | `map(string)` | n/a | yes |
 | <a name="input_vpc_enable_ssh_firewall_rule"></a> [vpc\_enable\_ssh\_firewall\_rule](#input\_vpc\_enable\_ssh\_firewall\_rule) | create firewall rule to enable ssh access | `bool` | `true` | no |
+| <a name="input_vpc_external_nat_address_name"></a> [vpc\_external\_nat\_address\_name](#input\_vpc\_external\_nat\_address\_name) | The name of the vpc external nat address | `string` | `""` | no |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name to be used on all the resources as identifier | `string` | `"identiq-vpc"` | no |
+| <a name="input_vpc_nat_router_name"></a> [vpc\_nat\_router\_name](#input\_vpc\_nat\_router\_name) | The name of the vpc nat router name | `string` | `"nat-router"` | no |
 | <a name="input_zones"></a> [zones](#input\_zones) | The zone to host the cluster in (required if is a zonal cluster) | `list(string)` | `[]` | no |
 
 ## Outputs
