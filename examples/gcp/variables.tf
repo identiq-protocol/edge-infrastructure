@@ -1,18 +1,33 @@
+### General variables ###
 variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
   default     = "identiq-vpc"
 }
+
+variable "vpc_external_nat_address_name" {
+  description = "The name of the vpc external nat address"
+  default = ""
+}
+
+variable "vpc_nat_router_name" {
+  description = "The name of the vpc nat router name"
+  default = "nat-router"
+}
+
 variable "vpc_enable_ssh_firewall_rule" {
   description = "create firewall rule to enable ssh access"
   default     = true
 }
+
 variable "region" {
   description = "The region to host all resources in"
   default     = "us-east1"
 }
+
 variable "project_id" {
   description = "The project ID to host all resources in"
 }
+
 variable "default_tags" {
   description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
   default = {
@@ -24,13 +39,15 @@ variable "tags" {
   description = "Any tags the user wishes to add to all resources"
   type        = map(string)
 }
+
+### GKE variables ###
 variable "gke_zones" {
   description = "The zones for gke control plane"
   default     = []
 }
 variable "gke_version" {
   description = "gke Kubernetes version"
-  default     = "1.22.8-gke.201"
+  default     = "1.23.14-gke.1800"
 }
 variable "gke_enable_private_nodes" {
   type        = bool
@@ -125,6 +142,12 @@ variable "gke_cluster_autoscaling" {
   }
   description = "Cluster autoscaling configuration. See [more details](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters#clusterautoscaling)"
 }
+
+### External DB CloudSQL variables ###
+variable "external_db" {
+  description = "Whether to create and use external cloud managed db instance"
+  default     = true
+}
 variable "external_db_postgres_version" {
   description = "External database(cloud SQL) postgres version"
   default     = "POSTGRES_13"
@@ -149,10 +172,6 @@ variable "external_db_authorized_networks" {
   }]
   type        = list(map(string))
   description = "List of mapped public networks authorized to access to the instances. Default - short range of GCP health-checkers IPs"
-}
-variable "external_db" {
-  description = "Whether to create and use external cloud managed db instance"
-  default     = true
 }
 variable "external_db_user_name" {
   description = "The name of the default user for external db"
@@ -214,9 +233,11 @@ variable "external_db_database_flags" {
     {
       name  = "enable_hashagg"
       value = "on"
-  }]
+  },
+  ]
 }
 
+### External Identities Redis MemoryStore variables ###
 variable "external_redis" {
   description = "Whenever to create and use external cloud managed redis instance"
   default     = false
@@ -227,7 +248,7 @@ variable "external_redis_memory_size_gb" {
 }
 variable "external_redis_version" {
   description = "external redis(memorystore) version"
-  default     = "REDIS_5_0"
+  default     = "REDIS_6_X"
 }
 variable "external_redis_configs" {
   description = "external redis(memorystore) configuration parameters"
