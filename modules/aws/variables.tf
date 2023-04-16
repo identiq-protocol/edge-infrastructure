@@ -1,7 +1,23 @@
 data "aws_availability_zones" "available" {
   state = "available"
 }
+variable "region" {
+  description = "region"
+}
 
+variable "default_tags" {
+  description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
+  default = {
+    Terraform = "true"
+  }
+}
+
+variable "tags" {
+  description = "Any tags the user wishes to add to all resources of the edge"
+  type        = map(string)
+  default     = {}
+}
+### VPC ###
 variable "external_vpc" {
   description = "Sepcifies whether we want to use an externally created VPC"
   default     = false
@@ -12,44 +28,6 @@ variable "eks_vpc_id" {
   type        = string
   default     = ""
 }
-
-
-variable "eks_cluster_endpoint_private_access" {
-  description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
-  type        = bool
-  default     = true
-}
-
-variable "eks_cluster_create_endpoint_private_access_sg_rule" {
-  description = "Whether to create security group rules for the access to the Amazon EKS private API server endpoint. When is `true`, `cluster_endpoint_private_access_cidrs` must be setted."
-  type        = bool
-  default     = false
-}
-
-variable "eks_cluster_endpoint_public_access" {
-  description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
-  type        = bool
-  default     = true
-}
-
-variable "eks_cluster_endpoint_public_access_cidrs" {
-  description = "List of CIDR blocks which can access the Amazon EKS public API server endpoint"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
-variable "eks_private_subnets" {
-  description = "Specifies private subnet IDs in case of external VPC"
-  type        = list(string)
-  default     = []
-}
-
-variable "eks_public_subnets" {
-  description = "Specifies public subnet IDs in case of external VPC"
-  type        = list(string)
-  default     = []
-}
-
 variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
   default     = "identiq-vpc"
@@ -90,8 +68,62 @@ variable "vpc_endpoint_type" {
   default     = "Interface"
 }
 
-variable "region" {
-  description = "region"
+variable "vpc_custom_service_name" {
+  description = "Override default prod service names"
+  default     = ""
+}
+
+variable "vpc_specific_subnet_newbits" {
+  default     = 4
+  description = "Specifies the edge subnet newbits for calculating the CIDR block"
+}
+
+### EKS ###
+variable "eks_cluster_endpoint_private_access" {
+  description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
+  type        = bool
+  default     = true
+}
+
+variable "eks_cluster_create_endpoint_private_access_sg_rule" {
+  description = "Whether to create security group rules for the access to the Amazon EKS private API server endpoint. When is `true`, `cluster_endpoint_private_access_cidrs` must be setted."
+  type        = bool
+  default     = false
+}
+variable "eks_cluster_endpoint_private_access_cidrs" {
+  description = "List of CIDR blocks which can access the Amazon EKS private API server endpoint. To use this `cluster_endpoint_private_access` and `cluster_create_endpoint_private_access_sg_rule` must be set to `true`."
+  type        = list(string)
+  default     = null
+}
+
+variable "eks_cluster_endpoint_private_access_sg" {
+  description = "List of security group IDs which can access the Amazon EKS private API server endpoint. To use this `cluster_endpoint_private_access` and `cluster_create_endpoint_private_access_sg_rule` must be set to `true`."
+  type        = list(string)
+  default     = null
+}
+
+variable "eks_cluster_endpoint_public_access" {
+  description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
+  type        = bool
+  default     = true
+}
+
+variable "eks_cluster_endpoint_public_access_cidrs" {
+  description = "List of CIDR blocks which can access the Amazon EKS public API server endpoint"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "eks_private_subnets" {
+  description = "Specifies private subnet IDs in case of external VPC"
+  type        = list(string)
+  default     = []
+}
+
+variable "eks_public_subnets" {
+  description = "Specifies public subnet IDs in case of external VPC"
+  type        = list(string)
+  default     = []
 }
 
 variable "eks_cluster_name" {
@@ -328,6 +360,7 @@ variable "eks_worker_ami_owner_id" {
   default     = "amazon"
 }
 
+### Elasticache ###
 variable "external_redis" {
   description = "Redis will be installed outside of EKS cluster (Elasticache)"
   type        = bool
@@ -455,6 +488,82 @@ variable "ec_subnet_single_az" {
   default     = false
 }
 
+variable "ec_appautoscaling_predefined_metric_type" {
+  type        = string
+  description = "The metric type."
+  default     = "ElastiCacheDatabaseMemoryUsageCountedForEvictPercentage"
+}
+
+variable "ec_appautoscaling_target_value" {
+  type        = number
+  description = "The target value for the metric."
+  default     = 80
+}
+
+variable "ec_appautoscaling_policy_type" {
+  type        = string
+  description = "The policy type. Valid values are StepScaling and TargetTrackingScaling. Defaults to StepScaling. Certain services only support only one policy type."
+  default     = "TargetTrackingScaling"
+}
+
+variable "ec_appautoscaling_target_min_capacity" {
+  type        = number
+  description = "The min capacity of the scalable target."
+  default     = 3
+}
+
+variable "ec_appautoscaling_target_max_capacity" {
+  type        = number
+  description = "The max capacity of the scalable target."
+  default     = 100
+}
+
+variable "ec_appautoscaling_scalable_dimension" {
+  type        = string
+  description = "The scalable dimension of the scalable target."
+  default     = "elasticache:replication-group:NodeGroups"
+}
+
+variable "ec_appautoscaling_service_namespace" {
+  type        = string
+  description = "The AWS service namespace of the scalable target."
+  default     = "elasticache"
+}
+
+variable "ec_appautoscaling_scale_in_cooldown" {
+  type        = number
+  description = "The amount of time, in seconds, after a scale in activity completes before another scale in activity can start."
+  default     = 300
+}
+
+variable "ec_appautoscaling_scale_out_cooldown" {
+  type        = number
+  description = "The amount of time, in seconds, after a scale out activity completes before another scale out activity can start."
+  default     = 300
+}
+
+variable "ec_enable_app_autoscaling" {
+  default     = true
+  description = "Enable app autoscaling for elasticache"
+}
+
+variable "ec_allow_all_egress" {
+  type        = bool
+  default     = true
+  description = <<-EOT
+    If `true`, the created security group for Elasticache will allow egress on all ports and protocols to all IP address.
+    If this is false and no egress rules are otherwise specified, then no egress will be allowed.
+    Defaults to `true` unless the deprecated `egress_cidr_blocks` is provided and is not `["0.0.0.0/0"]`, in which case defaults to `false`.
+    EOT
+}
+
+variable "ec_data_tiering_enabled" {
+  type        = bool
+  default     = false
+  description = "Enables Elasticache data tiering. Data tiering is only supported for replication groups using the r6gd node type."
+}
+
+### RDS ###
 variable "external_db" {
   description = "Database will be installed outside of EKS cluster (RDS)"
   type        = bool
@@ -709,100 +818,4 @@ variable "rds_allow_major_version_upgrade" {
   default     = false
 }
 
-variable "default_tags" {
-  description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
-  default = {
-    Terraform = "true"
-  }
-}
 
-variable "tags" {
-  description = "Any tags the user wishes to add to all resources of the edge"
-  type        = map(string)
-  default     = {}
-}
-
-variable "vpc_custom_service_name" {
-  description = "Override default prod service names"
-  default     = ""
-}
-
-variable "vpc_specific_subnet_newbits" {
-  default     = 4
-  description = "Specifies the edge subnet newbits for calculating the CIDR block"
-}
-
-variable "ec_appautoscaling_predefined_metric_type" {
-  type        = string
-  description = "The metric type."
-  default     = "ElastiCacheDatabaseMemoryUsageCountedForEvictPercentage"
-}
-
-variable "ec_appautoscaling_target_value" {
-  type        = number
-  description = "The target value for the metric."
-  default     = 80
-}
-
-variable "ec_appautoscaling_policy_type" {
-  type        = string
-  description = "The policy type. Valid values are StepScaling and TargetTrackingScaling. Defaults to StepScaling. Certain services only support only one policy type."
-  default     = "TargetTrackingScaling"
-}
-
-variable "ec_appautoscaling_target_min_capacity" {
-  type        = number
-  description = "The min capacity of the scalable target."
-  default     = 3
-}
-
-variable "ec_appautoscaling_target_max_capacity" {
-  type        = number
-  description = "The max capacity of the scalable target."
-  default     = 100
-}
-
-variable "ec_appautoscaling_scalable_dimension" {
-  type        = string
-  description = "The scalable dimension of the scalable target."
-  default     = "elasticache:replication-group:NodeGroups"
-}
-
-variable "ec_appautoscaling_service_namespace" {
-  type        = string
-  description = "The AWS service namespace of the scalable target."
-  default     = "elasticache"
-}
-
-variable "ec_appautoscaling_scale_in_cooldown" {
-  type        = number
-  description = "The amount of time, in seconds, after a scale in activity completes before another scale in activity can start."
-  default     = 300
-}
-
-variable "ec_appautoscaling_scale_out_cooldown" {
-  type        = number
-  description = "The amount of time, in seconds, after a scale out activity completes before another scale out activity can start."
-  default     = 300
-}
-
-variable "ec_enable_app_autoscaling" {
-  default     = true
-  description = "Enable app autoscaling for elasticache"
-}
-
-variable "ec_allow_all_egress" {
-  type        = bool
-  default     = true
-  description = <<-EOT
-    If `true`, the created security group for Elasticache will allow egress on all ports and protocols to all IP address.
-    If this is false and no egress rules are otherwise specified, then no egress will be allowed.
-    Defaults to `true` unless the deprecated `egress_cidr_blocks` is provided and is not `["0.0.0.0/0"]`, in which case defaults to `false`.
-    EOT
-}
-
-variable "ec_data_tiering_enabled" {
-  type        = bool
-  default     = false
-  description = "Enables Elasticache data tiering. Data tiering is only supported for replication groups using the r6gd node type."
-}

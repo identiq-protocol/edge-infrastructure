@@ -106,6 +106,8 @@ module "eks" {
   cluster_endpoint_public_access                 = var.eks_cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs           = var.eks_cluster_endpoint_public_access_cidrs
   cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
+  cluster_endpoint_private_access_cidrs          = var.eks_cluster_endpoint_private_access_cidrs
+  cluster_endpoint_private_access_sg             = var.eks_cluster_endpoint_private_access_sg
 
 }
 
