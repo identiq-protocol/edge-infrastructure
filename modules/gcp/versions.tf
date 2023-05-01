@@ -25,7 +25,7 @@ locals {
     gkeVersion             = var.gke_version
     gkeClusterName         = var.cluster_name
     networkName            = module.vpc.network_name
-    networkNatIPs          = module.vpc.nat_ip
+    networkNatIPs          = [module.vpc.nat_ip]
     externalRedis          = var.external_redis
     memoryStoreVersion     = var.external_redis_version
     memoryStoreSizeGb      = var.external_redis_memory_size_gb
