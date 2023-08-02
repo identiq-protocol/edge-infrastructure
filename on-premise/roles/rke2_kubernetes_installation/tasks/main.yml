@@ -1,0 +1,5 @@
+---
+- include_tasks: copy_binary.yml
+- include_tasks: configure_credentials.yml
+- include_tasks: configure_service_unit_files.yml
+- include_tasks: start_cluster.yml

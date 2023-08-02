@@ -1,0 +1,19 @@
+[servers]
+kube1.example.com rke_role=server
+kube2.example.com rke_role=server
+kube3.example.com rke_role=server
+worker1.example.com rke_role=agent app_role=base
+worker2.example.com rke_role=agent app_role=dynamic
+worker3.example.com rke_role=agent app_role=db
+worker4.example.com rke_role=agent app_role=cache
+
+[servers:vars]
+first_control_plane_hostname = kube1
+first_control_plane_address = kube1.example.com
+# registry_username = username
+# registry_password = pass123
+# registry_url = identiq-docker.jfrog.io
+# http_proxy = http://proxy.example.com:8080
+# no_proxy =
+# ansible_ssh_private_key_file=/\path/to/private-key.pem
+# ansible_user=ec2-user

@@ -1,0 +1,8 @@
+---
+# defaults file for rke2_kubernetes_installation
+registry_username: ""
+registry_password: ""
+registry_url: ""
+rke2_token: "Identiq123"
+http_proxy: ""
+no_proxy: 127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16

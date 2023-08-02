@@ -1,0 +1,9 @@
+---
+- name: Configure rke2 service unit file
+  template:
+    src: rke2.service.j2
+    dest: /etc/systemd/system/rke2-{{ rke_role }}.service
+
+- name: Reload systemd to pick up the new service unit files
+  systemd:
+    daemon_reload: yes

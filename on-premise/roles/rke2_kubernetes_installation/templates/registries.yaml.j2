@@ -1,0 +1,7 @@
+{% if registry_url is defined and registry_url != "" %}
+configs:
+  {{ registry_url }}:
+    auth:
+      username: "{{ registry_username }}"
+      password: "{{ registry_password }}"
+{% endif %}
