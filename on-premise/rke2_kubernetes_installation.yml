@@ -1,0 +1,5 @@
+---
+- hosts: servers
+  become: true
+  roles:
+    - rke2_kubernetes_installation

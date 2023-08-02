@@ -1,0 +1,14 @@
+---
+- name: Configure rke2-agent service unit file
+  template:
+    src: rke2-agent.service.j2
+    dest: /etc/systemd/system/rke2-agent.service
+
+- name: Configure rke2-server service unit file
+  template:
+    src: rke2-server.service.j2
+    dest: /etc/systemd/system/rke2-server.service
+
+- name: Reload systemd to pick up the new service unit files
+  systemd:
+    daemon_reload: yes

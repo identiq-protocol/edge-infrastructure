@@ -1,0 +1,12 @@
+token: "{{ rke2_token | default('Identiq123') }}"
+{% if ansible_hostname != first_control_plane_hostname %}
+server: "https://{{ first_control_plane_address }}:9345"
+{% endif %}
+{% if registry_url is defined and registry_url != "" %}
+system-default-registry: {{ registry_url }}
+{% endif %}
+disable:
+  - rke2-ingress-nginx
+  - rke2-metrics-server
+node-label:
+  - edge.identiq.com/role={{ app_role | default("none") }}

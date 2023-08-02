@@ -1,0 +1,6 @@
+---
+- name: Copy RKE2 binary to the target servers
+  copy:
+    src: rke2.linux-amd64
+    dest: /usr/bin/rke2
+    mode: '0755'
