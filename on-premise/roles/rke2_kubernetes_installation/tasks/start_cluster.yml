@@ -3,3 +3,4 @@
     name: rke2-{{ rke_role }}
     state: restarted
     enabled: yes
+  throttle: 1

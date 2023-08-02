@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/etc/rancher/rke2
-ExecStart=/usr/bin/rke2 agent
+ExecStart=/usr/bin/rke2 {{ rke_role }}
 Restart=always
 {% if http_proxy != "" %}
 Environment="HTTP_PROXY={{ http_proxy }}"
@@ -15,5 +15,6 @@ Environment="CONTAINERD_HTTP_PROXY={{ http_proxy }}"
 Environment="CONTAINERD_HTTPS_PROXY={{ http_proxy }}"
 Environment="CONTAINERD_NO_PROXY={{ no_proxy }}"
 {% endif %}
+
 [Install]
 WantedBy=multi-user.target
