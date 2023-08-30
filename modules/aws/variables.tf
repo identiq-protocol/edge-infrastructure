@@ -535,7 +535,7 @@ variable "rds_engine" {
 variable "rds_engine_version" {
   description = "The engine version to use"
   type        = string
-  default     = "13.4"
+  default     = "13.12"
 }
 
 variable "rds_parameter_group_family" {
