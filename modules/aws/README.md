@@ -153,7 +153,7 @@ The infstructarue consists of the following components:
 | <a name="input_rds_db_name"></a> [rds\_db\_name](#input\_rds\_db\_name) | The DB name to create | `string` | `"edge"` | no |
 | <a name="input_rds_deletion_protection"></a> [rds\_deletion\_protection](#input\_rds\_deletion\_protection) | The database can't be deleted when this value is set to true | `bool` | `false` | no |
 | <a name="input_rds_engine"></a> [rds\_engine](#input\_rds\_engine) | The database engine to use | `string` | `"postgres"` | no |
-| <a name="input_rds_engine_version"></a> [rds\_engine\_version](#input\_rds\_engine\_version) | The engine version to use | `string` | `"13.4"` | no |
+| <a name="input_rds_engine_version"></a> [rds\_engine\_version](#input\_rds\_engine\_version) | The engine version to use | `string` | `"13.12"` | no |
 | <a name="input_rds_instance_class"></a> [rds\_instance\_class](#input\_rds\_instance\_class) | The instance type of the RDS instance | `string` | `"db.m5.large"` | no |
 | <a name="input_rds_iops"></a> [rds\_iops](#input\_rds\_iops) | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `null` | no |
 | <a name="input_rds_maintenance_window"></a> [rds\_maintenance\_window](#input\_rds\_maintenance\_window) | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | `"Sun:00:00-Sun:03:00"` | no |
