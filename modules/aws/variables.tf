@@ -141,6 +141,15 @@ variable "eks_wait_for_cluster_timeout" {
   default     = 300
 }
 
+variable "eks_cluster_encryption_config" {
+  description = "Configuration block with encryption configuration for the cluster. To disable secret encryption, set this value to `{}`"
+  type        = any
+  default = {}
+#  default = {
+#    resources = ["secrets"]
+#  }
+}
+
 ### node groups variables ###
 
 # master node group

@@ -20,11 +20,12 @@ module "eks" {
   cluster_security_group_name        = var.eks_cluster_name
   cluster_security_group_description = "EKS cluster security group."
 
+
   cluster_name                         = var.eks_cluster_name
   cluster_version                      = var.eks_cluster_version
   cluster_endpoint_public_access       = var.eks_cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs = var.eks_cluster_endpoint_public_access_cidrs
-
+  cluster_encryption_config            = var.eks_cluster_encryption_config
   cluster_addons = {
     coredns = {
       most_recent = true
@@ -67,7 +68,6 @@ module "eks" {
   manage_aws_auth_configmap = true
   aws_auth_roles            = var.eks_map_roles
   aws_auth_users            = var.eks_map_users
-  create_kms_key            = true
   eks_managed_node_group_defaults = {
     iam_role_additional_policies = {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
@@ -229,7 +229,7 @@ provider "kubernetes" {
   exec {
     api_version = "client.authentication.k8s.io/v1"
     command     = "aws"
-    args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
   }
 }
 
