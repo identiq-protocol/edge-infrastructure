@@ -1,129 +1,235 @@
+moved {
+  from = module.eks.aws_iam_role.cluster[0]
+  to   = module.eks.aws_iam_role.this[0]
+}
+
+locals {
+  eks_subnets         = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
+  eks_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
+  eks_public_subnets  = var.external_vpc ? var.eks_public_subnets : module.vpc[0].public_subnets
+  eks_vpc_id          = var.external_vpc ? var.eks_vpc_id : module.vpc[0].vpc_id
+}
+
 module "eks" {
-  source                   = "terraform-aws-modules/eks/aws"
-  version                  = "17.24.0"
-  cluster_name             = var.eks_cluster_name
-  cluster_version          = var.eks_cluster_version
-  subnets                  = local.eks_subnets
-  vpc_id                   = local.eks_vpc_id
-  map_roles                = var.eks_map_roles
-  map_users                = var.eks_map_users
-  wait_for_cluster_timeout = var.eks_wait_for_cluster_timeout
+  source  = "terraform-aws-modules/eks/aws"
+  version = "19.16.0"
 
-  worker_groups_launch_template = [
-    {
-      name                    = "db"
-      override_instance_types = [var.eks_db_instance_type]
-      spot_instance_pools     = var.eks_db_instance_count
-      on_demand_base_capacity = var.external_db ? 0 : var.eks_db_instance_count
-      asg_min_size            = var.external_db ? 0 : var.eks_db_asg_min_size
-      asg_max_size            = var.external_db ? 0 : var.eks_db_instance_count
-      asg_desired_capacity    = var.external_db ? 0 : var.eks_db_instance_count
-      subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=db --register-with-taints=db:NoSchedule"
-      public_ip               = false
-      root_encrypted          = var.eks_db_root_encrypted
-      root_volume_size        = var.eks_db_root_volume_size
-      root_volume_type        = var.eks_db_root_volume_type
-      enable_monitoring       = var.eks_db_enable_monitoring
-    },
-    {
-      name                    = "cache"
-      override_instance_types = [var.eks_cache_instance_type]
-      spot_instance_pools     = var.eks_cache_instance_count
-      on_demand_base_capacity = var.external_redis ? 0 : var.eks_cache_instance_count
-      asg_min_size            = var.external_redis ? 0 : var.eks_cache_asg_min_size
-      asg_max_size            = var.external_redis ? 0 : var.eks_cache_instance_count
-      asg_desired_capacity    = var.external_redis ? 0 : var.eks_cache_instance_count
-      subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=cache --register-with-taints=cache:NoSchedule"
-      public_ip               = false
-      root_encrypted          = var.eks_cache_root_encrypted
-      root_volume_size        = var.eks_cache_root_volume_size
-      root_volume_type        = var.eks_cache_root_volume_type
-      enable_monitoring       = var.eks_cache_enable_monitoring
-    },
-    {
-      name = "dynamic"
-      tags = [
-        {
-          key                 = "k8s.io/cluster-autoscaler/enabled"
-          propagate_at_launch = "true"
-          value               = var.eks_dynamic_asg_autoscaling
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"
-          propagate_at_launch = "true"
-          value               = "owned"
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role"
-          propagate_at_launch = "true"
-          value               = "dynamic"
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/node-template/taint/dynamic"
-          propagate_at_launch = "true"
-          value               = "true:NoSchedule"
-        },
-      ]
-      override_instance_types = [var.eks_dynamic_instance_type]
-      spot_instance_pools     = var.eks_dynamic_instance_count
-      on_demand_base_capacity = var.eks_dynamic_max_instance_count
-      asg_min_size            = var.eks_dynamic_asg_min_size
-      asg_max_size            = var.eks_dynamic_max_instance_count
-      asg_desired_capacity    = var.eks_dynamic_instance_count
-      subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=dynamic --register-with-taints=dynamic:NoSchedule"
-      public_ip               = false
-      root_encrypted          = var.eks_dynamic_root_encrypted
-      root_volume_size        = var.eks_dynamic_root_volume_size
-      root_volume_type        = var.eks_dynamic_root_volume_type
-      enable_monitoring       = var.eks_dynamic_enable_monitoring
-    },
-    {
-      name                    = "base"
-      override_instance_types = [var.eks_base_instance_type]
-      on_demand_base_capacity = var.eks_base_instance_count
-      asg_min_size            = var.eks_base_asg_min_size
-      asg_max_size            = var.eks_base_instance_count
-      asg_desired_capacity    = var.eks_base_instance_count
-      subnets                 = [local.eks_private_subnets[0]]
-      kubelet_extra_args      = "--node-labels=edge.identiq.com/role=base"
-      public_ip               = false
-      root_encrypted          = var.eks_base_root_encrypted
-      root_volume_size        = var.eks_base_root_volume_size
-      root_volume_type        = var.eks_base_root_volume_type
-      enable_monitoring       = var.eks_base_enable_monitoring
+  # compitability with 17.24.0 eks module
+  prefix_separator                   = ""
+  iam_role_name                      = var.eks_cluster_name
+  cluster_security_group_name        = var.eks_cluster_name
+  cluster_security_group_description = "EKS cluster security group."
+
+  cluster_name                         = var.eks_cluster_name
+  cluster_version                      = var.eks_cluster_version
+  cluster_endpoint_public_access       = var.eks_cluster_endpoint_public_access
+  cluster_endpoint_public_access_cidrs = var.eks_cluster_endpoint_public_access_cidrs
+
+  cluster_addons = {
+    coredns = {
+      most_recent = true
+      configuration_values = jsonencode({
+        nodeSelector = {
+          "node.kubernetes.io/role" = "master"
+        }
+      })
     }
-  ]
-  worker_ami_name_filter                         = var.eks_worker_ami_name_filter
-  worker_ami_owner_id                            = var.eks_worker_ami_owner_id
-  cluster_enabled_log_types                      = var.eks_cluster_enabled_log_types
-  workers_additional_policies                    = concat([aws_iam_policy.lb_controller_policy.arn], [aws_iam_policy.worker_autoscaling.arn], ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"], var.eks_additional_policies)
-  depends_on                                     = [aws_iam_policy.lb_controller_policy, aws_iam_policy.worker_autoscaling]
-  tags                                           = merge(var.tags, var.default_tags)
-  cluster_endpoint_private_access                = var.eks_cluster_endpoint_private_access
-  cluster_endpoint_public_access                 = var.eks_cluster_endpoint_public_access
-  cluster_endpoint_public_access_cidrs           = var.eks_cluster_endpoint_public_access_cidrs
-  cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
+    kube-proxy = {
+      most_recent = true
+    }
+    aws-ebs-csi-driver = {
+      most_recent = true
+      configuration_values = jsonencode({
+        controller = {
+          nodeSelector = {
+            "node.kubernetes.io/role" = "master"
+          }
+        }
+      })
+    }
+    vpc-cni = {
+      most_recent    = true
+      before_compute = true
+      configuration_values = jsonencode({
+        env = {
+          # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
+          ENABLE_PREFIX_DELEGATION = "true"
+          WARM_PREFIX_TARGET       = "1"
+        }
+      })
+    }
+  }
 
-}
+  vpc_id                   = local.eks_vpc_id
+  subnet_ids               = [local.eks_private_subnets[0]]
+  control_plane_subnet_ids = local.eks_subnets
 
-data "aws_eks_cluster" "cluster" {
-  name = split("/", module.eks.cluster_arn)[1]
-}
+  manage_aws_auth_configmap = true
+  aws_auth_roles            = var.eks_map_roles
+  aws_auth_users            = var.eks_map_users
+  create_kms_key            = true
+  eks_managed_node_group_defaults = {
+    iam_role_additional_policies = {
+      AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+    }
+  }
+  eks_managed_node_groups = {
+    # Master node-group
+    master = {
+      # By default, the module creates a launch template to ensure tags are propagated to instances, etc.,
+      # so we need to disable it to use the default template provided by the AWS EKS managed node group service
+      use_custom_launch_template = false
+      # We are using the IRSA created below for permissions
+      # However, we have to deploy with the policy attached FIRST (when creating a fresh cluster)
+      # and then turn this off after the cluster/node group is created. Without this initial policy,
+      # the VPC CNI fails to assign IPs and nodes cannot join the cluster
+      # See https://github.com/aws/containers-roadmap/issues/1666 for more context
+      iam_role_attach_cni_policy = true
+      #      remote_access = {
+      #        ec2_ssh_key               = module.key_pair.key_pair_name
+      #        source_security_group_ids = [aws_security_group.remote_access.id]
+      #      }
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                                     = "true",
+        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                     = "owned",
+        "k8s.io/cluster-autoscaler/node-template/label/node.kubernetes.io/role" = "master",
+        "k8s.io/cluster-autoscaler/node-template/taint/CriticalAddonsOnly"      = "true:NoSchedule",
+      }
+      ami_type             = var.eks_master_ami_type
+      platform             = var.eks_master_platform
+      capacity_type        = var.eks_master_capacity_type
+      force_update_version = true
+      instance_types       = var.eks_master_instance_types
+      labels = {
+        "node.kubernetes.io/role" = "master"
+      }
+      taints = [
+        {
+          key    = "CriticalAddonsOnly"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+      min_size     = var.eks_master_min_size
+      max_size     = var.eks_master_max_size
+      desired_size = var.eks_master_desired_count
+    }
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = split("/", module.eks.cluster_arn)[1]
+    # Base node-group
+    base = {
+      use_custom_launch_template = false
+      iam_role_attach_cni_policy = true
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
+        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
+        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "base",
+      }
+      ami_type             = "BOTTLEROCKET_x86_64"
+      platform             = "bottlerocket"
+      capacity_type        = "ON_DEMAND"
+      force_update_version = true
+      instance_types       = var.eks_base_instance_types
+      labels = {
+        "edge.identiq.com/role" = "base"
+      }
+
+      min_size     = var.eks_base_min_size
+      max_size     = var.eks_base_max_size
+      desired_size = var.eks_base_desired_count
+    }
+
+    # Cache node-group
+    cache = {
+      use_custom_launch_template = false
+      iam_role_attach_cni_policy = true
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
+        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
+        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "cache",
+      }
+      ami_type             = "BOTTLEROCKET_x86_64"
+      platform             = "bottlerocket"
+      capacity_type        = "ON_DEMAND"
+      force_update_version = true
+      instance_types       = var.eks_cache_instance_types
+      labels = {
+        "edge.identiq.com/role" = "cache"
+      }
+      taints = [
+        {
+          key    = "cache"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+      min_size     = var.eks_cache_min_size
+      max_size     = var.eks_cache_max_size
+      desired_size = var.eks_cache_desired_count
+    }
+    # Db node-group
+    db = {
+      use_custom_launch_template = false
+      iam_role_attach_cni_policy = true
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
+        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
+        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "db",
+      }
+      ami_type             = var.eks_db_ami_type
+      platform             = var.eks_db_platform
+      capacity_type        = var.eks_db_capacity_type
+      force_update_version = true
+      instance_types       = var.eks_db_instance_types
+      labels = {
+        "edge.identiq.com/role" = "cache"
+      }
+      taints = [
+        {
+          key    = "db"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+      min_size     = var.eks_db_min_size
+      max_size     = var.eks_db_max_size
+      desired_size = var.eks_db_desired_count
+    }
+
+    # Dynamic node-group
+    dynamic = {
+      use_custom_launch_template = false
+      iam_role_attach_cni_policy = true
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
+        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
+        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "dynamic",
+      }
+      ami_type             = var.eks_dynamic_ami_type
+      platform             = var.eks_dynamic_platform
+      capacity_type        = var.eks_dynamic_capacity_type
+      force_update_version = true
+      instance_types       = var.eks_dynamic_instance_types
+      labels = {
+        "edge.identiq.com/role" = "dynamic"
+      }
+      taints = [
+        {
+          key    = "dynamic"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+      min_size     = var.eks_dynamic_min_size
+      max_size     = var.eks_dynamic_max_size
+      desired_size = var.eks_dynamic_desired_count
+    }
+  }
 }
 
 provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+
   exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
+    api_version = "client.authentication.k8s.io/v1"
     command     = "aws"
-    args        = ["--region", var.region, "eks", "get-token", "--cluster-name", var.eks_cluster_name]
+    args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
   }
 }
 
@@ -159,10 +265,4 @@ resource "kubernetes_storage_class" "ssd" {
   depends_on = [
     module.eks,
   ]
-}
-locals {
-  eks_subnets         = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
-  eks_private_subnets = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
-  eks_public_subnets  = var.external_vpc ? var.eks_public_subnets : module.vpc[0].public_subnets
-  eks_vpc_id          = var.external_vpc ? var.eks_vpc_id : module.vpc[0].vpc_id
 }
