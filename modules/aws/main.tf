@@ -25,7 +25,7 @@ module "eks" {
   cluster_version                      = var.eks_cluster_version
   cluster_endpoint_public_access       = var.eks_cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs = var.eks_cluster_endpoint_public_access_cidrs
-#  cluster_encryption_config            = var.eks_cluster_encryption_config
+  cluster_encryption_config            = var.eks_cluster_encryption_config
   cluster_addons = {
     coredns = {
       most_recent = true
