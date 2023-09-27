@@ -246,12 +246,12 @@ variable "eks_dynamic_capacity_type" {
 variable "eks_dynamic_ami_type" {
   description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
-  default     = "BOTTLEROCKET_x86_64"
+  default     = "AL2_x86_64"
 }
 variable "eks_dynamic_platform" {
   description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
   type        = string
-  default     = "bottlerocket"
+  default     = "linux"
 }
 
 variable "eks_dynamic_desired_count" {
