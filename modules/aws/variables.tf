@@ -106,7 +106,7 @@ variable "eks_cluster_name" {
 
 variable "eks_cluster_version" {
   description = "Kubernetes version to use for the EKS cluster"
-  default     = "1.23"
+  default     = "1.26"
 }
 
 variable "eks_map_roles" {
