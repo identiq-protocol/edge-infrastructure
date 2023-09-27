@@ -25,7 +25,7 @@ module "eks" {
   cluster_version                      = var.eks_cluster_version
   cluster_endpoint_public_access       = var.eks_cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs = var.eks_cluster_endpoint_public_access_cidrs
-  cluster_encryption_config            = var.eks_cluster_encryption_config
+#  cluster_encryption_config            = var.eks_cluster_encryption_config
   cluster_addons = {
     coredns = {
       most_recent = true
@@ -164,7 +164,7 @@ module "eks" {
       max_size     = var.eks_cache_max_size
       desired_size = var.eks_cache_desired_count
     }
-    # Db node-group
+    # DB node-group
     db = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
@@ -179,7 +179,7 @@ module "eks" {
       force_update_version = true
       instance_types       = var.eks_db_instance_types
       labels = {
-        "edge.identiq.com/role" = "cache"
+        "edge.identiq.com/role" = "db"
       }
       taints = [
         {
