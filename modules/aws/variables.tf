@@ -153,10 +153,15 @@ variable "eks_cluster_encryption_config" {
 ### node groups variables ###
 
 # master node group
+variable "eks_master_create" {
+    description = "Create EKS master node group"
+    type        = bool
+    default     = false
+}
 variable "eks_master_instance_types" {
   description = "EKS master worker group instance type"
   type        = list(string)
-  default     = ["c6a.large", "c6i.large"]
+  default     = ["t3.small", "t3a.small"]
 }
 variable "eks_master_capacity_type" {
   description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
@@ -177,7 +182,7 @@ variable "eks_master_platform" {
 variable "eks_master_desired_count" {
   description = "EKS master node group instance desired count"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "eks_master_min_size" {
@@ -189,7 +194,7 @@ variable "eks_master_min_size" {
 variable "eks_master_max_size" {
   description = "EKS master node group max number of instances"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 # base node group
