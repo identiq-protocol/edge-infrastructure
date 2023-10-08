@@ -3,14 +3,6 @@ moved {
   from = module.eks.aws_iam_role.cluster[0]
   to   = module.eks.aws_iam_role.this[0]
 }
-import {
-  to = kubernetes_manifest.aws-load-balancer-controller[0]
-  id = "apiVersion=apiextensions.k8s.io/v1,kind=CustomResourceDefinition,name=ingressclassparams.elbv2.k8s.aws"
-}
-import {
-  to =  kubernetes_manifest.aws-load-balancer-controller[1]
-  id = "apiVersion=apiextensions.k8s.io/v1,kind=CustomResourceDefinition,name=targetgroupbindings.elbv2.k8s.aws"
-}
 
 locals {
   eks_subnets                            = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
@@ -242,7 +234,6 @@ module "eks" {
 provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-
   exec {
     api_version = "client.authentication.k8s.io/v1"
     command     = "aws"
@@ -282,14 +273,4 @@ resource "kubernetes_storage_class" "ssd" {
   depends_on = [
     module.eks,
   ]
-}
-
-resource "kubernetes_manifest" "aws-load-balancer-controller" {
-  count    = length(local.aws_load_balancer_controller_manifests)
-  manifest = local.aws_load_balancer_controller_manifests[count.index]
-  lifecycle {
-    ignore_changes = [
-      object.metadata.annotations
-    ]
-  }
 }
