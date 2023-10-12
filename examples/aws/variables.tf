@@ -738,6 +738,12 @@ variable "ec_appautoscaling_predefined_metric_type" {
   default     = "ElastiCacheDatabaseMemoryUsageCountedForEvictPercentage"
 }
 
+variable "ec_log_delivery_configuration" {
+  type        = list(map(any))
+  default     = []
+  description = "The log_delivery_configuration block allows the streaming of Redis SLOWLOG or Redis Engine Log to CloudWatch Logs or Kinesis Data Firehose. Max of 2 blocks."
+}
+
 variable "ec_appautoscaling_target_value" {
   type        = number
   description = "The target value for the metric."
