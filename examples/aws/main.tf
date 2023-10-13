@@ -142,6 +142,8 @@ module "edge-aws" {
   ec_appautoscaling_scale_in_cooldown      = var.ec_appautoscaling_scale_in_cooldown
   ec_appautoscaling_scale_out_cooldown     = var.ec_appautoscaling_scale_out_cooldown
   ec_data_tiering_enabled                  = var.ec_data_tiering_enabled
+  ec_log_delivery_configuration            = var.ec_log_delivery_configuration
+
   # General
   default_tags = var.default_tags
   tags         = var.tags
