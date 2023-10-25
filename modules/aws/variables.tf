@@ -274,7 +274,7 @@ variable "eks_dynamic_min_size" {
 variable "eks_dynamic_max_size" {
   description = "EKS master node group max number of instances"
   type        = number
-  default     = 1
+  default     = 20
 }
 
 # cache node group

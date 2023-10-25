@@ -3,7 +3,7 @@ resource "aws_vpc_endpoint" "ep" {
   service_name       = local.vpc_endpoint_service_name
   vpc_id             = local.ep_vpc_id
   vpc_endpoint_type  = var.vpc_endpoint_type
-  security_group_ids = [module.eks.cluster_security_group_id]
+  security_group_ids = [module.eks.cluster_primary_security_group_id]
   subnet_ids         = local.ep_private_subnets
   tags               = var.tags
 }

@@ -11,7 +11,7 @@ locals {
       to_port                  = 5432
       protocol                 = "tcp"
       description              = "PostgreSQL access from within edge EKS cluster"
-      source_security_group_id = module.eks.cluster_security_group_id
+      source_security_group_id = module.eks.cluster_primary_security_group_id
     }
   ]
 }

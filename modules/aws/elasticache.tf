@@ -7,7 +7,7 @@ module "redis" {
   zone_id                              = ""
   vpc_id                               = local.ec_vpc_id
   allow_all_egress                     = var.ec_allow_all_egress
-  allowed_security_group_ids           = [module.eks.cluster_security_group_id]
+  allowed_security_group_ids           = [module.eks.cluster_primary_security_group_id]
   data_tiering_enabled                 = var.ec_data_tiering_enabled
   subnets                              = local.ec_private_subnets
   cluster_mode_enabled                 = var.ec_cluster_mode_enabled
