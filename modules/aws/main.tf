@@ -220,6 +220,7 @@ module "eks" {
   eks_managed_node_group_defaults = {
     iam_role_additional_policies = {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      ClusterAutoscalerPolicy  = aws_iam_policy.worker_autoscaling.arn
     }
   }
   eks_managed_node_groups = merge(

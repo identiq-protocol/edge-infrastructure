@@ -51,14 +51,14 @@ module "rds" {
   storage_encrypted                     = var.rds_storage_encrypted
   username                              = var.rds_username
   password                              = random_password.rds_password[0].result
-  port                                  = var.rds_engine == "mariadb" ? 3306 : 5432
+  port                                  = 5432
   multi_az                              = var.rds_multi_az
   create_db_subnet_group                = true
   subnet_ids                            = local.rds_private_subnets
   vpc_security_group_ids                = [module.rds_sg.security_group_id]
   maintenance_window                    = var.rds_maintenance_window
   backup_window                         = var.rds_backup_window
-  enabled_cloudwatch_logs_exports       = [var.rds_engine == "mariadb" ? "general" : "postgresql"]
+  enabled_cloudwatch_logs_exports       = ["postgresql"]
   backup_retention_period               = var.rds_backup_retention_period
   skip_final_snapshot                   = var.rds_skip_final_snapshot
   snapshot_identifier                   = var.rds_snapshot_identifier
@@ -78,11 +78,11 @@ module "rds" {
 resource "kubernetes_secret" "edge_db_secret" {
   count = var.external_db ? 1 : 0
   metadata {
-    name = "edge-${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}"
+    name = "edge-postgresql"
   }
   data = {
-    "${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}-password"      = random_password.rds_password[0].result
-    "${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}-root-password" = random_password.rds_password[0].result
+    "postgresql-password"      = random_password.rds_password[0].result
+    "postgresql-root-password" = random_password.rds_password[0].result
   }
 
   depends_on = [
@@ -94,7 +94,7 @@ resource "kubernetes_secret" "edge_db_secret" {
 resource "kubernetes_service" "edge_db_service" {
   count = var.external_db ? 1 : 0
   metadata {
-    name = "edge-${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}"
+    name = "edge-postgresql"
     annotations = {
       "ad.datadoghq.com/service.check_names"  = "[\"postgres\"]"
       "ad.datadoghq.com/service.init_configs" = "[{}]"
