@@ -755,6 +755,11 @@ variable "rds_allow_major_version_upgrade" {
   type        = bool
   default     = false
 }
+variable "rds_manage_master_user_password" {
+  description = "Set to true to allow RDS to manage the master user password in Secrets Manager"
+  type        = bool
+  default     = false
+}
 
 variable "default_tags" {
   description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"

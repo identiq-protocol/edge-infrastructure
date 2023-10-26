@@ -26,12 +26,6 @@ locals {
       # the VPC CNI fails to assign IPs and nodes cannot join the cluster
       # See https://github.com/aws/containers-roadmap/issues/1666 for more context
       iam_role_attach_cni_policy = true
-      tags = {
-        "k8s.io/cluster-autoscaler/enabled"                                     = "true",
-        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                     = "owned",
-        "k8s.io/cluster-autoscaler/node-template/label/node.kubernetes.io/role" = "master",
-        "k8s.io/cluster-autoscaler/node-template/taint/CriticalAddonsOnly"      = "true:NoSchedule",
-      }
       ami_type             = var.eks_master_ami_type
       platform             = var.eks_master_platform
       capacity_type        = var.eks_master_capacity_type
@@ -56,11 +50,6 @@ locals {
     base = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      tags = {
-        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
-        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
-        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "base",
-      }
       ami_type             = var.eks_base_ami_type
       platform             = var.eks_base_platform
       capacity_type        = var.eks_base_capacity_type
@@ -69,7 +58,6 @@ locals {
       labels = {
         "edge.identiq.com/role" = "base"
       }
-
       min_size     = var.eks_base_min_size
       max_size     = var.eks_base_max_size
       desired_size = var.eks_base_desired_count
@@ -79,11 +67,6 @@ locals {
     db = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      tags = {
-        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
-        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
-        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "db",
-      }
       ami_type             = var.eks_db_ami_type
       platform             = var.eks_db_platform
       capacity_type        = var.eks_db_capacity_type
@@ -108,11 +91,6 @@ locals {
     cache = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      tags = {
-        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
-        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
-        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "cache",
-      }
       ami_type             = var.eks_cache_ami_type
       platform             = var.eks_cache_platform
       capacity_type        = var.eks_cache_capacity_type
@@ -137,11 +115,6 @@ locals {
     dynamic = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      tags = {
-        "k8s.io/cluster-autoscaler/enabled"                                   = "true",
-        "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
-        "k8s.io/cluster-autoscaler/node-template/label/edge.identiq.com/role" = "dynamic",
-      }
       ami_type             = var.eks_dynamic_ami_type
       platform             = var.eks_dynamic_platform
       capacity_type        = var.eks_dynamic_capacity_type
@@ -218,9 +191,14 @@ module "eks" {
   aws_auth_roles            = var.eks_map_roles
   aws_auth_users            = var.eks_map_users
   eks_managed_node_group_defaults = {
+    tags = {
+      "k8s.io/cluster-autoscaler/enabled"                                   = "true",
+      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
+    }
     iam_role_additional_policies = {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
       ClusterAutoscalerPolicy  = aws_iam_policy.worker_autoscaling.arn
+
     }
   }
   eks_managed_node_groups = merge(
@@ -230,6 +208,55 @@ module "eks" {
     var.external_db ? {} : local.db_node_group,
     var.external_redis ? {} : local.cache_node_group
   )
+}
+
+################################################################################
+# Tags for the ASG to support cluster-autoscaler scale up from 0
+################################################################################
+
+locals {
+
+  # We need to lookup K8s taint effect from the AWS API value
+  taint_effects = {
+    NO_SCHEDULE        = "NoSchedule"
+    NO_EXECUTE         = "NoExecute"
+    PREFER_NO_SCHEDULE = "PreferNoSchedule"
+  }
+
+  cluster_autoscaler_label_tags = merge([
+    for name, group in module.eks.eks_managed_node_groups : {
+      for label_name, label_value in coalesce(group.node_group_labels, {}) : "${name}|label|${label_name}" => {
+        autoscaling_group = group.node_group_autoscaling_group_names[0],
+        key               = "k8s.io/cluster-autoscaler/node-template/label/${label_name}",
+        value             = label_value,
+      }
+    }
+  ]...)
+
+  cluster_autoscaler_taint_tags = merge([
+    for name, group in module.eks.eks_managed_node_groups : {
+      for taint in coalesce(group.node_group_taints, []) : "${name}|taint|${taint.key}" => {
+        autoscaling_group = group.node_group_autoscaling_group_names[0],
+        key               = "k8s.io/cluster-autoscaler/node-template/taint/${taint.key}"
+        value             = "${taint.value}:${local.taint_effects[taint.effect]}"
+      }
+    }
+  ]...)
+
+  cluster_autoscaler_asg_tags = merge(local.cluster_autoscaler_label_tags, local.cluster_autoscaler_taint_tags)
+}
+
+resource "aws_autoscaling_group_tag" "cluster_autoscaler_label_tags" {
+  for_each = local.cluster_autoscaler_asg_tags
+
+  autoscaling_group_name = each.value.autoscaling_group
+
+  tag {
+    key   = each.value.key
+    value = each.value.value
+
+    propagate_at_launch = false
+  }
 }
 
 provider "kubernetes" {

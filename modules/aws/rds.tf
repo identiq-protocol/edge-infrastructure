@@ -51,6 +51,7 @@ module "rds" {
   storage_encrypted                     = var.rds_storage_encrypted
   username                              = var.rds_username
   password                              = random_password.rds_password[0].result
+  manage_master_user_password           = var.rds_manage_master_user_password
   port                                  = 5432
   multi_az                              = var.rds_multi_az
   create_db_subnet_group                = true
@@ -74,6 +75,7 @@ module "rds" {
   tags                                  = merge(var.tags, var.default_tags)
   max_allocated_storage                 = var.rds_max_allocated_storage
 }
+
 
 resource "kubernetes_secret" "edge_db_secret" {
   count = var.external_db ? 1 : 0
