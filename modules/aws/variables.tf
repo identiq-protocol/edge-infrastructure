@@ -260,19 +260,19 @@ variable "eks_dynamic_platform" {
 }
 
 variable "eks_dynamic_desired_count" {
-  description = "EKS master node group instance desired count"
+  description = "EKS dynamic node group instance desired count"
   type        = number
   default     = 1
 }
 
 variable "eks_dynamic_min_size" {
-  description = "EKS master worker group minimum number of instances"
+  description = "EKS dynamic worker group minimum number of instances"
   type        = number
   default     = 0
 }
 
 variable "eks_dynamic_max_size" {
-  description = "EKS master node group max number of instances"
+  description = "EKS dynamic node group max number of instances"
   type        = number
   default     = 20
 }
@@ -340,19 +340,19 @@ variable "eks_db_platform" {
 }
 
 variable "eks_db_desired_count" {
-  description = "EKS master node group instance desired count"
+  description = "EKS db node group instance desired count"
   type        = number
   default     = 1
 }
 
 variable "eks_db_min_size" {
-  description = "EKS master worker group minimum number of instances"
+  description = "EKS db worker group minimum number of instances"
   type        = number
   default     = 0
 }
 
 variable "eks_db_max_size" {
-  description = "EKS master node group max number of instances"
+  description = "EKS db node group max number of instances"
   type        = number
   default     = 1
 }
@@ -398,7 +398,7 @@ variable "ec_private_subnets" {
 variable "ec_instance_type" {
   description = "Elastic cache instance type"
   type        = string
-  default     = "cache.r5.2xlarge"
+  default     = "cache.r7g.xlarge"
 }
 
 variable "ec_cluster_mode_enabled" {
@@ -445,13 +445,13 @@ variable "ec_automatic_failover_enabled" {
 variable "ec_engine_version" {
   description = "Elastic cache Redis engine version"
   type        = string
-  default     = "6.x"
+  default     = "7.0"
 }
 
 variable "ec_family" {
   description = "Elastic cache Redis family"
   type        = string
-  default     = "redis6.x"
+  default     = "redis7"
 }
 
 variable "ec_at_rest_encryption_enabled" {
@@ -499,7 +499,7 @@ variable "ec_transit_encryption_enabled" {
 variable "ec_subnet_single_az" {
   description = "Whether to Elastic cache subnet group with single subnet"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "external_db" {
@@ -600,7 +600,7 @@ variable "rds_db_name" {
 variable "rds_create_monitoring_role" {
   description = "Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs"
   type        = bool
-  default     = "true"
+  default     = true
 }
 
 variable "rds_username" {
@@ -612,7 +612,7 @@ variable "rds_username" {
 variable "rds_multi_az" {
   description = "Specifies if the RDS instance is multi-AZ"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "rds_maintenance_window" {
@@ -672,7 +672,7 @@ variable "rds_storage_encrypted" {
 variable "rds_instance_class" {
   description = "The instance type of the RDS instance"
   type        = string
-  default     = "db.m5.large"
+  default     = "db.r7g.large"
 }
 
 variable "rds_backup_retention_period" {
@@ -701,7 +701,7 @@ variable "rds_iops" {
 variable "rds_storage_type" {
   description = "One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not."
   type        = string
-  default     = "gp2"
+  default     = "gp3"
 }
 
 variable "rds_apply_immediately" {
@@ -761,6 +761,11 @@ variable "rds_manage_master_user_password" {
   default     = false
 }
 
+variable "rds_ca_cert_identifier" {
+  description = "Specifies the identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-rsa2048-g1"
+}
 variable "default_tags" {
   description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
   default = {

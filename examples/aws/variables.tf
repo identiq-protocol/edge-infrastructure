@@ -80,6 +80,12 @@ variable "vpc_enable_dns_support" {
   default     = true
 }
 
+variable "vpc_map_public_ip_on_launch" {
+  description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address. Default is `false`"
+  type        = bool
+  default     = true
+}
+
 variable "vpc_endpoint_service_name" {
   description = "Endpoint service name to configure with Identiq endpoint service"
   default     = ""
@@ -100,7 +106,7 @@ variable "eks_cluster_name" {
 
 variable "eks_cluster_version" {
   description = "Kubernetes version to use for the EKS cluster"
-  default     = "1.23"
+  default     = "1.26"
 }
 
 variable "eks_map_roles" {
@@ -135,181 +141,222 @@ variable "eks_wait_for_cluster_timeout" {
   default     = 300
 }
 
-variable "eks_db_instance_type" {
-  description = "EKS database worker group instance type"
+variable "eks_cluster_encryption_config" {
+  description = "Configuration block with encryption configuration for the cluster. To disable secret encryption, set this value to `{}`"
+  type        = any
+  default = {}
+#  default = {
+#    resources = ["secrets"]
+#  }
+}
+
+### node groups variables ###
+
+# master node group
+variable "eks_master_create" {
+    description = "Create EKS master node group"
+    type        = bool
+    default     = false
+}
+variable "eks_master_instance_types" {
+  description = "EKS master worker group instance type"
+  type        = list(string)
+  default     = ["t3.small", "t3a.small"]
+}
+variable "eks_master_capacity_type" {
+  description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
-  default     = "m5.large"
+  default     = "ON_DEMAND"
+}
+variable "eks_master_ami_type" {
+  description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
+  type        = string
+  default     = "BOTTLEROCKET_x86_64"
+}
+variable "eks_master_platform" {
+  description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
+  type        = string
+  default     = "bottlerocket"
 }
 
-variable "eks_db_instance_count" {
-  description = "EKS database worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+variable "eks_master_desired_count" {
+  description = "EKS master node group instance desired count"
   type        = number
-  default     = 1
+  default     = 2
 }
 
-variable "eks_db_asg_min_size" {
-  description = "EKS database worker group minimimum number of instances (asg_min_size)"
+variable "eks_master_min_size" {
+  description = "EKS master worker group minimimum number of instances"
   type        = number
   default     = 0
 }
 
-variable "eks_db_root_encrypted" {
-  description = "Whether EKS db worker group instance root volume should be encrypted or not"
-  type        = bool
-  default     = true
-}
-
-variable "eks_db_root_volume_size" {
-  description = "The size of the volume in gigabytes"
+variable "eks_master_max_size" {
+  description = "EKS master node group max number of instances"
   type        = number
-  default     = 100
+  default     = 2
 }
 
-variable "eks_db_root_volume_type" {
-  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+# base node group
+variable "eks_base_instance_types" {
+  description = "EKS base worker group instance type"
+  type        = list(string)
+  default     = ["c6a.2xlarge", "c6i.2xlarge"]
+}
+variable "eks_base_capacity_type" {
+  description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
-  default     = "gp3"
+  default     = "ON_DEMAND"
 }
-variable "eks_db_enable_monitoring" {
-  description = "Enable detailed cloudwatch monitoring on instances "
-  type        = bool
-  default     = false
-}
-
-variable "eks_cache_instance_type" {
-  description = "EKS cache worker group instance type"
+variable "eks_base_ami_type" {
+  description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
-  default     = "r5.2xlarge"
+  default     = "BOTTLEROCKET_x86_64"
+}
+variable "eks_base_platform" {
+  description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
+  type        = string
+  default     = "bottlerocket"
 }
 
-variable "eks_cache_instance_count" {
-  description = "EKS cache worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+variable "eks_base_desired_count" {
+  description = "EKS master node group instance desired count"
   type        = number
   default     = 1
 }
 
-variable "eks_cache_asg_min_size" {
-  description = "EKS cache worker group minimimum number of instances (asg_min_size)"
+variable "eks_base_min_size" {
+  description = "EKS master worker group minimimum number of instances"
   type        = number
   default     = 0
 }
 
-variable "eks_cache_root_encrypted" {
-  description = "Whether EKS cache worker group instance root volume should be encrypted or not"
-  type        = bool
-  default     = true
-}
-
-variable "eks_cache_root_volume_size" {
-  description = "The size of the volume in gigabytes"
+variable "eks_base_max_size" {
+  description = "EKS master node group max number of instances"
   type        = number
-  default     = 100
+  default     = 1
 }
 
-variable "eks_cache_root_volume_type" {
-  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
-  type        = string
-  default     = "gp3"
-}
-variable "eks_cache_enable_monitoring" {
-  description = "Enable detailed cloudwatch monitoring on instances "
-  type        = bool
-  default     = false
-}
-
-variable "eks_dynamic_instance_type" {
+# dynamic node group
+variable "eks_dynamic_instance_types" {
   description = "EKS dynamic worker group instance type"
+  type        = list(string)
+  default     = ["c6a.2xlarge", "c6i.2xlarge"]
+}
+variable "eks_dynamic_capacity_type" {
+  description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
-  default     = "c5.2xlarge"
+  default     = "ON_DEMAND"
+}
+variable "eks_dynamic_ami_type" {
+  description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
+  type        = string
+  default     = "AL2_x86_64"
+}
+variable "eks_dynamic_platform" {
+  description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
+  type        = string
+  default     = "linux"
 }
 
-variable "eks_dynamic_instance_count" {
-  description = "EKS dynamic worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+variable "eks_dynamic_desired_count" {
+  description = "EKS dynamic node group instance desired count"
   type        = number
-  default     = 4
-}
-variable "eks_dynamic_asg_autoscaling" {
-  description = "EKS dynamic worker group enable autoscaling"
-  type        = bool
-  default     = true
+  default     = 1
 }
 
-variable "eks_dynamic_asg_min_size" {
-  description = "EKS dynamic worker group minimimum number of instances (asg_min_size)"
+variable "eks_dynamic_min_size" {
+  description = "EKS dynamic worker group minimum number of instances"
   type        = number
   default     = 0
 }
-variable "eks_dynamic_max_instance_count" {
-  description = "EKS dynamic worker group maximum number of instances (asg_max_size)"
+
+variable "eks_dynamic_max_size" {
+  description = "EKS dynamic node group max number of instances"
   type        = number
   default     = 20
 }
 
-variable "eks_dynamic_root_encrypted" {
-  description = "Whether EKS dynamic worker group instance root volume should be encrypted or not"
-  type        = bool
-  default     = true
+# cache node group
+variable "eks_cache_instance_types" {
+  description = "EKS cache worker group instance type"
+  type        = list(string)
+  default     = ["r6a.2xlarge", "r6i.2xlarge"]
 }
-
-variable "eks_dynamic_root_volume_size" {
-  description = "The size of the volume in gigabytes"
-  type        = number
-  default     = 100
-}
-
-variable "eks_dynamic_root_volume_type" {
-  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+variable "eks_cache_capacity_type" {
+  description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
-  default     = "gp3"
+  default     = "ON_DEMAND"
 }
-
-variable "eks_dynamic_enable_monitoring" {
-  description = "Enable detailed cloudwatch monitoring on instances "
-  type        = bool
-  default     = false
-}
-
-variable "eks_base_instance_type" {
-  description = "EKS base worker group instance type"
+variable "eks_cache_ami_type" {
+  description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
-  default     = "c5.2xlarge"
+  default     = "BOTTLEROCKET_x86_64"
+}
+variable "eks_cache_platform" {
+  description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
+  type        = string
+  default     = "bottlerocket"
 }
 
-variable "eks_base_instance_count" {
-  description = "EKS base worker group instance count which sets on_demand_base_capacity, asg_min_size, asg_desired_capacity"
+variable "eks_cache_desired_count" {
+  description = "EKS master node group instance desired count"
   type        = number
   default     = 1
 }
 
-variable "eks_base_asg_min_size" {
-  description = "EKS base worker group minimimum number of instances (asg_min_size)"
+variable "eks_cache_min_size" {
+  description = "EKS master worker group minimum number of instances"
   type        = number
   default     = 0
 }
 
-variable "eks_base_root_encrypted" {
-  description = "Whether EKS base worker group instance root volume should be encrypted or not"
-  type        = bool
-  default     = true
-}
-
-variable "eks_base_root_volume_size" {
-  description = "The size of the volume in gigabytes"
+variable "eks_cache_max_size" {
+  description = "EKS master node group max number of instances"
   type        = number
-  default     = 100
+  default     = 1
 }
 
-variable "eks_base_root_volume_type" {
-  description = "The volume type. Can be standard, gp2, gp3, io1, io2, sc1 or st1"
+# db node group
+variable "eks_db_instance_types" {
+  description = "EKS db worker group instance type"
+  type        = list(string)
+  default     = ["m6a.xlarge", "m6i.xlarge"]
+}
+variable "eks_db_capacity_type" {
+  description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
-  default     = "gp3"
+  default     = "ON_DEMAND"
+}
+variable "eks_db_ami_type" {
+  description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
+  type        = string
+  default     = "BOTTLEROCKET_x86_64"
+}
+variable "eks_db_platform" {
+  description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
+  type        = string
+  default     = "bottlerocket"
 }
 
-variable "eks_base_enable_monitoring" {
-  description = "Enable detailed cloudwatch monitoring on instances "
-  type        = bool
-  default     = false
+variable "eks_db_desired_count" {
+  description = "EKS db node group instance desired count"
+  type        = number
+  default     = 1
 }
+
+variable "eks_db_min_size" {
+  description = "EKS db worker group minimum number of instances"
+  type        = number
+  default     = 0
+}
+
+variable "eks_db_max_size" {
+  description = "EKS db node group max number of instances"
+  type        = number
+  default     = 1
+}
+
 
 variable "eks_cluster_enabled_log_types" {
   default     = []
@@ -351,7 +398,7 @@ variable "ec_private_subnets" {
 variable "ec_instance_type" {
   description = "Elastic cache instance type"
   type        = string
-  default     = "cache.r5.2xlarge"
+  default     = "cache.r7g.xlarge"
 }
 
 variable "ec_cluster_mode_enabled" {
@@ -398,13 +445,13 @@ variable "ec_automatic_failover_enabled" {
 variable "ec_engine_version" {
   description = "Elastic cache Redis engine version"
   type        = string
-  default     = "6.x"
+  default     = "7.0"
 }
 
 variable "ec_family" {
   description = "Elastic cache Redis family"
   type        = string
-  default     = "redis6.x"
+  default     = "redis7"
 }
 
 variable "ec_at_rest_encryption_enabled" {
@@ -452,7 +499,7 @@ variable "ec_transit_encryption_enabled" {
 variable "ec_subnet_single_az" {
   description = "Whether to Elastic cache subnet group with single subnet"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "external_db" {
@@ -553,7 +600,7 @@ variable "rds_db_name" {
 variable "rds_create_monitoring_role" {
   description = "Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs"
   type        = bool
-  default     = "true"
+  default     = true
 }
 
 variable "rds_username" {
@@ -565,7 +612,7 @@ variable "rds_username" {
 variable "rds_multi_az" {
   description = "Specifies if the RDS instance is multi-AZ"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "rds_maintenance_window" {
@@ -625,7 +672,7 @@ variable "rds_storage_encrypted" {
 variable "rds_instance_class" {
   description = "The instance type of the RDS instance"
   type        = string
-  default     = "db.m5.large"
+  default     = "db.r7g.large"
 }
 
 variable "rds_backup_retention_period" {
@@ -654,7 +701,7 @@ variable "rds_iops" {
 variable "rds_storage_type" {
   description = "One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not."
   type        = string
-  default     = "gp2"
+  default     = "gp3"
 }
 
 variable "rds_apply_immediately" {
@@ -708,7 +755,17 @@ variable "rds_allow_major_version_upgrade" {
   type        = bool
   default     = false
 }
+variable "rds_manage_master_user_password" {
+  description = "Set to true to allow RDS to manage the master user password in Secrets Manager"
+  type        = bool
+  default     = false
+}
 
+variable "rds_ca_cert_identifier" {
+  description = "Specifies the identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-rsa2048-g1"
+}
 variable "default_tags" {
   description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
   default = {
