@@ -27,6 +27,7 @@ module "redis" {
   snapshot_name                        = var.ec_snapshot_name
   snapshot_window                      = var.ec_snapshot_window
   snapshot_retention_limit             = var.ec_snapshot_retention_limit
+  log_delivery_configuration = var.ec_log_delivery_configuration
 }
 
 resource "kubernetes_secret" "edge_redis_secret" {
