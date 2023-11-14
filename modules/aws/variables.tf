@@ -262,7 +262,7 @@ variable "eks_dynamic_platform" {
 variable "eks_dynamic_desired_count" {
   description = "EKS dynamic node group instance desired count"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "eks_dynamic_min_size" {
@@ -862,4 +862,35 @@ variable "ec_data_tiering_enabled" {
   type        = bool
   default     = false
   description = "Enables Elasticache data tiering. Data tiering is only supported for replication groups using the r6gd node type."
+}
+
+### cluster autoscaler variables ###
+variable "cluster_autoscaler_enabled" {
+  description = "Enable cluster autoscaler"
+  type        = bool
+  default     = false
+}
+
+variable "cluster_autoscaler_verbosity_level" {
+  description = "Verbosity level"
+  type        = string
+  default     = "4"
+}
+
+variable "cluster_autoscaler_namespace" {
+  description = "Namespace to deploy cluster autoscaler"
+  type        = string
+  default     = "default"
+}
+
+variable "cluster_autoscaler_helm_chart_version" {
+  description = "Cluster autoscaler helm chart version"
+  type        = string
+  default     = "9.29.3"
+}
+
+variable "cluster_autoscaler_image_tag" {
+    description = "Cluster autoscaler image tag"
+    type        = string
+    default     = "v1.27.2"
 }

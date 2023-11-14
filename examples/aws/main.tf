@@ -165,6 +165,13 @@ module "edge-aws" {
   ec_enable_app_autoscaling                = var.ec_enable_app_autoscaling
   ec_allow_all_egress                      = var.ec_allow_all_egress
   ec_data_tiering_enabled                  = var.ec_data_tiering_enabled
+
+  # cluster autoscaler
+  cluster_autoscaler_enabled = var.cluster_autoscaler_enabled
+  cluster_autoscaler_verbosity_level = var.cluster_autoscaler_verbosity_level
+  cluster_autoscaler_namespace = var.cluster_autoscaler_namespace
+  cluster_autoscaler_helm_chart_version = var.cluster_autoscaler_helm_chart_version
+  cluster_autoscaler_image_tag = var.cluster_autoscaler_image_tag
 }
 
 output "connect" {

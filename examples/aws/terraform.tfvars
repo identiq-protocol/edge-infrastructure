@@ -1,12 +1,20 @@
-eks_cluster_name                     = "edge-cluster"
-region                               = "us-east-1"
-external_redis                       = true
-ec_cluster_mode_creation_fix_enabled = true
-ec_cluster_mode_enabled              = true
-ec_cluster_mode_num_node_groups      = 2
-#external_db                     = true
-#rds_apply_immediately           = false
-#rds_allow_major_version_upgrade = false
+eks_cluster_name = "edge-cluster"
+region           = "us-east-1"
+
+# Elasticache Redis
+external_redis      = true         # Create an external redis using elasticache
+external_redis_name = "edge-redis" # Name of the elasticache instance
+
+### uncomment the following lines to enable elasticache cluster mode
+#ec_cluster_mode_creation_fix_enabled = true
+#ec_cluster_mode_enabled              = true
+#ec_cluster_mode_num_node_groups      = 2
+#cluster_autoscaler_enabled = true
+
+# RDS Postgres
+external_db                     = true # Create an external postgres using RDS
+external_db_name                = "edge-db" # Name of the RDS instance
+
 # For configuring additional IAM roles to administer the cluster
 # uncomment the variable below and set the correct IAM roles ARN.
 # eks_map_roles = [{ rolearn = "arn:aws:iam::012345678901:role/edge-admin", username = "admin", groups = ["system:masters"] }]
