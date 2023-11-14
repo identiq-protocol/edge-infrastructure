@@ -1,13 +1,13 @@
 module "redis" {
   count                                = var.external_redis ? 1 : 0
   source                               = "cloudposse/elasticache-redis/aws"
-  version                              = "0.49.0"
+  version                              = "0.52.0"
   availability_zones                   = var.ec_cluster_mode_enabled && var.ec_cluster_mode_creation_fix_enabled ? [] : data.aws_availability_zones.available.names
   name                                 = var.external_redis_name
   zone_id                              = ""
   vpc_id                               = local.ec_vpc_id
   allow_all_egress                     = var.ec_allow_all_egress
-  allowed_security_group_ids           = [module.eks.worker_security_group_id]
+  allowed_security_group_ids           = [module.eks.cluster_primary_security_group_id]
   data_tiering_enabled                 = var.ec_data_tiering_enabled
   subnets                              = local.ec_private_subnets
   cluster_mode_enabled                 = var.ec_cluster_mode_enabled

@@ -11,7 +11,7 @@ locals {
       to_port                  = 5432
       protocol                 = "tcp"
       description              = "PostgreSQL access from within edge EKS cluster"
-      source_security_group_id = module.eks.worker_security_group_id
+      source_security_group_id = module.eks.cluster_primary_security_group_id
     }
   ]
 }
@@ -19,7 +19,7 @@ locals {
 module "rds_sg" {
   create      = var.external_db ? true : false
   source      = "terraform-aws-modules/security-group/aws"
-  version     = "4.8.0"
+  version     = "5.1.0"
   name        = "${var.external_db_name}-db-sg"
   description = "Security group for edge rds"
   vpc_id      = local.rds_vpc_id
@@ -38,9 +38,9 @@ module "rds_sg" {
 module "rds" {
   count                                 = var.external_db ? 1 : 0
   source                                = "terraform-aws-modules/rds/aws"
-  version                               = "2.35.0"
+  version                               = "6.1.1"
   identifier                            = var.external_db_name
-  name                                  = var.rds_db_name
+  db_name                               = var.rds_db_name
   monitoring_role_name                  = "${var.eks_cluster_name}-monitoring"
   create_monitoring_role                = var.rds_create_monitoring_role
   engine                                = var.rds_engine
@@ -51,13 +51,15 @@ module "rds" {
   storage_encrypted                     = var.rds_storage_encrypted
   username                              = var.rds_username
   password                              = random_password.rds_password[0].result
-  port                                  = var.rds_engine == "mariadb" ? 3306 : 5432
+  manage_master_user_password           = var.rds_manage_master_user_password
+  port                                  = 5432
   multi_az                              = var.rds_multi_az
+  create_db_subnet_group                = true
   subnet_ids                            = local.rds_private_subnets
   vpc_security_group_ids                = [module.rds_sg.security_group_id]
   maintenance_window                    = var.rds_maintenance_window
   backup_window                         = var.rds_backup_window
-  enabled_cloudwatch_logs_exports       = [var.rds_engine == "mariadb" ? "general" : "postgresql"]
+  enabled_cloudwatch_logs_exports       = ["postgresql"]
   backup_retention_period               = var.rds_backup_retention_period
   skip_final_snapshot                   = var.rds_skip_final_snapshot
   snapshot_identifier                   = var.rds_snapshot_identifier
@@ -71,17 +73,19 @@ module "rds" {
   parameters                            = var.rds_parameters
   allow_major_version_upgrade           = var.rds_allow_major_version_upgrade
   tags                                  = merge(var.tags, var.default_tags)
-  max_allocated_storage = var.rds_max_allocated_storage
+  max_allocated_storage                 = var.rds_max_allocated_storage
+  ca_cert_identifier                    = var.rds_ca_cert_identifier
 }
+
 
 resource "kubernetes_secret" "edge_db_secret" {
   count = var.external_db ? 1 : 0
   metadata {
-    name = "edge-${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}"
+    name = "edge-postgresql"
   }
   data = {
-    "${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}-password"      = module.rds[0].this_db_instance_password
-    "${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}-root-password" = module.rds[0].this_db_instance_password
+    "postgresql-password"      = random_password.rds_password[0].result
+    "postgresql-root-password" = random_password.rds_password[0].result
   }
 
   depends_on = [
@@ -93,7 +97,7 @@ resource "kubernetes_secret" "edge_db_secret" {
 resource "kubernetes_service" "edge_db_service" {
   count = var.external_db ? 1 : 0
   metadata {
-    name = "edge-${var.rds_engine == "mariadb" ? "mariadb" : "postgresql"}"
+    name = "edge-postgresql"
     annotations = {
       "ad.datadoghq.com/service.check_names"  = "[\"postgres\"]"
       "ad.datadoghq.com/service.init_configs" = "[{}]"
@@ -103,7 +107,7 @@ resource "kubernetes_service" "edge_db_service" {
 
   spec {
     type          = "ExternalName"
-    external_name = module.rds[0].this_db_instance_address
+    external_name = module.rds[0].db_instance_address
   }
 
   depends_on = [
