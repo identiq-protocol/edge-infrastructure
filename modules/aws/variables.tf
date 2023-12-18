@@ -144,39 +144,49 @@ variable "eks_wait_for_cluster_timeout" {
 variable "eks_cluster_encryption_config" {
   description = "Configuration block with encryption configuration for the cluster. To disable secret encryption, set this value to `{}`"
   type        = any
-  default = {}
-#  default = {
-#    resources = ["secrets"]
-#  }
+  default     = {}
+  #  default = {
+  #    resources = ["secrets"]
+  #  }
 }
 
 ### node groups variables ###
 
 # master node group
 variable "eks_master_create" {
-    description = "Create EKS master node group"
-    type        = bool
-    default     = false
+  description = "Create EKS master node group"
+  type        = bool
+  default     = false
 }
+
 variable "eks_master_instance_types" {
   description = "EKS master worker group instance type"
   type        = list(string)
   default     = ["t3.small", "t3a.small"]
 }
+
 variable "eks_master_capacity_type" {
   description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
   default     = "ON_DEMAND"
 }
+
 variable "eks_master_ami_type" {
   description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
   default     = "BOTTLEROCKET_x86_64"
 }
+
 variable "eks_master_platform" {
   description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
   type        = string
   default     = "bottlerocket"
+}
+
+variable "eks_master_disk_size" {
+  description = "Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false`"
+  type        = number
+  default     = 100
 }
 
 variable "eks_master_desired_count" {
@@ -203,20 +213,29 @@ variable "eks_base_instance_types" {
   type        = list(string)
   default     = ["c6a.2xlarge", "c6i.2xlarge"]
 }
+
 variable "eks_base_capacity_type" {
   description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
   default     = "ON_DEMAND"
 }
+
 variable "eks_base_ami_type" {
   description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
   default     = "BOTTLEROCKET_x86_64"
 }
+
 variable "eks_base_platform" {
   description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
   type        = string
   default     = "bottlerocket"
+}
+
+variable "eks_base_disk_size" {
+  description = "Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false`"
+  type        = number
+  default     = 100
 }
 
 variable "eks_base_desired_count" {
@@ -243,20 +262,29 @@ variable "eks_dynamic_instance_types" {
   type        = list(string)
   default     = ["c6a.2xlarge", "c6i.2xlarge"]
 }
+
 variable "eks_dynamic_capacity_type" {
   description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
   default     = "ON_DEMAND"
 }
+
 variable "eks_dynamic_ami_type" {
   description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
   default     = "AL2_x86_64"
 }
+
 variable "eks_dynamic_platform" {
   description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
   type        = string
   default     = "linux"
+}
+
+variable "eks_dynamic_disk_size" {
+  description = "Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false`"
+  type        = number
+  default     = 100
 }
 
 variable "eks_dynamic_desired_count" {
@@ -283,20 +311,29 @@ variable "eks_cache_instance_types" {
   type        = list(string)
   default     = ["r6a.2xlarge", "r6i.2xlarge"]
 }
+
 variable "eks_cache_capacity_type" {
   description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
   default     = "ON_DEMAND"
 }
+
 variable "eks_cache_ami_type" {
   description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
   default     = "BOTTLEROCKET_x86_64"
 }
+
 variable "eks_cache_platform" {
   description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
   type        = string
   default     = "bottlerocket"
+}
+
+variable "eks_cache_disk_size" {
+  description = "Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false`"
+  type        = number
+  default     = 100
 }
 
 variable "eks_cache_desired_count" {
@@ -323,20 +360,29 @@ variable "eks_db_instance_types" {
   type        = list(string)
   default     = ["m6a.xlarge", "m6i.xlarge"]
 }
+
 variable "eks_db_capacity_type" {
   description = "Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`"
   type        = string
   default     = "ON_DEMAND"
 }
+
 variable "eks_db_ami_type" {
   description = "Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`"
   type        = string
   default     = "BOTTLEROCKET_x86_64"
 }
+
 variable "eks_db_platform" {
   description = "Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported"
   type        = string
   default     = "bottlerocket"
+}
+
+variable "eks_db_disk_size" {
+  description = "Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false`"
+  type        = number
+  default     = 100
 }
 
 variable "eks_db_desired_count" {
@@ -896,7 +942,7 @@ variable "cluster_autoscaler_helm_chart_version" {
 }
 
 variable "cluster_autoscaler_image_tag" {
-    description = "Cluster autoscaler image tag"
-    type        = string
-    default     = "v1.27.2"
+  description = "Cluster autoscaler image tag"
+  type        = string
+  default     = "v1.27.2"
 }
