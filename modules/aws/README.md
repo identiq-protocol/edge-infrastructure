@@ -108,6 +108,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_base_ami_type"></a> [eks\_base\_ami\_type](#input\_eks\_base\_ami\_type) | Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64` | `string` | `"BOTTLEROCKET_x86_64"` | no |
 | <a name="input_eks_base_capacity_type"></a> [eks\_base\_capacity\_type](#input\_eks\_base\_capacity\_type) | Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT` | `string` | `"ON_DEMAND"` | no |
 | <a name="input_eks_base_desired_count"></a> [eks\_base\_desired\_count](#input\_eks\_base\_desired\_count) | EKS master node group instance desired count | `number` | `1` | no |
+| <a name="input_eks_base_disk_size"></a> [eks\_base\_disk\_size](#input\_eks\_base\_disk\_size) | Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false` | `number` | `100` | no |
 | <a name="input_eks_base_instance_types"></a> [eks\_base\_instance\_types](#input\_eks\_base\_instance\_types) | EKS base worker group instance type | `list(string)` | <pre>[<br>  "c6a.2xlarge",<br>  "c6i.2xlarge"<br>]</pre> | no |
 | <a name="input_eks_base_max_size"></a> [eks\_base\_max\_size](#input\_eks\_base\_max\_size) | EKS master node group max number of instances | `number` | `1` | no |
 | <a name="input_eks_base_min_size"></a> [eks\_base\_min\_size](#input\_eks\_base\_min\_size) | EKS master worker group minimimum number of instances | `number` | `0` | no |
@@ -115,6 +116,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_cache_ami_type"></a> [eks\_cache\_ami\_type](#input\_eks\_cache\_ami\_type) | Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64` | `string` | `"BOTTLEROCKET_x86_64"` | no |
 | <a name="input_eks_cache_capacity_type"></a> [eks\_cache\_capacity\_type](#input\_eks\_cache\_capacity\_type) | Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT` | `string` | `"ON_DEMAND"` | no |
 | <a name="input_eks_cache_desired_count"></a> [eks\_cache\_desired\_count](#input\_eks\_cache\_desired\_count) | EKS master node group instance desired count | `number` | `1` | no |
+| <a name="input_eks_cache_disk_size"></a> [eks\_cache\_disk\_size](#input\_eks\_cache\_disk\_size) | Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false` | `number` | `100` | no |
 | <a name="input_eks_cache_instance_types"></a> [eks\_cache\_instance\_types](#input\_eks\_cache\_instance\_types) | EKS cache worker group instance type | `list(string)` | <pre>[<br>  "r6a.2xlarge",<br>  "r6i.2xlarge"<br>]</pre> | no |
 | <a name="input_eks_cache_max_size"></a> [eks\_cache\_max\_size](#input\_eks\_cache\_max\_size) | EKS master node group max number of instances | `number` | `1` | no |
 | <a name="input_eks_cache_min_size"></a> [eks\_cache\_min\_size](#input\_eks\_cache\_min\_size) | EKS master worker group minimum number of instances | `number` | `0` | no |
@@ -130,6 +132,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_db_ami_type"></a> [eks\_db\_ami\_type](#input\_eks\_db\_ami\_type) | Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64` | `string` | `"BOTTLEROCKET_x86_64"` | no |
 | <a name="input_eks_db_capacity_type"></a> [eks\_db\_capacity\_type](#input\_eks\_db\_capacity\_type) | Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT` | `string` | `"ON_DEMAND"` | no |
 | <a name="input_eks_db_desired_count"></a> [eks\_db\_desired\_count](#input\_eks\_db\_desired\_count) | EKS db node group instance desired count | `number` | `1` | no |
+| <a name="input_eks_db_disk_size"></a> [eks\_db\_disk\_size](#input\_eks\_db\_disk\_size) | Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false` | `number` | `100` | no |
 | <a name="input_eks_db_instance_types"></a> [eks\_db\_instance\_types](#input\_eks\_db\_instance\_types) | EKS db worker group instance type | `list(string)` | <pre>[<br>  "m6a.xlarge",<br>  "m6i.xlarge"<br>]</pre> | no |
 | <a name="input_eks_db_max_size"></a> [eks\_db\_max\_size](#input\_eks\_db\_max\_size) | EKS db node group max number of instances | `number` | `1` | no |
 | <a name="input_eks_db_min_size"></a> [eks\_db\_min\_size](#input\_eks\_db\_min\_size) | EKS db worker group minimum number of instances | `number` | `0` | no |
@@ -137,6 +140,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_dynamic_ami_type"></a> [eks\_dynamic\_ami\_type](#input\_eks\_dynamic\_ami\_type) | Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64` | `string` | `"AL2_x86_64"` | no |
 | <a name="input_eks_dynamic_capacity_type"></a> [eks\_dynamic\_capacity\_type](#input\_eks\_dynamic\_capacity\_type) | Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT` | `string` | `"ON_DEMAND"` | no |
 | <a name="input_eks_dynamic_desired_count"></a> [eks\_dynamic\_desired\_count](#input\_eks\_dynamic\_desired\_count) | EKS dynamic node group instance desired count | `number` | `2` | no |
+| <a name="input_eks_dynamic_disk_size"></a> [eks\_dynamic\_disk\_size](#input\_eks\_dynamic\_disk\_size) | Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false` | `number` | `100` | no |
 | <a name="input_eks_dynamic_instance_types"></a> [eks\_dynamic\_instance\_types](#input\_eks\_dynamic\_instance\_types) | EKS dynamic worker group instance type | `list(string)` | <pre>[<br>  "c6a.2xlarge",<br>  "c6i.2xlarge"<br>]</pre> | no |
 | <a name="input_eks_dynamic_max_size"></a> [eks\_dynamic\_max\_size](#input\_eks\_dynamic\_max\_size) | EKS dynamic node group max number of instances | `number` | `20` | no |
 | <a name="input_eks_dynamic_min_size"></a> [eks\_dynamic\_min\_size](#input\_eks\_dynamic\_min\_size) | EKS dynamic worker group minimum number of instances | `number` | `0` | no |
@@ -147,6 +151,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_master_capacity_type"></a> [eks\_master\_capacity\_type](#input\_eks\_master\_capacity\_type) | Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT` | `string` | `"ON_DEMAND"` | no |
 | <a name="input_eks_master_create"></a> [eks\_master\_create](#input\_eks\_master\_create) | Create EKS master node group | `bool` | `false` | no |
 | <a name="input_eks_master_desired_count"></a> [eks\_master\_desired\_count](#input\_eks\_master\_desired\_count) | EKS master node group instance desired count | `number` | `2` | no |
+| <a name="input_eks_master_disk_size"></a> [eks\_master\_disk\_size](#input\_eks\_master\_disk\_size) | Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false` | `number` | `100` | no |
 | <a name="input_eks_master_instance_types"></a> [eks\_master\_instance\_types](#input\_eks\_master\_instance\_types) | EKS master worker group instance type | `list(string)` | <pre>[<br>  "t3.small",<br>  "t3a.small"<br>]</pre> | no |
 | <a name="input_eks_master_max_size"></a> [eks\_master\_max\_size](#input\_eks\_master\_max\_size) | EKS master node group max number of instances | `number` | `2` | no |
 | <a name="input_eks_master_min_size"></a> [eks\_master\_min\_size](#input\_eks\_master\_min\_size) | EKS master worker group minimimum number of instances | `number` | `0` | no |
