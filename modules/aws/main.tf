@@ -26,11 +26,12 @@ locals {
       # the VPC CNI fails to assign IPs and nodes cannot join the cluster
       # See https://github.com/aws/containers-roadmap/issues/1666 for more context
       iam_role_attach_cni_policy = true
-      ami_type             = var.eks_master_ami_type
-      platform             = var.eks_master_platform
-      capacity_type        = var.eks_master_capacity_type
-      force_update_version = true
-      instance_types       = var.eks_master_instance_types
+      ami_type                   = var.eks_master_ami_type
+      platform                   = var.eks_master_platform
+      capacity_type              = var.eks_master_capacity_type
+      force_update_version       = true
+      instance_types             = var.eks_master_instance_types
+      disk_size                  = var.eks_master_disk_size
       labels = {
         "node.kubernetes.io/role" = "master"
       }
@@ -50,11 +51,12 @@ locals {
     base = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      ami_type             = var.eks_base_ami_type
-      platform             = var.eks_base_platform
-      capacity_type        = var.eks_base_capacity_type
-      force_update_version = true
-      instance_types       = var.eks_base_instance_types
+      ami_type                   = var.eks_base_ami_type
+      platform                   = var.eks_base_platform
+      capacity_type              = var.eks_base_capacity_type
+      force_update_version       = true
+      instance_types             = var.eks_base_instance_types
+      disk_size                  = var.eks_base_disk_size
       labels = {
         "edge.identiq.com/role" = "base"
       }
@@ -67,11 +69,12 @@ locals {
     db = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      ami_type             = var.eks_db_ami_type
-      platform             = var.eks_db_platform
-      capacity_type        = var.eks_db_capacity_type
-      force_update_version = true
-      instance_types       = var.eks_db_instance_types
+      ami_type                   = var.eks_db_ami_type
+      platform                   = var.eks_db_platform
+      capacity_type              = var.eks_db_capacity_type
+      force_update_version       = true
+      instance_types             = var.eks_db_instance_types
+      disk_size                  = var.eks_db_disk_size
       labels = {
         "edge.identiq.com/role" = "db"
       }
@@ -91,11 +94,12 @@ locals {
     cache = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      ami_type             = var.eks_cache_ami_type
-      platform             = var.eks_cache_platform
-      capacity_type        = var.eks_cache_capacity_type
-      force_update_version = true
-      instance_types       = var.eks_cache_instance_types
+      ami_type                   = var.eks_cache_ami_type
+      platform                   = var.eks_cache_platform
+      capacity_type              = var.eks_cache_capacity_type
+      force_update_version       = true
+      instance_types             = var.eks_cache_instance_types
+      disk_size                  = var.eks_cache_disk_size
       labels = {
         "edge.identiq.com/role" = "cache"
       }
@@ -115,11 +119,12 @@ locals {
     dynamic = {
       use_custom_launch_template = false
       iam_role_attach_cni_policy = true
-      ami_type             = var.eks_dynamic_ami_type
-      platform             = var.eks_dynamic_platform
-      capacity_type        = var.eks_dynamic_capacity_type
-      force_update_version = true
-      instance_types       = var.eks_dynamic_instance_types
+      ami_type                   = var.eks_dynamic_ami_type
+      platform                   = var.eks_dynamic_platform
+      capacity_type              = var.eks_dynamic_capacity_type
+      force_update_version       = true
+      instance_types             = var.eks_dynamic_instance_types
+      disk_size                  = var.eks_dynamic_disk_size
       labels = {
         "edge.identiq.com/role" = "dynamic"
       }
@@ -192,8 +197,8 @@ module "eks" {
   aws_auth_users            = var.eks_map_users
   eks_managed_node_group_defaults = {
     tags = {
-      "k8s.io/cluster-autoscaler/enabled"                                   = "true",
-      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}"                   = "owned",
+      "k8s.io/cluster-autoscaler/enabled"                 = "true",
+      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}" = "owned",
     }
     iam_role_additional_policies = {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
