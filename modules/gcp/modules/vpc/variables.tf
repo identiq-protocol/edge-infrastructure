@@ -8,30 +8,30 @@ variable "region" {
 
 variable "vpc_name" {
   description = "The name of the vpc"
-  default = "identiq-vpc"
+  default     = "identiq-vpc"
 }
 
 variable "vpc_external_nat_address_name" {
   description = "The name of the vpc external nat address"
-  default = ""
+  default     = ""
 }
 
 variable "vpc_nat_router_name" {
   description = "The name of the vpc nat router name"
-  default = "nat-router"
+  default     = "nat-router"
 }
 
 variable "subnetwork_cidr_range" {
   description = "The ip range for the subnetwork"
-  default = "10.2.0.0/16"
+  default     = "10.2.0.0/16"
 }
 
 variable "auto_create_subnetworks" {
   description = "vpc will auto create subnetworks for each region"
-  default = false
+  default     = false
 }
 
 variable "enable_ssh_firewall_rule" {
   description = "create firewall rule to enable ssh access"
-  default = false
+  default     = false
 }

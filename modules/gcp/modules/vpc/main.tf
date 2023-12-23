@@ -1,23 +1,23 @@
 resource "google_compute_network" "vpc_network" {
-  name = var.vpc_name
+  name                    = var.vpc_name
   auto_create_subnetworks = var.auto_create_subnetworks
 
 }
 resource "google_compute_subnetwork" "private-subnetwork" {
-  name = "${var.vpc_name}-subnetwork-private"
+  name          = "${var.vpc_name}-subnetwork-private"
   ip_cidr_range = var.subnetwork_cidr_range
-  region = var.region
-  network = google_compute_network.vpc_network.name
+  region        = var.region
+  network       = google_compute_network.vpc_network.name
 
 }
 resource "google_compute_firewall" "default" {
-  count = var.enable_ssh_firewall_rule ? 1 : 0
+  count   = var.enable_ssh_firewall_rule ? 1 : 0
   name    = "allow-ssh-${google_compute_network.vpc_network.name}"
   network = google_compute_network.vpc_network.name
 
   allow {
     protocol = "tcp"
-    ports = ["22"]
+    ports    = ["22"]
   }
   source_ranges = ["0.0.0.0/0"]
 }
@@ -25,7 +25,7 @@ resource "google_compute_firewall" "default" {
 resource "google_compute_address" "external_nat_address" {
   name         = var.vpc_external_nat_address_name != "" ? var.vpc_external_nat_address_name : "${var.vpc_name}-nat-ip"
   address_type = "EXTERNAL"
-  region       =  var.region
+  region       = var.region
 }
 resource "google_compute_router" "router" {
   project = var.project_id

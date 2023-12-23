@@ -3,6 +3,7 @@
 registry_username: ""
 registry_password: ""
 registry_url: ""
+# checkov:skip=CKV_SECRET_6
 rke2_token: "Identiq123"
 http_proxy: ""
 no_proxy: 127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16

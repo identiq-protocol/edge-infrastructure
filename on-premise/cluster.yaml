@@ -55,6 +55,6 @@ dns:
 
 private_registries:
   - url: identiq-docker.jfrog.io
-    user: user_name_for_artifactory
-    password: password_for_artifactory
+    user: <REPLACE_WITH_USER_NAME_FOR_ARTIFACTORY>
+    password: <REPLACE_WITH_PASSWORD_FOR_ARTIFACTORY>
     is_default: true

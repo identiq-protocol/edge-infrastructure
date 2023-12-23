@@ -1,9 +1,6 @@
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
 variable "external_vpc" {
   description = "Sepcifies whether we want to use an externally created VPC"
+  type        = bool
   default     = false
 }
 
@@ -52,31 +49,37 @@ variable "eks_public_subnets" {
 
 variable "vpc_name" {
   description = "Name to be used on all the resources as identifier"
+  type        = string
   default     = "identiq-vpc"
 }
 
 variable "vpc_cidrsubnet" {
   description = "The CIDR block for the VPC"
+  type        = string
   default     = "10.0.0.0/16"
 }
 
 variable "vpc_enable_nat_gateway" {
   description = "Should be true if you want to provision NAT Gateways for each of your private networks"
+  type        = bool
   default     = true
 }
 
 variable "vpc_enable_vpn_gateway" {
   description = "Should be true if you want to create a new VPN Gateway resource and attach it to the VPC"
+  type        = bool
   default     = false
 }
 
 variable "vpc_enable_dns_hostnames" {
   description = "Should be true to enable DNS hostnames in the Default VPC"
+  type        = bool
   default     = true
 }
 
 variable "vpc_enable_dns_support" {
   description = "Should be true to enable DNS support in the Default VPC"
+  type        = bool
   default     = true
 }
 
@@ -88,25 +91,32 @@ variable "vpc_map_public_ip_on_launch" {
 
 variable "vpc_endpoint_service_name" {
   description = "Endpoint service name to configure with Identiq endpoint service"
+  type        = string
   default     = ""
 }
 
 variable "vpc_endpoint_type" {
   description = "Endpoint service type to create, default unless otherwise is Interface"
+  type        = string
   default     = "Interface"
 }
 
 variable "region" {
   description = "region"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "eks_cluster_name" {
   description = "Name of EKS cluster"
+  type        = string
+  default     = "edge"
 }
 
 variable "eks_cluster_version" {
   description = "Kubernetes version to use for the EKS cluster"
-  default     = "1.26"
+  type        = string
+  default     = "1.27"
 }
 
 variable "eks_map_roles" {
@@ -429,11 +439,13 @@ variable "external_redis" {
 
 variable "external_redis_name" {
   description = "External redis name (if enabled)"
+  type        = string
   default     = "edge"
 }
 
 variable "ec_vpc_id" {
   description = "VPC ID in case we external VPC is provided"
+  type        = string
   default     = ""
 }
 variable "ec_private_subnets" {
@@ -523,6 +535,7 @@ variable "ec_parameter" {
 
 variable "ec_snapshot_name" {
   description = "The name of a snapshot from which to restore data into the new node group. Changing the snapshot_name forces a new resource."
+  type        = string
   default     = null
 }
 
@@ -534,6 +547,7 @@ variable "ec_snapshot_retention_limit" {
 
 variable "ec_snapshot_window" {
   description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster."
+  type        = string
   default     = "06:30-07:30"
 }
 
@@ -735,6 +749,7 @@ variable "rds_monitoring_interval" {
 
 variable "rds_max_allocated_storage" {
   description = "Max allocated storage"
+  type        = number
   default     = 0
 }
 
@@ -814,6 +829,7 @@ variable "rds_ca_cert_identifier" {
 }
 variable "default_tags" {
   description = "Default tags applied on all resources. If you wish to add tags DO NOT change this variable, instead change `tags` variable"
+  type        = map(string)
   default = {
     Terraform = "true"
   }
@@ -827,11 +843,13 @@ variable "tags" {
 
 variable "vpc_custom_service_name" {
   description = "Override default prod service names"
+  type        = string
   default     = ""
 }
 
 variable "vpc_specific_subnet_newbits" {
   default     = 4
+  type        = number
   description = "Specifies the edge subnet newbits for calculating the CIDR block"
 }
 
@@ -897,6 +915,7 @@ variable "ec_appautoscaling_scale_out_cooldown" {
 
 variable "ec_enable_app_autoscaling" {
   default     = true
+  type        = bool
   description = "Enable app autoscaling for elasticache"
 }
 

@@ -6,12 +6,12 @@ variable "vpc_name" {
 
 variable "vpc_external_nat_address_name" {
   description = "The name of the vpc external nat address"
-  default = ""
+  default     = ""
 }
 
 variable "vpc_nat_router_name" {
   description = "The name of the vpc nat router name"
-  default = "nat-router"
+  default     = "nat-router"
 }
 
 variable "vpc_enable_ssh_firewall_rule" {
@@ -239,7 +239,7 @@ variable "external_db_database_flags" {
     {
       name  = "enable_hashagg"
       value = "on"
-  },
+    },
   ]
 }
 

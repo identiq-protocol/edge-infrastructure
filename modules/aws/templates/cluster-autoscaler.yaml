@@ -258,7 +258,20 @@ nameOverride: ""
 nodeSelector: ${node_selector}
 
 # podAnnotations -- Annotations to add to each pod.
-podAnnotations: {}
+podAnnotations:
+  ad.datadoghq.com/aws-cluster-autoscaler.checks: |
+    {
+      "openmetrics": {
+        "instances": [
+          {
+            "openmetrics_endpoint": "http://%%host%%:%%port%%/metrics",
+            "metrics": [
+                "cluster_autoscaler_*"
+              ]
+          }
+        ]
+      }
+    }           
 
 # podDisruptionBudget -- Pod disruption budget.
 podDisruptionBudget:

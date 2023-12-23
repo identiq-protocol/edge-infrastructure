@@ -16,11 +16,11 @@ resource "azurerm_private_endpoint" "endpoint" {
 }
 
 data "azurerm_private_endpoint_connection" "ip_address" {
-  name = var.private_endpoint_name
+  name                = var.private_endpoint_name
   resource_group_name = data.azurerm_resource_group.rg.name
-  depends_on = [azurerm_private_endpoint.endpoint]
+  depends_on          = [azurerm_private_endpoint.endpoint]
 }
 
 output "ip_address" {
-  value = data.azurerm_private_endpoint_connection.ip_address.private_service_connection.0.private_ip_address
+  value = data.azurerm_private_endpoint_connection.ip_address.private_service_connection[0].private_ip_address
 }

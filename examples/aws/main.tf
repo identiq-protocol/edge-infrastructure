@@ -1,15 +1,15 @@
 provider "aws" {
   region = var.region
 }
-
-#terraform {
-#  backend "s3" {
-#    region   = "us-east-1"
-#    bucket   = "terraform-state"
-#    key      = "production/aws/edge"
-#    encrypt  = "true"
-#  }
-#}
+terraform {
+  required_version = ">= 1.6"
+  #  backend "s3" {
+  #    region   = "us-east-1"
+  #    bucket   = "terraform-state"
+  #    key      = "production/aws/edge"
+  #    encrypt  = "true"
+  #  }
+}
 
 module "edge-aws" {
   source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=2.0.2"
@@ -167,11 +167,11 @@ module "edge-aws" {
   ec_data_tiering_enabled                  = var.ec_data_tiering_enabled
 
   # cluster autoscaler
-  cluster_autoscaler_enabled = var.cluster_autoscaler_enabled
-  cluster_autoscaler_verbosity_level = var.cluster_autoscaler_verbosity_level
-  cluster_autoscaler_namespace = var.cluster_autoscaler_namespace
+  cluster_autoscaler_enabled            = var.cluster_autoscaler_enabled
+  cluster_autoscaler_verbosity_level    = var.cluster_autoscaler_verbosity_level
+  cluster_autoscaler_namespace          = var.cluster_autoscaler_namespace
   cluster_autoscaler_helm_chart_version = var.cluster_autoscaler_helm_chart_version
-  cluster_autoscaler_image_tag = var.cluster_autoscaler_image_tag
+  cluster_autoscaler_image_tag          = var.cluster_autoscaler_image_tag
 }
 
 output "connect" {

@@ -23,11 +23,11 @@ module "redis" {
   at_rest_encryption_enabled           = var.ec_at_rest_encryption_enabled
   transit_encryption_enabled           = var.ec_transit_encryption_enabled
   parameter                            = var.ec_parameter
-  tags                                 = merge(var.tags, var.default_tags)
+  tags                                 = local.tags
   snapshot_name                        = var.ec_snapshot_name
   snapshot_window                      = var.ec_snapshot_window
   snapshot_retention_limit             = var.ec_snapshot_retention_limit
-  log_delivery_configuration = var.ec_log_delivery_configuration
+  log_delivery_configuration           = var.ec_log_delivery_configuration
 }
 
 resource "kubernetes_secret" "edge_redis_secret" {
@@ -51,6 +51,9 @@ resource "aws_appautoscaling_target" "autoscaling_target" {
   resource_id        = "replication-group/${var.external_redis_name}"
   scalable_dimension = var.ec_appautoscaling_scalable_dimension
   service_namespace  = var.ec_appautoscaling_service_namespace
+  depends_on = [
+    module.redis[0]
+  ]
 }
 
 resource "aws_appautoscaling_policy" "autoscaling_policy" {
@@ -68,6 +71,9 @@ resource "aws_appautoscaling_policy" "autoscaling_policy" {
       predefined_metric_type = var.ec_appautoscaling_predefined_metric_type
     }
   }
+    depends_on = [
+        module.redis[0]
+    ]
 }
 
 resource "kubernetes_service" "edge_redis_service" {

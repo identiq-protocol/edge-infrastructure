@@ -5,6 +5,7 @@ moved {
 }
 
 locals {
+  tags = merge(var.tags,var.default_tags)
   eks_subnets                            = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
   eks_private_subnets                    = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
   eks_public_subnets                     = var.external_vpc ? var.eks_public_subnets : module.vpc[0].public_subnets
@@ -141,6 +142,10 @@ locals {
   }
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.16.0"
@@ -196,10 +201,10 @@ module "eks" {
   aws_auth_roles            = var.eks_map_roles
   aws_auth_users            = var.eks_map_users
   eks_managed_node_group_defaults = {
-    tags = {
+    tags = merge(local.tags, {
       "k8s.io/cluster-autoscaler/enabled"                 = "true",
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}" = "owned",
-    }
+    })
     iam_role_additional_policies = {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
       ClusterAutoscalerPolicy  = aws_iam_policy.worker_autoscaling.arn
@@ -213,6 +218,7 @@ module "eks" {
     var.external_db ? {} : local.db_node_group,
     var.external_redis ? {} : local.cache_node_group
   )
+  tags = local.tags
 }
 
 ################################################################################
@@ -237,6 +243,15 @@ locals {
       }
     }
   ]...)
+  asg_tags = merge([
+    for name, group in module.eks.eks_managed_node_groups : {
+      for k, v in local.tags : "${name}|label|${k}"  => {
+        autoscaling_group = group.node_group_autoscaling_group_names[0],
+        key               = k,
+        value             = v,
+      }
+    }
+  ]...)
 
   cluster_autoscaler_taint_tags = merge([
     for name, group in module.eks.eks_managed_node_groups : {
@@ -252,7 +267,7 @@ locals {
 }
 
 resource "aws_autoscaling_group_tag" "cluster_autoscaler_label_tags" {
-  for_each = local.cluster_autoscaler_asg_tags
+  for_each = merge(local.cluster_autoscaler_asg_tags, local.asg_tags)
 
   autoscaling_group_name = each.value.autoscaling_group
 

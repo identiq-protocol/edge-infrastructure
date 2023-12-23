@@ -48,7 +48,7 @@ resource "aws_eip" "ip" {
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name_prefix = "identiq_data_verification_tool_profile"
-  role = var.iam_role_name
+  role        = var.iam_role_name
 }
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
@@ -71,9 +71,9 @@ module "ec2_instance" {
     Name = "Identiq Data Verification Tool"
   }
 
-  user_data  = file("${path.cwd}/init-verification-tool.sh")
+  user_data            = file("${path.cwd}/init-verification-tool.sh")
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
-  depends_on = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, module.ssh-security-group]
+  depends_on           = [data.aws_ami.amazon-linux-2, aws_key_pair.generated_key, module.ssh-security-group]
 }
 resource "aws_eip_association" "eip_assoc" {
   count         = var.private_only ? 0 : 1

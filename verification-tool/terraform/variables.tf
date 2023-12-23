@@ -18,7 +18,7 @@ variable "vpc_id" {
   default = ""
 }
 variable "iam_role_name" {
-  default = ""
+  default = "verifications-tool"
 }
 variable "private_subnet_id" {
   default = ""

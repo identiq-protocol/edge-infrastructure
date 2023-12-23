@@ -1,10 +1,10 @@
 ### CloudSQL - postgres ###
 module "postgresql-db" {
-  count   = var.external_db ? 1 : 0
-  source  = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
-  version = "13.0.1"
-  name    = var.cluster_name
-  database_flags = var.external_db_database_flags
+  count                = var.external_db ? 1 : 0
+  source               = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
+  version              = "13.0.1"
+  name                 = var.cluster_name
+  database_flags       = var.external_db_database_flags
   random_instance_name = true
   user_name            = var.external_db_user_name
   database_version     = var.external_db_postgres_version

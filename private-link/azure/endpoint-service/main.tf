@@ -14,7 +14,7 @@ resource "azurerm_private_link_service" "service" {
   }
 
   load_balancer_frontend_ip_configuration_ids = [
-    data.azurerm_lb.lb.frontend_ip_configuration.0.id,
+    data.azurerm_lb.lb.frontend_ip_configuration[0].id,
   ]
 }
 output "service_name" {

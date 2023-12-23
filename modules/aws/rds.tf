@@ -32,7 +32,7 @@ module "rds_sg" {
   ingress_with_ipv6_cidr_blocks         = var.rds_sg_ingress_with_ipv6_cidr_blocks
   ingress_with_self                     = var.rds_sg_ingress_with_self
   ingress_with_source_security_group_id = concat(var.rds_sg_ingress_with_source_security_group_id, local.rds_sg_ingress_with_source_security_group_id_default)
-  tags                                  = merge(var.tags, var.default_tags)
+  tags                                  = local.tags
 }
 
 module "rds" {
@@ -72,7 +72,7 @@ module "rds" {
   apply_immediately                     = var.rds_apply_immediately
   parameters                            = var.rds_parameters
   allow_major_version_upgrade           = var.rds_allow_major_version_upgrade
-  tags                                  = merge(var.tags, var.default_tags)
+  tags                                  = local.tags
   max_allocated_storage                 = var.rds_max_allocated_storage
   ca_cert_identifier                    = var.rds_ca_cert_identifier
 }

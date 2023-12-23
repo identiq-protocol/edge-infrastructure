@@ -9,11 +9,13 @@ external_redis_name = "edge-redis" # Name of the elasticache instance
 #ec_cluster_mode_creation_fix_enabled = true
 #ec_cluster_mode_enabled              = true
 #ec_cluster_mode_num_node_groups      = 2
-#cluster_autoscaler_enabled = true
+
+
+cluster_autoscaler_enabled = true # Install cluster autoscaler
 
 # RDS Postgres
-external_db                     = true # Create an external postgres using RDS
-external_db_name                = "edge-db" # Name of the RDS instance
+external_db      = true      # Create an external postgres using RDS
+external_db_name = "edge-db" # Name of the RDS instance
 
 # For configuring additional IAM roles to administer the cluster
 # uncomment the variable below and set the correct IAM roles ARN.

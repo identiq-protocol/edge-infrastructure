@@ -5,7 +5,7 @@ resource "aws_vpc_endpoint" "ep" {
   vpc_endpoint_type  = var.vpc_endpoint_type
   security_group_ids = [module.eks.cluster_primary_security_group_id]
   subnet_ids         = local.ep_private_subnets
-  tags               = var.tags
+  tags               = local.tags
 }
 
 locals {

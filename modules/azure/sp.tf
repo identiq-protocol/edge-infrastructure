@@ -18,7 +18,7 @@ resource "azuread_service_principal_password" "app" {
 }
 
 resource "azurerm_role_assignment" "assignment" {
-  scope = azurerm_resource_group.rg.id
+  scope                = azurerm_resource_group.rg.id
   role_definition_name = "Owner"
-  principal_id = azuread_service_principal.app.id
+  principal_id         = azuread_service_principal.app.id
 }

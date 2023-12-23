@@ -11,6 +11,7 @@ resource "aws_security_group" "pinky_ingress" {
   vpc_id      = local.eks_vpc_id
 
   egress {
+    description      = "Open all outbound traffic"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
