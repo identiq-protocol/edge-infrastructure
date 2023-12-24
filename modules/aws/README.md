@@ -11,9 +11,12 @@ The infstructarue consists of the following components:
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.6 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | 5.17.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.11.0 |
+| <a name="requirement_http"></a> [http](#requirement\_http) | 3.4.1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.23.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | 3.6.0 |
 
 ## Providers
 
@@ -22,9 +25,9 @@ The infstructarue consists of the following components:
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.17.0 |
 | <a name="provider_aws.virginia"></a> [aws.virginia](#provider\_aws.virginia) | 5.17.0 |
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.11.0 |
-| <a name="provider_http"></a> [http](#provider\_http) | n/a |
+| <a name="provider_http"></a> [http](#provider\_http) | 3.4.1 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.23.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.6.0 |
 
 ## Modules
 
@@ -43,6 +46,7 @@ The infstructarue consists of the following components:
 |------|------|
 | [aws_appautoscaling_policy.autoscaling_policy](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/appautoscaling_policy) | resource |
 | [aws_appautoscaling_target.autoscaling_target](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/appautoscaling_target) | resource |
+| [aws_autoscaling_group_tag.asg_tags](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/autoscaling_group_tag) | resource |
 | [aws_autoscaling_group_tag.cluster_autoscaler_label_tags](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/autoscaling_group_tag) | resource |
 | [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/iam_policy) | resource |
@@ -56,11 +60,11 @@ The infstructarue consists of the following components:
 | [kubernetes_service.edge_db_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/service) | resource |
 | [kubernetes_service.edge_redis_service](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/service) | resource |
 | [kubernetes_storage_class.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/storage_class) | resource |
-| [random_password.rds_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [random_password.rds_password](https://registry.terraform.io/providers/hashicorp/random/3.6.0/docs/resources/password) | resource |
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/data-sources/availability_zones) | data source |
 | [aws_ecrpublic_authorization_token.token](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/data-sources/ecrpublic_authorization_token) | data source |
 | [aws_iam_policy_document.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/data-sources/iam_policy_document) | data source |
-| [http_http.iam_policy](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
+| [http_http.iam_policy](https://registry.terraform.io/providers/hashicorp/http/3.4.1/docs/data-sources/http) | data source |
 
 ## Inputs
 
