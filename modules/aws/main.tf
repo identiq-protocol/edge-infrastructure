@@ -5,7 +5,7 @@ moved {
 }
 
 locals {
-  tags = merge(var.tags,var.default_tags)
+  tags                                   = merge(var.tags, var.default_tags)
   eks_subnets                            = var.external_vpc ? concat(var.eks_private_subnets, var.eks_public_subnets) : concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets)
   eks_private_subnets                    = var.external_vpc ? var.eks_private_subnets : module.vpc[0].private_subnets
   eks_public_subnets                     = var.external_vpc ? var.eks_public_subnets : module.vpc[0].public_subnets
@@ -245,7 +245,7 @@ locals {
   ]...)
   asg_tags = merge([
     for name, group in module.eks.eks_managed_node_groups : {
-      for k, v in local.tags : "${name}|label|${k}"  => {
+      for k, v in local.tags : "${name}|label|${k}" => {
         autoscaling_group = group.node_group_autoscaling_group_names[0],
         key               = k,
         value             = v,
@@ -267,7 +267,7 @@ locals {
 }
 
 resource "aws_autoscaling_group_tag" "cluster_autoscaler_label_tags" {
-  for_each = merge(local.cluster_autoscaler_asg_tags, local.asg_tags)
+  for_each = local.cluster_autoscaler_asg_tags
 
   autoscaling_group_name = each.value.autoscaling_group
 
@@ -276,6 +276,19 @@ resource "aws_autoscaling_group_tag" "cluster_autoscaler_label_tags" {
     value = each.value.value
 
     propagate_at_launch = false
+  }
+}
+
+resource "aws_autoscaling_group_tag" "asg_tags" {
+  for_each = local.asg_tags
+
+  autoscaling_group_name = each.value.autoscaling_group
+
+  tag {
+    key   = each.value.key
+    value = each.value.value
+
+    propagate_at_launch = true
   }
 }
 

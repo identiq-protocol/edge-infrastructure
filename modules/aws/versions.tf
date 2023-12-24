@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">=1.6"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -13,6 +14,15 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.23.0"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = "3.4.1"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.0"
+    }
+
   }
 }
 

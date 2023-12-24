@@ -71,9 +71,9 @@ resource "aws_appautoscaling_policy" "autoscaling_policy" {
       predefined_metric_type = var.ec_appautoscaling_predefined_metric_type
     }
   }
-    depends_on = [
-        module.redis[0]
-    ]
+  depends_on = [
+    module.redis[0]
+  ]
 }
 
 resource "kubernetes_service" "edge_redis_service" {
