@@ -228,7 +228,7 @@ hostNetwork: false
 
 image:
   # image.repository -- Image repository
-  repository: identiq-docker.jfrog.io/autoscaling/cluster-autoscaler  # not in original chart
+  repository: registry.k8s.io/autoscaling/cluster-autoscaler  # not in original chart
   # image.tag -- Image tag
   tag: ${image_tag}  # not in original chart
   # image.pullPolicy -- Image pull policy
@@ -238,8 +238,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # image.pullSecrets -- Image pull secrets
-  pullSecrets:
-    - identiq-docker-key  # not in original chart
+  pullSecrets: []
 
 # kubeTargetVersionOverride -- Allow overriding the `.Capabilities.KubeVersion.GitVersion` check. Useful for `helm template` commands.
 kubeTargetVersionOverride: ""
