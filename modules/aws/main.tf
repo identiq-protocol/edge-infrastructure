@@ -148,7 +148,7 @@ data "aws_availability_zones" "available" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "19.16.0"
+  version = "19.21.0"
 
   # compatibility with 17.24.0 eks module
   prefix_separator                   = ""
@@ -197,9 +197,11 @@ module "eks" {
   subnet_ids               = [local.eks_private_subnets[0]]
   control_plane_subnet_ids = local.eks_subnets
 
-  manage_aws_auth_configmap = true
-  aws_auth_roles            = var.eks_map_roles
-  aws_auth_users            = var.eks_map_users
+  manage_aws_auth_configmap              = true
+  aws_auth_roles                         = var.eks_map_roles
+  aws_auth_users                         = var.eks_map_users
+  cluster_enabled_log_types              = var.eks_cluster_enabled_log_types
+  cloudwatch_log_group_retention_in_days = var.eks_cloudwatch_log_group_retention_in_days
   eks_managed_node_group_defaults = {
     tags = merge(local.tags, {
       "k8s.io/cluster-autoscaler/enabled"                 = "true",
