@@ -34,7 +34,7 @@ The infstructarue consists of the following components:
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cluster_autoscaler_irsa_role"></a> [cluster\_autoscaler\_irsa\_role](#module\_cluster\_autoscaler\_irsa\_role) | terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks | 5.30.0 |
-| <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | 19.16.0 |
+| <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | 19.21.0 |
 | <a name="module_rds"></a> [rds](#module\_rds) | terraform-aws-modules/rds/aws | 6.1.1 |
 | <a name="module_rds_sg"></a> [rds\_sg](#module\_rds\_sg) | terraform-aws-modules/security-group/aws | 5.1.0 |
 | <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 0.52.0 |
@@ -125,6 +125,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_cache_max_size"></a> [eks\_cache\_max\_size](#input\_eks\_cache\_max\_size) | EKS master node group max number of instances | `number` | `1` | no |
 | <a name="input_eks_cache_min_size"></a> [eks\_cache\_min\_size](#input\_eks\_cache\_min\_size) | EKS master worker group minimum number of instances | `number` | `0` | no |
 | <a name="input_eks_cache_platform"></a> [eks\_cache\_platform](#input\_eks\_cache\_platform) | Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported | `string` | `"bottlerocket"` | no |
+| <a name="input_eks_cloudwatch_log_group_retention_in_days"></a> [eks\_cloudwatch\_log\_group\_retention\_in\_days](#input\_eks\_cloudwatch\_log\_group\_retention\_in\_days) | Number of days to retain log events. Default retention - 7 days | `number` | `7` | no |
 | <a name="input_eks_cluster_create_endpoint_private_access_sg_rule"></a> [eks\_cluster\_create\_endpoint\_private\_access\_sg\_rule](#input\_eks\_cluster\_create\_endpoint\_private\_access\_sg\_rule) | Whether to create security group rules for the access to the Amazon EKS private API server endpoint. When is `true`, `cluster_endpoint_private_access_cidrs` must be setted. | `bool` | `false` | no |
 | <a name="input_eks_cluster_enabled_log_types"></a> [eks\_cluster\_enabled\_log\_types](#input\_eks\_cluster\_enabled\_log\_types) | A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | `list(string)` | `[]` | no |
 | <a name="input_eks_cluster_encryption_config"></a> [eks\_cluster\_encryption\_config](#input\_eks\_cluster\_encryption\_config) | Configuration block with encryption configuration for the cluster. To disable secret encryption, set this value to `{}` | `any` | `{}` | no |
