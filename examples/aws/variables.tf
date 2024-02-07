@@ -423,14 +423,6 @@ variable "eks_db_max_size" {
   type        = number
   default     = 1
 }
-
-
-variable "eks_cluster_enabled_log_types" {
-  default     = []
-  description = "A list of the desired control plane logging to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)"
-  type        = list(string)
-}
-
 variable "eks_worker_ami_name_filter" {
   description = "Name filter for AWS EKS worker AMI. If not provided, the latest official AMI for the specified 'cluster_version' is used."
   type        = string
