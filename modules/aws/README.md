@@ -158,7 +158,7 @@ The infstructarue consists of the following components:
 | <a name="input_eks_master_desired_count"></a> [eks\_master\_desired\_count](#input\_eks\_master\_desired\_count) | EKS master node group instance desired count | `number` | `2` | no |
 | <a name="input_eks_master_disk_size"></a> [eks\_master\_disk\_size](#input\_eks\_master\_disk\_size) | Disk size in GiB for nodes. Defaults to `100`. Only valid when `use_custom_launch_template` = `false` | `number` | `100` | no |
 | <a name="input_eks_master_instance_types"></a> [eks\_master\_instance\_types](#input\_eks\_master\_instance\_types) | EKS master worker group instance type | `list(string)` | <pre>[<br>  "t3.small",<br>  "t3a.small"<br>]</pre> | no |
-| <a name="input_eks_master_max_size"></a> [eks\_master\_max\_size](#input\_eks\_master\_max\_size) | EKS master node group max number of instances | `number` | `2` | no |
+| <a name="input_eks_master_max_size"></a> [eks\_master\_max\_size](#input\_eks\_master\_max\_size) | EKS master node group max number of instances | `number` | `4` | no |
 | <a name="input_eks_master_min_size"></a> [eks\_master\_min\_size](#input\_eks\_master\_min\_size) | EKS master worker group minimimum number of instances | `number` | `0` | no |
 | <a name="input_eks_master_platform"></a> [eks\_master\_platform](#input\_eks\_master\_platform) | Identifies if the OS platform is `bottlerocket` or `linux` based; `windows` is not supported | `string` | `"bottlerocket"` | no |
 | <a name="input_eks_private_subnets"></a> [eks\_private\_subnets](#input\_eks\_private\_subnets) | Specifies private subnet IDs in case of external VPC | `list(string)` | `[]` | no |

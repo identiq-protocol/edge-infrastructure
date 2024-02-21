@@ -225,7 +225,7 @@ variable "eks_master_min_size" {
 variable "eks_master_max_size" {
   description = "EKS master node group max number of instances"
   type        = number
-  default     = 2
+  default     = 4
 }
 
 # base node group
