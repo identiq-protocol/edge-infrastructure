@@ -51,6 +51,7 @@ The infstructarue consists of the following components:
 | [aws_iam_policy.lb_controller_policy](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.worker_autoscaling](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/iam_policy) | resource |
 | [aws_security_group.pinky_ingress](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/security_group) | resource |
+| [aws_security_group_rule.pink_ingress](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/security_group_rule) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/vpc_endpoint) | resource |
 | [helm_release.cluster-autoscaler](https://registry.terraform.io/providers/hashicorp/helm/2.11.0/docs/resources/release) | resource |
 | [kubernetes_annotations.gp2](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/annotations) | resource |
@@ -172,6 +173,7 @@ The infstructarue consists of the following components:
 | <a name="input_external_redis"></a> [external\_redis](#input\_external\_redis) | Redis will be installed outside of EKS cluster (Elasticache) | `bool` | `false` | no |
 | <a name="input_external_redis_name"></a> [external\_redis\_name](#input\_external\_redis\_name) | External redis name (if enabled) | `string` | `"edge"` | no |
 | <a name="input_external_vpc"></a> [external\_vpc](#input\_external\_vpc) | Sepcifies whether we want to use an externally created VPC | `bool` | `false` | no |
+| <a name="input_pinky_ingress_rules"></a> [pinky\_ingress\_rules](#input\_pinky\_ingress\_rules) | n/a | <pre>list(object({<br>    from_port = number<br>    to_port   = number<br>    protocol  = string<br>    type      = string<br>    cidr_blocks = list(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_rds_allocated_storage"></a> [rds\_allocated\_storage](#input\_rds\_allocated\_storage) | The allocated storage in gigabytes | `string` | `1000` | no |
 | <a name="input_rds_allow_major_version_upgrade"></a> [rds\_allow\_major\_version\_upgrade](#input\_rds\_allow\_major\_version\_upgrade) | Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible | `bool` | `false` | no |
 | <a name="input_rds_apply_immediately"></a> [rds\_apply\_immediately](#input\_rds\_apply\_immediately) | Specifies whether any database modifications are applied immediately, or during the next maintenance window | `bool` | `"true"` | no |
