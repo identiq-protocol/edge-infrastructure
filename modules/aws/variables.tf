@@ -10,6 +10,15 @@ variable "eks_vpc_id" {
   default     = ""
 }
 
+variable "pinky_ingress_rules" {
+  type = list(object({
+    from_port = number
+    to_port   = number
+    protocol  = string
+    type      = string
+  }))
+  default = []
+}
 
 variable "eks_cluster_endpoint_private_access" {
   description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
