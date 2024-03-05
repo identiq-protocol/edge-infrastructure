@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "pink_ingress" {
   protocol          = var.pinky_ingress_rules[count.index].protocol
   security_group_id = aws_security_group.pinky_ingress.id
   to_port           = var.pinky_ingress_rules[count.index].to_port
-  cidr_blocks       = [var.pinky_ingress_rules[count.index].cidr_blocks]
+  cidr_blocks       = var.pinky_ingress_rules[count.index].cidr_blocks
   type              = var.pinky_ingress_rules[count.index].type
 }
 
