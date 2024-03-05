@@ -24,12 +24,13 @@ resource "aws_security_group" "pinky_ingress" {
 }
 
 resource "aws_security_group_rule" "pink_ingress" {
-  count = length(var.pinky_ingress_rules)
-  from_port         = 443
-  protocol          = "tcp"
+  count             = length(var.pinky_ingress_rules)
+  from_port         = var.pinky_ingress_rules[count.index].from_port
+  protocol          = var.pinky_ingress_rules[count.index].protocol
   security_group_id = aws_security_group.pinky_ingress.id
-  to_port           = 443
-  type              = "ingress"
+  to_port           = var.pinky_ingress_rules[count.index].to_port
+  cidr_blocks       = [var.pinky_ingress_rules[count.index].cidr_blocks]
+  type              = var.pinky_ingress_rules[count.index].type
 }
 
 

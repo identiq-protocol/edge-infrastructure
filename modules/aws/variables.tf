@@ -16,6 +16,7 @@ variable "pinky_ingress_rules" {
     to_port   = number
     protocol  = string
     type      = string
+    cidr_blocks = list(string)
   }))
   default = []
 }
