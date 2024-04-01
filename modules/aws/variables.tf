@@ -12,10 +12,10 @@ variable "eks_vpc_id" {
 
 variable "pinky_ingress_rules" {
   type = list(object({
-    from_port = number
-    to_port   = number
-    protocol  = string
-    type      = string
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    type        = string
     cidr_blocks = list(string)
   }))
   default = []
@@ -126,7 +126,7 @@ variable "eks_cluster_name" {
 variable "eks_cluster_version" {
   description = "Kubernetes version to use for the EKS cluster"
   type        = string
-  default     = "1.27"
+  default     = "1.28"
 }
 
 variable "eks_map_roles" {
@@ -958,7 +958,7 @@ variable "cluster_autoscaler_enabled" {
 variable "cluster_autoscaler_verbosity_level" {
   description = "Verbosity level"
   type        = string
-  default     = "4"
+  default     = "0"
 }
 
 variable "cluster_autoscaler_namespace" {
@@ -970,11 +970,11 @@ variable "cluster_autoscaler_namespace" {
 variable "cluster_autoscaler_helm_chart_version" {
   description = "Cluster autoscaler helm chart version"
   type        = string
-  default     = "9.29.3"
+  default     = "9.36.0"
 }
 
 variable "cluster_autoscaler_image_tag" {
   description = "Cluster autoscaler image tag"
   type        = string
-  default     = "v1.27.2"
+  default     = "v1.28.2"
 }
