@@ -1,5 +1,5 @@
 resource "aws_vpc_endpoint" "ep" {
-  count              = vpc_endpoint_service_exists || var.vpc_custom_service_name != "" ? 1 : 0
+  count              = local.vpc_endpoint_service_exists || var.vpc_custom_service_name != "" ? 1 : 0
   service_name       = local.vpc_endpoint_service_name
   vpc_id             = local.ep_vpc_id
   vpc_endpoint_type  = var.vpc_endpoint_type
