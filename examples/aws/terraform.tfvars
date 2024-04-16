@@ -25,6 +25,6 @@ external_db_name = "edge-db" # Name of the RDS instance
 # eks_additional_policies = ["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]
 
 ### Uncomment to configure vpc endpoint service for us-east-1
-# vpc_endpoint_service_name = com.amazonaws.vpce.us-east-1.vpce-svc-0964eccd96e1f130c
+# vpc_endpoint_service_name = "com.amazonaws.vpce.us-east-1.vpce-svc-0964eccd96e1f130c"
 ### Uncomment to configure vpc endpoint service for eu-central-1
-# vpc_endpoint_service_name = com.amazonaws.vpce.eu-central-1.vpce-svc-0ead3a40b72d7e586
+# vpc_endpoint_service_name = "com.amazonaws.vpce.eu-central-1.vpce-svc-0ead3a40b72d7e586"
