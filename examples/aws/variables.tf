@@ -102,7 +102,7 @@ variable "vpc_map_public_ip_on_launch" {
 variable "vpc_endpoint_service_name" {
   description = <<EOT
     Endpoint service name to configure with Identiq endpoint service.
-    Identiq endpoint service by region:
+    Identiq endpoint service by region: 
     us-east-1 : com.amazonaws.vpce.us-east-1.vpce-svc-0964eccd96e1f130c
     eu-central-1 : com.amazonaws.vpce.eu-central-1.vpce-svc-0ead3a40b72d7e586
   EOT
@@ -857,12 +857,6 @@ variable "tags" {
   description = "Any tags the user wishes to add to all resources of the edge"
   type        = map(string)
   default     = {}
-}
-
-variable "vpc_custom_service_name" {
-  description = "Override default prod service names"
-  type        = string
-  default     = ""
 }
 
 variable "vpc_specific_subnet_newbits" {

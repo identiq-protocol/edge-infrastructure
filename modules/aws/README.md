@@ -214,12 +214,11 @@ The infstructarue consists of the following components:
 | <a name="input_region"></a> [region](#input\_region) | region | `string` | `"us-east-1"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags the user wishes to add to all resources of the edge | `map(string)` | `{}` | no |
 | <a name="input_vpc_cidrsubnet"></a> [vpc\_cidrsubnet](#input\_vpc\_cidrsubnet) | The CIDR block for the VPC | `string` | `"10.0.0.0/16"` | no |
-| <a name="input_vpc_custom_service_name"></a> [vpc\_custom\_service\_name](#input\_vpc\_custom\_service\_name) | Override default prod service names | `string` | `""` | no |
 | <a name="input_vpc_enable_dns_hostnames"></a> [vpc\_enable\_dns\_hostnames](#input\_vpc\_enable\_dns\_hostnames) | Should be true to enable DNS hostnames in the Default VPC | `bool` | `true` | no |
 | <a name="input_vpc_enable_dns_support"></a> [vpc\_enable\_dns\_support](#input\_vpc\_enable\_dns\_support) | Should be true to enable DNS support in the Default VPC | `bool` | `true` | no |
 | <a name="input_vpc_enable_nat_gateway"></a> [vpc\_enable\_nat\_gateway](#input\_vpc\_enable\_nat\_gateway) | Should be true if you want to provision NAT Gateways for each of your private networks | `bool` | `true` | no |
 | <a name="input_vpc_enable_vpn_gateway"></a> [vpc\_enable\_vpn\_gateway](#input\_vpc\_enable\_vpn\_gateway) | Should be true if you want to create a new VPN Gateway resource and attach it to the VPC | `bool` | `false` | no |
-| <a name="input_vpc_endpoint_service_name"></a> [vpc\_endpoint\_service\_name](#input\_vpc\_endpoint\_service\_name) | Endpoint service name to configure with Identiq endpoint service | `string` | `""` | no |
+| <a name="input_vpc_endpoint_service_name"></a> [vpc\_endpoint\_service\_name](#input\_vpc\_endpoint\_service\_name) | Endpoint service name to configure with Identiq endpoint service.<br>    Identiq endpoint service by region: <br>    us-east-1 : com.amazonaws.vpce.us-east-1.vpce-svc-0964eccd96e1f130c<br>    eu-central-1 : com.amazonaws.vpce.eu-central-1.vpce-svc-0ead3a40b72d7e586 | `string` | `""` | no |
 | <a name="input_vpc_endpoint_type"></a> [vpc\_endpoint\_type](#input\_vpc\_endpoint\_type) | Endpoint service type to create, default unless otherwise is Interface | `string` | `"Interface"` | no |
 | <a name="input_vpc_map_public_ip_on_launch"></a> [vpc\_map\_public\_ip\_on\_launch](#input\_vpc\_map\_public\_ip\_on\_launch) | Specify true to indicate that instances launched into the subnet should be assigned a public IP address. Default is `false` | `bool` | `true` | no |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name to be used on all the resources as identifier | `string` | `"identiq-vpc"` | no |
