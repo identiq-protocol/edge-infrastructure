@@ -152,7 +152,6 @@ module "edge-aws" {
   default_tags                                 = var.default_tags
   tags                                         = var.tags
 
-  vpc_custom_service_name                  = var.vpc_custom_service_name
   vpc_specific_subnet_newbits              = var.vpc_specific_subnet_newbits
   ec_appautoscaling_predefined_metric_type = var.ec_appautoscaling_predefined_metric_type
   ec_appautoscaling_target_value           = var.ec_appautoscaling_target_value
