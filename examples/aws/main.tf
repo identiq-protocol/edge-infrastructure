@@ -16,6 +16,7 @@ module "edge-aws" {
 
   external_vpc                                       = var.external_vpc
   eks_vpc_id                                         = var.eks_vpc_id
+  pinky_ingress_rules				     = var.pinky_ingress_rules
   eks_cluster_endpoint_private_access                = var.eks_cluster_endpoint_private_access
   eks_cluster_create_endpoint_private_access_sg_rule = var.eks_cluster_create_endpoint_private_access_sg_rule
   eks_cluster_endpoint_public_access                 = var.eks_cluster_endpoint_public_access
