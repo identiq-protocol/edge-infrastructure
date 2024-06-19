@@ -102,7 +102,7 @@ variable "vpc_map_public_ip_on_launch" {
 variable "vpc_endpoint_service_name" {
   description = <<EOT
     Endpoint service name to configure with Identiq endpoint service.
-    Identiq endpoint service by region: 
+    Identiq endpoint service by region:
     us-east-1 : com.amazonaws.vpce.us-east-1.vpce-svc-0964eccd96e1f130c
     eu-central-1 : com.amazonaws.vpce.eu-central-1.vpce-svc-0ead3a40b72d7e586
   EOT
@@ -660,7 +660,7 @@ variable "rds_engine" {
 variable "rds_engine_version" {
   description = "The engine version to use"
   type        = string
-  default     = "13.13"
+  default     = "13.15"
 }
 
 variable "rds_parameter_group_family" {
