@@ -12,7 +12,7 @@ terraform {
 }
 
 module "edge-aws" {
-  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=2.0.15"
+  source = "git@github.com:identiq-protocol/edge-infrastructure.git//modules/aws/?ref=2.0.16"
 
   external_vpc                                       = var.external_vpc
   eks_vpc_id                                         = var.eks_vpc_id
