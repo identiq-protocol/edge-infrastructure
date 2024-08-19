@@ -304,12 +304,12 @@ provider "kubernetes" {
   }
 }
 
-resource "kubernetes_annotations" "gp2" {
+resource "kubernetes_annotations" "gp3" {
   api_version = "storage.k8s.io/v1"
   kind        = "StorageClass"
   force       = true
   metadata {
-    name = "gp2"
+    name = "gp3"
   }
   annotations = {
     "storageclass.kubernetes.io/is-default-class" = "false"
@@ -330,7 +330,7 @@ resource "kubernetes_storage_class" "ssd" {
   volume_binding_mode    = "WaitForFirstConsumer"
   parameters = {
     fsType      = "ext4"
-    "type"      = "gp2"
+    "type"      = "gp3"
     "encrypted" = "true"
   }
   depends_on = [

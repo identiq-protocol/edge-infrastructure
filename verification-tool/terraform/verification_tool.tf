@@ -57,7 +57,7 @@ module "ec2_instance" {
   name = "Identiq Data Verification Tool"
   root_block_device = [{
     volume_size           = var.verification_tool_disk_size
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     encrypted             = true
     delete_on_termination = true
   }]

@@ -54,7 +54,7 @@ The infstructarue consists of the following components:
 | [aws_security_group_rule.pink_ingress](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/security_group_rule) | resource |
 | [aws_vpc_endpoint.ep](https://registry.terraform.io/providers/hashicorp/aws/5.17.0/docs/resources/vpc_endpoint) | resource |
 | [helm_release.cluster-autoscaler](https://registry.terraform.io/providers/hashicorp/helm/2.11.0/docs/resources/release) | resource |
-| [kubernetes_annotations.gp2](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/annotations) | resource |
+| [kubernetes_annotations.gp3](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/annotations) | resource |
 | [kubernetes_config_map.version](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/config_map) | resource |
 | [kubernetes_secret.edge_db_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/secret) | resource |
 | [kubernetes_secret.edge_redis_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/2.23.0/docs/resources/secret) | resource |
@@ -208,7 +208,7 @@ The infstructarue consists of the following components:
 | <a name="input_rds_skip_final_snapshot"></a> [rds\_skip\_final\_snapshot](#input\_rds\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final\_snapshot\_identifier | `bool` | `true` | no |
 | <a name="input_rds_snapshot_identifier"></a> [rds\_snapshot\_identifier](#input\_rds\_snapshot\_identifier) | Specifies whether or not to create this database from a snapshot. This correlates to the snapshot ID you'd find in the RDS console, e.g: rds:production-2015-06-26-06-05 | `string` | `null` | no |
 | <a name="input_rds_storage_encrypted"></a> [rds\_storage\_encrypted](#input\_rds\_storage\_encrypted) | Specifies whether the DB instance is encrypted | `bool` | `true` | no |
-| <a name="input_rds_storage_type"></a> [rds\_storage\_type](#input\_rds\_storage\_type) | One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not. | `string` | `"gp3"` | no |
+| <a name="input_rds_storage_type"></a> [rds\_storage\_type](#input\_rds\_storage\_type) | One of 'standard' (magnetic), 'gp3' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp3' if not. | `string` | `"gp3"` | no |
 | <a name="input_rds_username"></a> [rds\_username](#input\_rds\_username) | Username for the master DB user | `string` | `"edge"` | no |
 | <a name="input_rds_vpc_id"></a> [rds\_vpc\_id](#input\_rds\_vpc\_id) | VPC ID in case we external VPC is provided | `string` | `""` | no |
 | <a name="input_region"></a> [region](#input\_region) | region | `string` | `"us-east-1"` | no |
