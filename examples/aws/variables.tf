@@ -778,7 +778,7 @@ variable "rds_iops" {
 }
 
 variable "rds_storage_type" {
-  description = "One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp2' if not."
+  description = "One of 'standard' (magnetic), 'gp3' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'gp3' if not."
   type        = string
   default     = "gp3"
 }
